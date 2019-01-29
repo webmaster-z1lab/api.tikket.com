@@ -9,10 +9,11 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Event\Models
  *
- * @property string name
- * @property bool   is_public
- * @property int    min_buy
- * @property int    max_buy
+ * @property string                    name
+ * @property bool                      is_public
+ * @property int                       min_buy
+ * @property int                       max_buy
+ * @property \Modules\Event\Models\Lot lots
  */
 class Entrance extends Model
 {
@@ -23,7 +24,7 @@ class Entrance extends Model
 
     protected $attributes = [
         'is_public' => self::STATUS_PUBLIC,
-        'is_free' => self::STATUS_PUBLIC,
+        'is_free'   => self::STATUS_PUBLIC,
         'min_buy'   => self::MIN_BUY,
         'max_buy'   => self::MAX_BUY,
     ];

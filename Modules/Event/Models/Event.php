@@ -10,21 +10,24 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @package Modules\Event\Models
  *
- * @property string         name
- * @property string         url
- * @property string         description
- * @property string         body
- * @property string         cover
- * @property string         category
- * @property string         types
- * @property string         referer
- * @property \Carbon\Carbon created_at
- * @property \Carbon\Carbon updated_at
- * @property \Carbon\Carbon deleted_at
- * @property \Carbon\Carbon starts_at
- * @property \Carbon\Carbon finishes_at
- * @property bool           is_active
- * @property bool           is_public
+ * @property string                         name
+ * @property string                         url
+ * @property string                         description
+ * @property string                         body
+ * @property string                         cover
+ * @property string                         category
+ * @property string                         types
+ * @property string                         referer
+ * @property \Carbon\Carbon                 created_at
+ * @property \Carbon\Carbon                 updated_at
+ * @property \Carbon\Carbon                 deleted_at
+ * @property \Carbon\Carbon                 starts_at
+ * @property \Carbon\Carbon                 finishes_at
+ * @property bool                           is_active
+ * @property bool                           is_public
+ * @property \Modules\Event\Models\Entrance entrances
+ * @property \Modules\Event\Models\Address  address
+ * @property \Modules\Event\Models\Producer producer
  *
  */
 class Event extends Model
@@ -68,5 +71,21 @@ class Event extends Model
     public function entrances()
     {
         return $this->hasMany(Entrance::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function address()
+    {
+        return $this->embedsOne(Address::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function producer()
+    {
+        return $this->embedsOne(Producer::class);
     }
 }
