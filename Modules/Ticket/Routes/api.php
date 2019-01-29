@@ -1,5 +1,5 @@
 <?php
 
-Route::middleware('api')->get('ticket', function () {
-    return response()->json('ok');
+Route::middleware('api')->get('tickets', function () {
+    return response()->json('tickets');
 });
