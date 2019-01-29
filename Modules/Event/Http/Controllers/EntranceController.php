@@ -3,19 +3,19 @@
 namespace Modules\Event\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Event\Repositories\EventRepository;
+use Modules\Event\Repositories\EntranceRepository;
 use Z1lab\JsonApi\Http\Controllers\ApiController;
 
-class EventController extends ApiController
+class EntranceController extends ApiController
 {
     /**
-     * EventController constructor.
+     * EntranceController constructor.
      *
-     * @param \Modules\Event\Repositories\EventRepository $repository
+     * @param \Modules\Event\Repositories\EntranceRepository $repository
      */
-    public function __construct(EventRepository $repository)
+    public function __construct(EntranceRepository $repository)
     {
-        parent::__construct($repository, 'Event');
+        parent::__construct($repository, 'Entrance');
     }
 
     /**
@@ -23,7 +23,7 @@ class EventController extends ApiController
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function store(Request $request)
+    public function store(Request $request, string $event)
     {
         return $this->makeResource($this->repository->create($request->all()));
     }
@@ -34,7 +34,7 @@ class EventController extends ApiController
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $event, string $id)
     {
         return $this->makeResource($this->repository->update($request->all(), $id));
     }
