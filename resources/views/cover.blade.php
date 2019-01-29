@@ -38,7 +38,6 @@
     </div>
 </header>
 
-
 <main id="content" role="main">
     <!-- Hero Section -->
     <div class="d-lg-flex" style="background: url(https://cdn.z1lab.com.br/template/front/2.0.1/img/bg-shapes/bg4.png) no-repeat right;">
@@ -119,23 +118,23 @@
     let servers = [
         {
             "id": "payment",
-            "url": "https://payment.tikket.com",
+            "url": "https://payment.tikket.com.br",
         },
         {
             "id": "auth",
-            "url": "https://oauth.tikket.com",
+            "url": "https://oauth.tikket.com.br",
         },
         {
             "id": "portal",
-            "url": "https://tikket.com",
+            "url": "https://tikket.com.br",
         },
         {
             "id": "message",
-            "url": "https://message.tikket.com",
+            "url": "https://message.tikket.com.br",
         },
         {
             "id": "core",
-            "url": "https://api.tikket.com",
+            "url": "https://api.tikket.com.br",
         }
     ];
 
