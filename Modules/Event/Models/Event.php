@@ -44,6 +44,7 @@ class Event extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
         'url',
         'description',
         'body',

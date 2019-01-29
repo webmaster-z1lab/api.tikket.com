@@ -1,0 +1,25 @@
+{
+    "name": "z1lab/ticket",
+    "description": "",
+    "authors": [
+        {
+            "name": "Olimar Ferraz",
+            "email": "webmaster@z1lab.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Ticket\\Providers\\TicketServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Ticket\\": ""
+        }
+    }
+}

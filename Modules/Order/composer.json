@@ -1,0 +1,25 @@
+{
+    "name": "z1lab/order",
+    "description": "",
+    "authors": [
+        {
+            "name": "Olimar Ferraz",
+            "email": "webmaster@z1lab.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Order\\Providers\\OrderServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Order\\": ""
+        }
+    }
+}
