@@ -6,9 +6,13 @@ use GuzzleHttp\Client;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Order\Events\OrderCreated;
+use Modules\Order\Repositories\OrderRepository;
 
 class SendToPayment
 {
+    /**
+     * @var \Modules\Order\Repositories\OrderRepository
+     */
     protected $repository;
 
     /**
@@ -16,7 +20,7 @@ class SendToPayment
      *
      * @param $repository
      */
-    public function __construct($repository)
+    public function __construct(OrderRepository $repository)
     {
         $this->repository = $repository;
     }
