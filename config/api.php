@@ -14,6 +14,7 @@ return [
     'version' => [
         'app'   => '1',
         'event' => '1',
+        'cart'  => '1',
     ],
 
     /*
@@ -29,6 +30,7 @@ return [
     'resources_path' => [
         'app'   => 'App\Http\Resources',
         'event' => 'Modules\Event\Http\Resources',
+        'cart'  => 'Modules\Cart\Http\Resources',
     ],
 
     /*
@@ -43,6 +45,7 @@ return [
     'resources' => [
         'app'   => '',
         'event' => '',
+        'cart'  => '',
     ],
 
 ];

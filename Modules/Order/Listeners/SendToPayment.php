@@ -5,6 +5,7 @@ namespace Modules\Order\Listeners;
 use GuzzleHttp\Client;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Modules\Event\Repositories\EntranceRepository;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Repositories\OrderRepository;
 
@@ -14,15 +15,21 @@ class SendToPayment
      * @var \Modules\Order\Repositories\OrderRepository
      */
     protected $repository;
+    /**
+     * @var \Modules\Event\Repositories\EntranceRepository
+     */
+    private $entranceRepository;
 
     /**
      * Create the event listener.
      *
-     * @param $repository
+     * @param \Modules\Order\Repositories\OrderRepository    $repository
+     * @param \Modules\Event\Repositories\EntranceRepository $entranceRepository
      */
-    public function __construct(OrderRepository $repository)
+    public function __construct(OrderRepository $repository, EntranceRepository $entranceRepository)
     {
         $this->repository = $repository;
+        $this->entranceRepository = $entranceRepository;
     }
 
     /**
@@ -37,6 +44,20 @@ class SendToPayment
     {
         $order = $this->repository->find($event->getOrder());
 
+        $data = $order->toArray();
+        unset($data['tickets']);
+        $data['items'] = [];
+
+        foreach ($order->tickets()->groupBy('entrance_id')->get() as $entrance_id => $tickets) {
+            $entrance = $this->entranceRepository->find($entrance_id);
+            $data['items'][] = [
+                'item_id'     => $entrance_id,
+                'description' => $entrance->name,
+                'quantity'    => count($tickets),
+                'amount'      => 10000,
+            ];
+        }
+
         $client = new Client(['base_uri' => config('payment.server')]);
 
         $credential = \OpenID::getClientToken();
@@ -48,7 +69,7 @@ class SendToPayment
             'headers' => [
                 'Authorization' => "Bearer $credential",
             ],
-            'json'    => $order->toArray(),
+            'json'    => $data,
         ]);
 
         $transaction_id = json_decode($response->getBody(), TRUE)['data']['id'];

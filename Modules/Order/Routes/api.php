@@ -1,5 +1,6 @@
 <?php
 
-Route::middleware('api')->get('orders', function () {
-   return response()->json('orders');
+Route::middleware('api.v:1,order')->prefix('v1')->group(function ()
+{
+   Route::post('orders', 'OrderController@store')->name('orders.store');
 });

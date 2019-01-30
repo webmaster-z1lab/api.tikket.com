@@ -30,4 +30,12 @@ class Order extends Model
     {
         return $this->embedsOne(Card::class);
     }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsMany
+     */
+    public function tickets()
+    {
+        return $this->embedsMany(Ticket::class);
+    }
 }

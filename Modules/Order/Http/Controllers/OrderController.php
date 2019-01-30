@@ -2,71 +2,39 @@
 
 namespace Modules\Order\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
+use Modules\Order\Events\OrderCreated;
+use Modules\Order\Http\Requests\OrderRequest;
+use Modules\Order\Repositories\OrderRepository;
 
 class OrderController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * @return Response
+     * @var \Modules\Order\Repositories\OrderRepository
      */
-    public function index()
+    private $repository;
+
+    /**
+     * OrderController constructor.
+     *
+     * @param \Modules\Order\Repositories\OrderRepository $repository
+     */
+    public function __construct(OrderRepository $repository)
     {
-        return view('order::index');
+        $this->repository = $repository;
     }
 
     /**
-     * Show the form for creating a new resource.
-     * @return Response
+     * @param \Modules\Order\Http\Requests\OrderRequest $request
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function create()
+    public function store(OrderRequest $request)
     {
-        return view('order::create');
-    }
+        $order = $this->repository->createByCart($request->get('cart_id'), $request->ip());
 
-    /**
-     * Store a newly created resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-    }
+        event(new OrderCreated($order->id));
 
-    /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function show()
-    {
-        return view('order::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('order::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
+        return api_resource('Order')->make($order);
     }
 }
