@@ -16,17 +16,14 @@ class Address extends Resource
     public function toArray($request)
     {
         return [
-            'id'         => $this->id,
-            'type'       => 'addresses',
-            'attributes' => [
-                'street'      => $this->street,
-                'number'      => $this->number,
-                'complement'  => $this->complement,
-                'district'    => $this->district,
-                'postal_code' => $this->postal_code,
-                'city'        => $this->city,
-                'state'       => $this->state,
-            ],
+            'id'          => $this->id,
+            'street'      => $this->street,
+            'number'      => $this->number,
+            'complement'  => $this->complement,
+            'district'    => $this->district,
+            'postal_code' => $this->postal_code,
+            'city'        => $this->city,
+            'state'       => $this->state,
         ];
     }
 }

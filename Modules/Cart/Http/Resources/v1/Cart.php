@@ -30,11 +30,11 @@ class Cart extends Resource
                 'amount'     => $this->amount,
                 'fee'        => $this->fee,
                 'expires_at' => $this->expires_at->toW3cString(),
+                'tickets'    => api_resource('Ticket')->collection($this->tickets),
+                'card'       => $this->when(ends_with($this->type, 'card'), api_resource('Card')->make($this->card)),
             ],
             'relationships' => [
-                'event'   => $event->make($this->event),
-                'tickets' => api_resource('Ticket')->collection($this->tickets),
-                'card'    => $this->when(ends_with($this->type, 'card'), api_resource('Card')->make($this->card)),
+                'event' => $event->make($this->event),
             ],
         ];
     }

@@ -16,23 +16,18 @@ class Address extends Resource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'type'          => 'producers',
-            'attributes'    => [
-                'name'        => $this->name,
-                'street'      => $this->street,
-                'number'      => $this->number,
-                'district'    => $this->district,
-                'complement'  => $this->complement,
-                'city'        => $this->city,
-                'state'       => $this->state,
-                'postal_code' => $this->postal_code,
-                'formatted'   => $this->formatted,
-                'maps_url'    => $this->maps_url,
-            ],
-            'relationships' => [
-                'coordinate' => api_resource('Coordinate')->make($this->coordinate),
-            ],
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'street'      => $this->street,
+            'number'      => $this->number,
+            'district'    => $this->district,
+            'complement'  => $this->complement,
+            'city'        => $this->city,
+            'state'       => $this->state,
+            'postal_code' => $this->postal_code,
+            'formatted'   => $this->formatted,
+            'maps_url'    => $this->maps_url,
+            'coordinate'  => api_resource('Coordinate')->make($this->coordinate),
         ];
     }
 }

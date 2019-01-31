@@ -33,10 +33,10 @@ class Event extends Resource
                 'is_active'   => $this->is_active,
                 'created_at'  => $this->created_at->toW3cString(),
                 'updated_at'  => $this->updated_at->toW3cString(),
+                'address'     => api_resource('Address')->make($this->address),
+                'producer'    => api_resource('Producer')->make($this->producer),
             ],
             'relationships' => [
-                'address'  => api_resource('Address')->make($this->address),
-                'producer' => api_resource('Producer')->make($this->producer),
                 'entrances' => api_resource('Entrance')->collection($this->entrances),
             ],
         ];

@@ -24,9 +24,10 @@ class Entrance extends Resource
                 'is_free'   => $this->is_free,
                 'min_buy'   => $this->min_buy,
                 'max_buy'   => $this->max_buy,
+                'lots'      => api_resource('Lot')->collection($this->lots),
             ],
             'relationships' => [
-                'lots' => api_resource('Lot')->collection($this->lots),
+                'event' => api_resource('Event')->make($this->event),
             ],
         ];
     }

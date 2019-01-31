@@ -16,12 +16,9 @@ class Coordinate extends Resource
     public function toArray($request)
     {
         return [
-            'id'         => $this->id,
-            'type'       => 'coordinates',
-            'attributes' => [
-                'type'     => $this->type,
-                'location' => $this->location,
-            ],
+            'id'       => $this->id,
+            'type'     => $this->type,
+            'location' => $this->location,
         ];
     }
 }

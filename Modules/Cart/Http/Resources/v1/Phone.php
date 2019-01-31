@@ -16,12 +16,9 @@ class Phone extends Resource
     public function toArray($request)
     {
         return [
-            'id'         => $this->id,
-            'type'       => 'phones',
-            'attributes' => [
-                'area_code' => $this->area_code,
-                'phone'     => $this->phone,
-            ],
+            'id'        => $this->id,
+            'area_code' => $this->area_code,
+            'phone'     => $this->phone,
         ];
     }
 }

@@ -16,17 +16,12 @@ class Holder extends Resource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'type'          => 'holders',
-            'attributes'    => [
-                'name'       => $this->name,
-                'document'   => $this->document,
-                'birth_date' => $this->birth_date->format('Y-m-d'),
-            ],
-            'relationships' => [
-                'address' => api_resource('Address')->make($this->address),
-                'phone'   => api_resource('Phone')->make($this->phone),
-            ],
+            'id'         => $this->id,
+            'name'       => $this->name,
+            'document'   => $this->document,
+            'birth_date' => $this->birth_date->format('Y-m-d'),
+            'address'    => api_resource('Address')->make($this->address),
+            'phone'      => api_resource('Phone')->make($this->phone),
         ];
     }
 }

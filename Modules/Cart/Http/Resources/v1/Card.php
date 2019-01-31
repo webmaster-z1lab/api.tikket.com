@@ -16,18 +16,13 @@ class Card extends Resource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'types'         => 'cards',
-            'attributes'    => [
-                'brand'        => $this->brand,
-                'number'       => $this->number,
-                'token'        => $this->token,
-                'installments' => $this->installments,
-                'parcel'       => $this->parcel,
-            ],
-            'relationships' => [
-                'holder' => api_resource('Holder')->make($this->holder),
-            ],
+            'id'           => $this->id,
+            'brand'        => $this->brand,
+            'number'       => $this->number,
+            'token'        => $this->token,
+            'installments' => $this->installments,
+            'parcel'       => $this->parcel,
+            'holder'       => api_resource('Holder')->make($this->holder),
         ];
     }
 }
