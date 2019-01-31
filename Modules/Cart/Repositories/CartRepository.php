@@ -47,19 +47,21 @@ class CartRepository
     {
         $cart = Cart::create([
             'user_id'    => \Auth::check() ? \Auth::id() : NULL,
-            'event_id'   => $data['event'],
             'callback'   => $data['callback'],
             'expires_at' => now()->addMinutes(15),
         ]);
+
+        $cart->event()->associate($data['event']);
 
         $amount = 0;
         $fee = 0;
         foreach ($data['tickets'] as $ticket) {
             $ticket['quantity'] = intval($ticket['quantity']);
             $entrance = Entrance::find($ticket['entrance']);
-            $lot = $entrance->lots()->number($ticket['lot'])->first();
+            $lot = $entrance->lots()->where('number', $ticket['lot'])->first();
             $amount += ($ticket['quantity'] * $lot->value);
             $fee += ($ticket['quantity'] * $lot->fee);
+
             for ($aux = 0; $aux < $ticket['quantity']; $aux++) {
                 $cart->tickets()->create([
                     'entrance_id' => $ticket['entrance'],

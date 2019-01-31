@@ -30,14 +30,16 @@ class Lot extends Model
         'fee'    => 'integer',
     ];
 
+    protected $dates = [
+        'starts_at',
+        'finishes_at',
+    ];
+
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $position
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return int
      */
-    public function scopeNumber($query, $position)
+    public function getPriceAttribute()
     {
-        return $query->orderBy('starts_at')->skip($position - 1);
+        return (int)$this->attributes['value'] + (int)$this->attributes['fee'];
     }
 }

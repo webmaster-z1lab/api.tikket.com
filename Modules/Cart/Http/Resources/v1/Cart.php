@@ -17,7 +17,7 @@ class Cart extends Resource
      */
     public function toArray($request)
     {
-        $event = (new APIResourceManager())->setVersion(config('api.version.event', 'event'))->resolve('Event');
+        $event = (new APIResourceManager())->setVersion(config('api.version.event'), 'event')->resolve('Event');
 
         return [
             'id'            => $this->id,
@@ -29,7 +29,7 @@ class Cart extends Resource
                 'callback'   => $this->callback,
                 'amount'     => $this->amount,
                 'fee'        => $this->fee,
-                'expires_at' => $this->expires_at,
+                'expires_at' => $this->expires_at->toW3cString(),
             ],
             'relationships' => [
                 'event'   => $event->make($this->event),

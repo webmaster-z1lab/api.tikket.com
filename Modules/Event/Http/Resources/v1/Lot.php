@@ -18,8 +18,11 @@ class Lot extends Resource
             'id'         => $this->id,
             'type'       => 'lots',
             'attributes' => [
+                'number' => $this->number,
                 'amount' => $this->amount,
                 'value' => $this->value,
+                'fee' => $this->fee,
+                'price' => $this->price,
                 'starts_at' => $this->starts_at->toW3cString(),
                 'finishes_at' => $this->finishes_at->toW3cString(),
             ],
