@@ -35,9 +35,10 @@ class OrderRepository
         $cart = $cart->toArray();
 
         $order = Order::create([
-            'hash' => $cart['hash'],
-            'ip'   => $ip,
-            'type' => $cart['type'],
+            'hash'   => $cart['hash'],
+            'ip'     => $ip,
+            'type'   => $cart['type'],
+            'amount' => $cart['amount'],
         ]);
 
         $order->tickets()->createMany($cart['tickets']);

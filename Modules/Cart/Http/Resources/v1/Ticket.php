@@ -20,6 +20,7 @@ class Ticket extends Resource
             'types'      => 'items',
             'attributes' => [
                 'entrance_id' => $this->entrance_id,
+                'entrance'    => $this->entrance,
                 'lot'         => $this->lot,
                 'name'        => $this->name,
                 'document'    => substr($this->document, 0, 3) . '.***.***-**',

@@ -54,7 +54,7 @@ class SendToPayment
                 'item_id'     => $entrance_id,
                 'description' => $entrance->name,
                 'quantity'    => count($tickets),
-                'amount'      => 10000,
+                'amount'      => $entrance->lots()->number($tickets->first()->lot)->first()->value,
             ];
         }
 

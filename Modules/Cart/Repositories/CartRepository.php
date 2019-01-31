@@ -10,6 +10,7 @@ namespace Modules\Cart\Repositories;
 
 
 use Modules\Cart\Models\Cart;
+use Modules\Event\Models\Entrance;
 
 class CartRepository
 {
@@ -35,20 +36,34 @@ class CartRepository
             'expires_at' => now()->addMinutes(15),
         ]);
 
+        $amount = 0;
         foreach ($data['items'] as $item) {
+            $item['quantity'] = intval($item['quantity']);
+            $entrance = Entrance::find($item['id']);
+            $price = $entrance->lots()->number($item['lot'])->first()->value;
+            $amount += ($item['quantity'] * $price);
             for ($aux = 0; $aux < $item['quantity']; $aux++) {
                 $cart->tickets()->create([
                     'entrance_id' => $item['id'],
+                    'entrance'    => $entrance->name,
                     'lot'         => $item['lot'],
+                    'price'       => $price,
                 ]);
             }
         }
 
+        $cart->amount = $amount;
         $cart->save();
 
         return $cart->fresh();
     }
 
+    /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Cart\Models\Cart|null
+     */
     public function setTickets(array $data, string $id)
     {
         $cart = Cart::find($id);
@@ -66,6 +81,12 @@ class CartRepository
         return $cart->fresh();
     }
 
+    /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Cart\Models\Cart|null
+     */
     public function setCard(array $data, string $id)
     {
         $cart = Cart::find($id);
@@ -74,11 +95,11 @@ class CartRepository
             abort(404);
 
         $cart->update([
-            'hash' => $data['hash'],
-            'callback' => $data['callback']
+            'hash'     => $data['hash'],
+            'callback' => $data['callback'],
         ]);
 
-        $data['card']['parcel'] = (int) (floatval($data['card']['parcel']) * 100);
+        $data['card']['parcel'] = (int)(floatval($data['card']['parcel']) * 100);
 
         $card = $cart->card()->create(array_except($data['card'], ['holder']));
 
