@@ -25,9 +25,9 @@ class CartRequest extends ApiFormRequest
     {
         return [
             'callback'           => 'bail|required|string',
-            'event_id'           => 'bail|required|exists:events,_id',
+            'event'              => 'bail|required|exists:events,_id',
             'tickets'            => 'bail|required|array|min:1',
-            'tickets.*.id'       => 'bail|required|exists:entrances,_id',
+            'tickets.*.entrance' => 'bail|required|exists:entrances,_id',
             'tickets.*.quantity' => 'bail|required|integer|min:1',
             'tickets.*.lot'      => 'bail|required|integer|min:1',
         ];

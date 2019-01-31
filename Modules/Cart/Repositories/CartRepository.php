@@ -14,6 +14,22 @@ use Modules\Event\Models\Entrance;
 
 class CartRepository
 {
+
+    /**
+     * @param string $id
+     *
+     * @return null|\Modules\Cart\Models\Cart
+     */
+    public function find(string $id)
+    {
+        $cart = Cart::find($id);
+
+        if ($cart === NULL)
+            abort(404);
+
+        return $cart;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Model|\Modules\Cart\Models\Cart|object|null
      */
@@ -30,8 +46,8 @@ class CartRepository
     public function create(array $data)
     {
         $cart = Cart::create([
-            'user_id'    => \Auth::user()->id,
-            'event_id'   => $data['event_id'],
+            'user_id'    => \Auth::check() ? \Auth::id() : NULL,
+            'event_id'   => $data['event'],
             'callback'   => $data['callback'],
             'expires_at' => now()->addMinutes(15),
         ]);
@@ -40,13 +56,13 @@ class CartRepository
         $fee = 0;
         foreach ($data['tickets'] as $ticket) {
             $ticket['quantity'] = intval($ticket['quantity']);
-            $entrance = Entrance::find($ticket['id']);
+            $entrance = Entrance::find($ticket['entrance']);
             $lot = $entrance->lots()->number($ticket['lot'])->first();
             $amount += ($ticket['quantity'] * $lot->value);
             $fee += ($ticket['quantity'] * $lot->fee);
             for ($aux = 0; $aux < $ticket['quantity']; $aux++) {
                 $cart->tickets()->create([
-                    'entrance_id' => $ticket['id'],
+                    'entrance_id' => $ticket['entrance'],
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
                     'price'       => $lot->value,
@@ -62,6 +78,21 @@ class CartRepository
     }
 
     /**
+     * @param string $id
+     *
+     * @return \Modules\Cart\Models\Cart|null
+     */
+    public function setUser(string $id)
+    {
+        $cart = $this->find($id);
+
+        $cart->user_id = \Auth::id();
+        $cart->save();
+
+        return $cart->fresh();
+    }
+
+    /**
      * @param array  $data
      * @param string $id
      *
@@ -69,10 +100,7 @@ class CartRepository
      */
     public function setTickets(array $data, string $id)
     {
-        $cart = Cart::find($id);
-
-        if ($cart === NULL)
-            abort(404);
+        $cart = $this->find($id);
 
         foreach ($data['tickets'] as $ticket) {
             $item = $cart->tickets()->find($ticket['id']);
@@ -92,10 +120,7 @@ class CartRepository
      */
     public function setCard(array $data, string $id)
     {
-        $cart = Cart::find($id);
-
-        if ($cart === NULL)
-            abort(404);
+        $cart = $this->find($id);
 
         $cart->update([
             'hash'     => $data['hash'],

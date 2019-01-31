@@ -43,6 +43,16 @@ class CartController extends Controller
     }
 
     /**
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function user(string $id)
+    {
+        return api_resource('Cart')->make($this->repository->setUser($id));
+    }
+
+    /**
      * @param \Modules\Cart\Http\Requests\TicketRequest $request
      * @param string                                    $id
      *
