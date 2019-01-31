@@ -11,15 +11,19 @@ class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'type', 'hash', 'callback', 'amount', 'expires_at'];
+    protected $fillable = ['user_id', 'type', 'hash', 'callback', 'amount', 'fee', 'expires_at'];
 
     protected $dates = ['expires_at'];
 
-    protected $casts = ['amount' => 'integer'];
+    protected $casts = [
+        'amount' => 'integer',
+        'fee'    => 'integer',
+    ];
 
     protected $attributes = [
         'type'   => 'credit_card',
         'amount' => 0,
+        'fee'    => 0,
     ];
 
     /**

@@ -28,6 +28,12 @@ class OrderRepository
         return $cart;
     }
 
+    /**
+     * @param string $cart_id
+     * @param string $ip
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Modules\Order\Models\Order|null
+     */
     public function createByCart(string $cart_id, string $ip)
     {
         $cart = $this->find($cart_id);
@@ -39,6 +45,7 @@ class OrderRepository
             'ip'     => $ip,
             'type'   => $cart['type'],
             'amount' => $cart['amount'],
+            'fee'    => $cart['fee'],
         ]);
 
         $order->tickets()->createMany($cart['tickets']);
@@ -63,6 +70,6 @@ class OrderRepository
 
         $order->save();
 
-        return $order->save();
+        return $order->fresh();
     }
 }

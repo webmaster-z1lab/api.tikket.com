@@ -19,6 +19,7 @@ class Lot extends Model
     protected $fillable = [
         'amount',
         'value',
+        'fee',
         'starts_at',
         'finishes_at',
     ];
@@ -26,6 +27,7 @@ class Lot extends Model
     protected $casts = [
         'amount' => 'integer',
         'value'  => 'integer',
+        'fee'    => 'integer',
     ];
 
     /**

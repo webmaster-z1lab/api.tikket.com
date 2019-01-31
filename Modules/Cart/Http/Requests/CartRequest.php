@@ -24,12 +24,12 @@ class CartRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            'callback'         => 'bail|required|string',
-            'event_id'         => 'bail|required|exists:events,_id',
-            'items'            => 'bail|required|array|min:1',
-            'items.*.id'       => 'bail|required|exists:entrances,_id',
-            'items.*.quantity' => 'bail|required|integer|min:1',
-            'items.*.lot'      => 'bail|required|integer|min:1',
+            'callback'           => 'bail|required|string',
+            'event_id'           => 'bail|required|exists:events,_id',
+            'tickets'            => 'bail|required|array|min:1',
+            'tickets.*.id'       => 'bail|required|exists:entrances,_id',
+            'tickets.*.quantity' => 'bail|required|integer|min:1',
+            'tickets.*.lot'      => 'bail|required|integer|min:1',
         ];
     }
 }

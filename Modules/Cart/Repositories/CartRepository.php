@@ -37,22 +37,25 @@ class CartRepository
         ]);
 
         $amount = 0;
-        foreach ($data['items'] as $item) {
-            $item['quantity'] = intval($item['quantity']);
-            $entrance = Entrance::find($item['id']);
-            $price = $entrance->lots()->number($item['lot'])->first()->value;
-            $amount += ($item['quantity'] * $price);
-            for ($aux = 0; $aux < $item['quantity']; $aux++) {
+        $fee = 0;
+        foreach ($data['tickets'] as $ticket) {
+            $ticket['quantity'] = intval($ticket['quantity']);
+            $entrance = Entrance::find($ticket['id']);
+            $lot = $entrance->lots()->number($ticket['lot'])->first();
+            $amount += ($ticket['quantity'] * $lot->value);
+            $fee += ($ticket['quantity'] * $lot->fee);
+            for ($aux = 0; $aux < $ticket['quantity']; $aux++) {
                 $cart->tickets()->create([
-                    'entrance_id' => $item['id'],
+                    'entrance_id' => $ticket['id'],
                     'entrance'    => $entrance->name,
-                    'lot'         => $item['lot'],
-                    'price'       => $price,
+                    'lot'         => $ticket['lot'],
+                    'price'       => $lot->value,
                 ]);
             }
         }
 
         $cart->amount = $amount;
+        $cart->fee = $fee;
         $cart->save();
 
         return $cart->fresh();

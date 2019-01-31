@@ -9,9 +9,12 @@ class Order extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['status', 'amount', 'hash', 'ip', 'type'];
+    protected $fillable = ['status', 'amount', 'fee', 'hash', 'ip', 'type'];
 
-    protected $casts = ['amount' => 'integer'];
+    protected $casts = [
+        'amount' => 'integer',
+        'fee'    => 'integer',
+    ];
 
     protected $attributes = ['status' => 'waiting'];
 

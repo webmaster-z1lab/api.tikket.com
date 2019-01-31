@@ -27,6 +27,8 @@ class Cart extends Resource
                 'type'       => $this->type,
                 'hash'       => $this->hash,
                 'callback'   => $this->callback,
+                'amount'     => $this->amount,
+                'fee'        => $this->fee,
                 'expires_at' => $this->expires_at,
             ],
             'relationships' => [

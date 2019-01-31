@@ -45,7 +45,8 @@ class SendToPayment
         $order = $this->repository->find($event->getOrder());
 
         $data = $order->toArray();
-        unset($data['tickets']);
+        $data['amount'] += $data['fee'];
+        unset($data['tickets'], $data['fee']);
         $data['items'] = [];
 
         foreach ($order->tickets()->groupBy('entrance_id')->get() as $entrance_id => $tickets) {
