@@ -110,6 +110,7 @@ class CartRepository
             $item->update(array_except($ticket, ['id']));
         }
 
+        $cart->callback = $data['callback'];
         if ($cart->user_id === NULL)
             $cart->user_id = \Auth::id();
 
