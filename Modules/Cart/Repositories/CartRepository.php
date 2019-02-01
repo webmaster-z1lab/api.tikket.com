@@ -138,9 +138,10 @@ class CartRepository
 
         $card = $cart->card()->create(array_except($data['card'], ['holder']));
 
-        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address']));
+        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
 
         $holder->address()->create($data['card']['holder']['address']);
+        $holder->phone()->create($data['card']['holder']['phone']);
 
         $holder->save();
 

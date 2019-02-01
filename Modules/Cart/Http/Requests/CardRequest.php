@@ -47,6 +47,10 @@ class CardRequest extends ApiFormRequest
             'card.holder.address.postal_code' => 'bail|required|digits:8',
             'card.holder.address.city'        => 'bail|required|string',
             'card.holder.address.state'       => 'bail|required|string|size:2',
+
+            'card.holder.phone'           => 'bail|required|array',
+            'card.holder.phone.area_code' => 'bail|required|digits:2',
+            'card.holder.phone.phone'     => 'bail|required|digits_between:8,9',
         ];
     }
 }
