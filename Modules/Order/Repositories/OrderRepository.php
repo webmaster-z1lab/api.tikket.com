@@ -33,22 +33,23 @@ class OrderRepository
      * @param string $ip
      *
      * @return \Illuminate\Database\Eloquent\Model|\Modules\Order\Models\Order|null
+     * @throws \Exception
      */
     public function createByCart(string $cart_id, string $ip)
     {
         $cart = $this->find($cart_id);
 
-        $cart = $cart->toArray();
+        $data = $cart->toArray();
 
         $order = Order::create([
-            'hash'   => $cart['hash'],
+            'hash'   => $data['hash'],
             'ip'     => $ip,
-            'type'   => $cart['type'],
-            'amount' => $cart['amount'],
-            'fee'    => $cart['fee'],
+            'type'   => $data['type'],
+            'amount' => $data['amount'],
+            'fee'    => $data['fee'],
         ]);
 
-        $order->tickets()->createMany($cart['tickets']);
+        $order->tickets()->createMany($data['tickets']);
 
         $user = \Auth::user();
 
@@ -58,17 +59,19 @@ class OrderRepository
             'email'    => $user->email,
             'document' => $user->document,
         ]);
-        $costumer->phone()->create($cart['card']['holder']['phone']);
+        $costumer->phone()->create($data['card']['holder']['phone']);
         $costumer->save();
 
-        $card = $order->card()->create(array_except($cart['card'], ['holder']));
-        $holder = $card->holder()->create(array_except($cart['card']['holder'], ['address', 'phone']));
-        $holder->phone()->create($cart['card']['holder']['phone']);
-        $holder->address()->create($cart['card']['holder']['address']);
+        $card = $order->card()->create(array_except($data['card'], ['holder']));
+        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
+        $holder->phone()->create($data['card']['holder']['phone']);
+        $holder->address()->create($data['card']['holder']['address']);
         $holder->save();
         $card->save();
 
         $order->save();
+
+        $cart->delete();
 
         return $order->fresh();
     }
