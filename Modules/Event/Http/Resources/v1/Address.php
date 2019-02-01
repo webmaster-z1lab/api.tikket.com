@@ -3,6 +3,7 @@
 namespace Modules\Event\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\Resource;
+use Juampi92\APIResources\APIResourceManager;
 
 class Address extends Resource
 {
@@ -12,9 +13,12 @@ class Address extends Resource
      * @param  \Illuminate\Http\Request
      *
      * @return array
+     * @throws \Exception
      */
     public function toArray($request)
     {
+        $event = (new APIResourceManager())->setVersion(1, 'event');
+
         return [
             'id'          => $this->id,
             'name'        => $this->name,
@@ -27,7 +31,7 @@ class Address extends Resource
             'postal_code' => $this->postal_code,
             'formatted'   => $this->formatted,
             'maps_url'    => $this->maps_url,
-            'coordinate'  => api_resource('Coordinate')->make($this->coordinate),
+            'coordinate'  => $event->resolve('Coordinate')->make($this->coordinate),
         ];
     }
 }

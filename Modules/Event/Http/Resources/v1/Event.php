@@ -3,6 +3,7 @@
 namespace Modules\Event\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\Resource;
+use Juampi92\APIResources\APIResourceManager;
 
 class Event extends Resource
 {
@@ -12,9 +13,12 @@ class Event extends Resource
      * @param  \Illuminate\Http\Request
      *
      * @return array
+     * @throws \Exception
      */
     public function toArray($request)
     {
+        $event = (new APIResourceManager())->setVersion(1, 'event');
+
         return [
             'id'            => $this->id,
             'type'          => 'events',
@@ -33,11 +37,11 @@ class Event extends Resource
                 'is_active'   => $this->is_active,
                 'created_at'  => $this->created_at->toW3cString(),
                 'updated_at'  => $this->updated_at->toW3cString(),
-                'address'     => api_resource('Address')->make($this->address),
-                'producer'    => api_resource('Producer')->make($this->producer),
+                'address'     => $event->resolve('Address')->make($this->address),
+                'producer'    => $event->resolve('Producer')->make($this->producer),
             ],
             'relationships' => [
-                'entrances' => api_resource('Entrance')->collection($this->entrances),
+                'entrances' => $event->resolve('Entrance')->collection($this->entrances),
             ],
         ];
     }
