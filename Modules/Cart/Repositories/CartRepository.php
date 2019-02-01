@@ -35,7 +35,7 @@ class CartRepository
      */
     public function getByUser()
     {
-        return Cart::where('user_id', \Auth::user()->id)->first();
+        return Cart::where('user_id', \Auth::id())->latest()->first();
     }
 
     /**
@@ -68,6 +68,7 @@ class CartRepository
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
                     'price'       => $lot->value,
+                    'fee'         => $lot->fee,
                 ]);
             }
         }
@@ -109,6 +110,10 @@ class CartRepository
             $item->update(array_except($ticket, ['id']));
         }
 
+        $cart->callback = $data['callback'];
+        if ($cart->user_id === NULL)
+            $cart->user_id = \Auth::id();
+
         $cart->save();
 
         return $cart->fresh();
@@ -133,9 +138,14 @@ class CartRepository
 
         $card = $cart->card()->create(array_except($data['card'], ['holder']));
 
-        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address']));
+        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
 
         $holder->address()->create($data['card']['holder']['address']);
+
+        $holder->phone()->create([
+            'area_code' => substr($data['card']['holder']['phone'], 0, 2),
+            'phone'     => substr($data['card']['holder']['phone'], 2),
+        ]);
 
         $holder->save();
 

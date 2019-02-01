@@ -8,7 +8,10 @@ class Ticket extends Model
 {
     public $timestamps = FALSE;
 
-    protected $fillable = ['entrance_id', 'entrance', 'lot', 'price', 'name', 'document', 'email'];
+    protected $fillable = ['entrance_id', 'entrance', 'lot', 'price', 'fee', 'name', 'document', 'email'];
 
-    protected $casts = ['price' => 'integer'];
+    protected $casts = [
+        'price' => 'integer',
+        'fee'   => 'integer',
+    ];
 }

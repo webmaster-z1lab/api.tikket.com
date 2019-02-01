@@ -26,7 +26,7 @@ class TicketRequest extends ApiFormRequest
         return [
             'callback'         => 'bail|required|string',
             'tickets'            => 'bail|required|array|min:1',
-            'tickets.*.id'       => 'bail|required|exists:carts,items._id',
+            'tickets.*.id'       => 'bail|required|string',
             'tickets.*.name'     => 'bail|required|string',
             'tickets.*.document' => 'bail|required|cpf',
             'tickets.*.email'    => 'bail|required|email',
