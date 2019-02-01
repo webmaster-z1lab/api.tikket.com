@@ -31,6 +31,7 @@ class Cart extends Resource
                 'callback'   => $this->callback,
                 'amount'     => $this->amount,
                 'fee'        => $this->fee,
+                'discount'   => 0,
                 'expires_at' => Carbon::now()->diffInSeconds($this->expires_at),
                 'tickets'    => $cart->resolve('Ticket')->collection($this->tickets),
                 'card'       => $this->when(ends_with($this->type, 'card'), $cart->resolve('Card')->make($this->card)),
