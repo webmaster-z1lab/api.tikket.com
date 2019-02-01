@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Cart\Http\Resources\v1;
+namespace Modules\Order\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\Resource;
 
