@@ -28,10 +28,11 @@ class OrderController extends Controller
      * @param \Modules\Order\Http\Requests\OrderRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\Resource
+     * @throws \Exception
      */
     public function store(OrderRequest $request)
     {
-        $order = $this->repository->createByCart($request->get('cart_id'), $request->ip());
+        $order = $this->repository->createByCart($request->get('cart'), $request->ip());
 
         event(new OrderCreated($order->id));
 

@@ -16,16 +16,16 @@ class OrderRepository
     /**
      * @param string $id
      *
-     * @return null|\Modules\Cart\Models\Cart
+     * @return null|\Modules\Order\Models\Order
      */
     public function find(string $id)
     {
-        $cart = Cart::find($id);
+        $order = Order::find($id);
 
-        if ($cart === NULL)
+        if ($order === NULL)
             abort(404);
 
-        return $cart;
+        return $order;
     }
 
     /**
@@ -37,7 +37,10 @@ class OrderRepository
      */
     public function createByCart(string $cart_id, string $ip)
     {
-        $cart = $this->find($cart_id);
+        $cart = Cart::find($cart_id);
+
+        if ($cart === NULL)
+            abort(404);
 
         $data = $cart->toArray();
 

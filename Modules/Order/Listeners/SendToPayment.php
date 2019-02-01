@@ -49,13 +49,13 @@ class SendToPayment
         unset($data['tickets'], $data['fee']);
         $data['items'] = [];
 
-        foreach ($order->tickets()->groupBy('entrance_id')->get() as $entrance_id => $tickets) {
+        foreach ($order->tickets()->groupBy('entrance_id') as $entrance_id => $tickets) {
             $entrance = $this->entranceRepository->find($entrance_id);
             $data['items'][] = [
                 'item_id'     => $entrance_id,
                 'description' => $entrance->name,
                 'quantity'    => count($tickets),
-                'amount'      => $entrance->lots()->number($tickets->first()->lot)->first()->value,
+                'amount'      => $entrance->lots()->where('number', $tickets->first()->lot)->first()->value,
             ];
         }
 
