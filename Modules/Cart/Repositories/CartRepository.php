@@ -35,7 +35,7 @@ class CartRepository
      */
     public function getByUser()
     {
-        return Cart::where('user_id', \Auth::user()->id)->first();
+        return Cart::where('user_id', \Auth::id())->latest()->first();
     }
 
     /**
@@ -68,6 +68,7 @@ class CartRepository
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
                     'price'       => $lot->value,
+                    'fee'         => $lot->fee,
                 ]);
             }
         }
@@ -108,6 +109,9 @@ class CartRepository
             $item = $cart->tickets()->find($ticket['id']);
             $item->update(array_except($ticket, ['id']));
         }
+
+        if ($cart->user_id === NULL)
+            $cart->user_id = \Auth::id();
 
         $cart->save();
 

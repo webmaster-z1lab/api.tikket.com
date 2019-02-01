@@ -15,6 +15,7 @@ return [
         'app'   => '1',
         'event' => '1',
         'cart'  => '1',
+        'order' => '1',
     ],
 
     /*
@@ -31,6 +32,7 @@ return [
         'app'   => 'App\Http\Resources',
         'event' => 'Modules\Event\Http\Resources',
         'cart'  => 'Modules\Cart\Http\Resources',
+        'order' => 'Modules\Order\Http\Resources',
     ],
 
     /*
@@ -46,6 +48,7 @@ return [
         'app'   => '',
         'event' => '',
         'cart'  => '',
+        'order' => '',
     ],
 
 ];
