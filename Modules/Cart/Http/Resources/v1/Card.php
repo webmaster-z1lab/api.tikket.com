@@ -22,7 +22,7 @@ class Card extends Resource
         return [
             'id'           => $this->id,
             'brand'        => $this->brand,
-            'number'       => $this->number,
+            'number'       => str_pad($this->number, '16', '*', STR_PAD_LEFT),
             'token'        => $this->token,
             'installments' => $this->installments,
             'parcel'       => $this->parcel,

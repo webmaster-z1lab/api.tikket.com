@@ -141,7 +141,11 @@ class CartRepository
         $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
 
         $holder->address()->create($data['card']['holder']['address']);
-        $holder->phone()->create($data['card']['holder']['phone']);
+
+        $holder->phone()->create([
+            'area_code' => substr($data['card']['holder']['phone'], 0, 2),
+            'phone'     => substr($data['card']['holder']['phone'], 2),
+        ]);
 
         $holder->save();
 
