@@ -38,4 +38,13 @@ class EventController extends ApiController
     {
         return $this->makeResource($this->repository->update($request->all(), $id));
     }
+
+    /**
+     * @param string $url
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function findByUrl(string $url)
+    {
+        return $this->makeResource($this->repository->findByUrl($url));
+    }
 }

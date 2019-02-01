@@ -23,6 +23,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon                 deleted_at
  * @property \Carbon\Carbon                 starts_at
  * @property \Carbon\Carbon                 finishes_at
+ * @property bool                           fee_is_hidden
  * @property bool                           is_active
  * @property bool                           is_public
  * @property \Modules\Event\Models\Entrance entrances
@@ -36,10 +37,12 @@ class Event extends Model
 
     const STATUS_ACTIVE = TRUE;
     const STATUS_PUBLIC = FALSE;
+    const STATUS_FEE = TRUE;
 
     protected $attributes = [
-        'is_active' => self::STATUS_ACTIVE,
-        'is_public' => self::STATUS_PUBLIC,
+        'is_active'     => self::STATUS_ACTIVE,
+        'is_public'     => self::STATUS_PUBLIC,
+        'fee_is_hidden' => self::STATUS_FEE,
     ];
 
     protected $fillable = [
@@ -54,6 +57,7 @@ class Event extends Model
         'referer',
         'starts_at',
         'finishes_at',
+        'fee_is_hidden',
         'is_public',
         'is_active',
     ];
@@ -64,6 +68,12 @@ class Event extends Model
         'deleted_at',
         'starts_at',
         'finishes_at',
+    ];
+
+    protected $casts = [
+        'fee_is_hidden' => 'boolean',
+        'is_public'     => 'boolean',
+        'is_active'     => 'boolean',
     ];
 
     /**

@@ -1,11 +1,16 @@
 <?php
 
-Route::middleware('api.v:1,event')->prefix('v1')->group(function ()
-{
-    Route::prefix('events/{event}')->group(function ()
-    {
-        Route::apiResource('entrances', 'EntranceController');
-    });
+Route::middleware('api.v:1,event')
+    ->prefix('v1')
+    ->group(function () {
+        Route::apiResource('events', 'EventController')->except(['show']);
 
-    Route::apiResource('events', 'EventController');
-});
+        Route::prefix('events')->as('events.')->group(function () {
+            Route::get('{event}', 'EventController@show')->name('show')->where('event', '\b[0-9a-fA-F]{24}\b');
+            Route::get('{url}', 'EventController@findByUrl');
+        });
+
+        Route::prefix('events/{event}')->group(function () {
+            Route::apiResource('entrances', 'EntranceController');
+        });
+    });

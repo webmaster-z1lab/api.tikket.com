@@ -17,6 +17,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class Lot extends Model
 {
     protected $fillable = [
+        'number',
         'amount',
         'value',
         'fee',
@@ -25,6 +26,7 @@ class Lot extends Model
     ];
 
     protected $casts = [
+        'number' => 'integer',
         'amount' => 'integer',
         'value'  => 'integer',
         'fee'    => 'integer',

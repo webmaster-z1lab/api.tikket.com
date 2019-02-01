@@ -62,4 +62,18 @@ class EventRepository extends ApiRepository
 
         return $event->fresh();
     }
+
+    /**
+     * @param string $url
+     *
+     * @return mixed
+     */
+    public function findByUrl(string $url)
+    {
+        $place = $this->model->where('url', $url)->first();
+
+        if (NULL === $place) abort(404);
+
+        return $place;
+    }
 }
