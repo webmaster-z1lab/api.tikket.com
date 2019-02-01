@@ -3,6 +3,7 @@
 namespace Modules\Cart\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Cart\Http\Requests\CardRequest;
 use Modules\Cart\Http\Requests\CartRequest;
 use Modules\Cart\Http\Requests\TicketRequest;
 use Modules\Cart\Repositories\CartRepository;
@@ -64,12 +65,12 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Modules\Cart\Http\Requests\TicketRequest $request
-     * @param string                                    $id
+     * @param \Modules\Cart\Http\Requests\CardRequest $request
+     * @param string                                  $id
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function card(TicketRequest $request, string $id)
+    public function card(CardRequest $request, string $id)
     {
         return api_resource('Cart')->make($this->repository->setCard($request->validated(), $id));
     }
