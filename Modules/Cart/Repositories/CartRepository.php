@@ -151,6 +151,15 @@ class CartRepository
 
         $card->save();
 
+        if (array_key_exists('costumer', $data) && !empty($data['costumer'])) {
+            $costumer = $cart->costumer()->create(array_except($data['costumer'], ['phone']));
+            $costumer->phone()->create([
+                'area_code' => substr($data['costumer']['phone'], 0, 2),
+                'phone'     => substr($data['costumer']['phone'], 2),
+            ]);
+            $costumer->save();
+        }
+
         $cart->save();
 
         return $cart->fresh();

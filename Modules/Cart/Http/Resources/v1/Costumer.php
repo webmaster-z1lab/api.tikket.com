@@ -5,7 +5,7 @@ namespace Modules\Cart\Http\Resources\v1;
 use Illuminate\Http\Resources\Json\Resource;
 use Juampi92\APIResources\APIResourceManager;
 
-class Holder extends Resource
+class Costumer extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -21,10 +21,7 @@ class Holder extends Resource
 
         return [
             'id'         => $this->id,
-            'name'       => $this->name,
             'document'   => substr($this->document, 0, 3) . '.***.***-**',
-            'birth_date' => $this->birth_date->format('Y-m-d'),
-            'address'    => $cart->resolve('Address')->make($this->address),
             'phone'      => $cart->resolve('Phone')->make($this->phone),
         ];
     }

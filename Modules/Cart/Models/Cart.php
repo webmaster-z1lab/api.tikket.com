@@ -50,6 +50,14 @@ class Cart extends Model
         return $this->embedsOne(Card::class);
     }
 
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function costumer()
+    {
+        return $this->embedsOne(Costumer::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

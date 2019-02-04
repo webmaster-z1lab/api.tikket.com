@@ -60,9 +60,9 @@ class OrderRepository
             'user_id'  => $user->id,
             'name'     => $user->name,
             'email'    => $user->email,
-            'document' => $user->document,
+            'document' => $data['costumer']['document'],
         ]);
-        $costumer->phone()->create($data['card']['holder']['phone']);
+        $costumer->phone()->create($data['costumer']['phone']);
         $costumer->save();
 
         $card = $order->card()->create(array_except($data['card'], ['holder']));

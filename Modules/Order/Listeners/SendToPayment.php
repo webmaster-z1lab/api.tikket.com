@@ -3,6 +3,7 @@
 namespace Modules\Order\Listeners;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Event\Repositories\EntranceRepository;
@@ -66,12 +67,16 @@ class SendToPayment
         if (!$credential)
             throw new \Exception('Not possible to generate the client credential.');
 
-        $response = $client->post('api/v1/transactions', [
-            'headers' => [
-                'Authorization' => "Bearer $credential",
-            ],
-            'json'    => $data,
-        ]);
+        try {
+            $response = $client->post('api/v1/transactions', [
+                'headers' => [
+                    'Authorization' => "Bearer $credential",
+                ],
+                'json'    => $data,
+            ]);
+        } catch (ClientException $e) {
+            dd((string)$e->getResponse()->getBody());
+        }
 
         $transaction_id = json_decode($response->getBody(), TRUE)['data']['id'];
         $order->transaction_id = $transaction_id;
