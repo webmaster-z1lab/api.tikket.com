@@ -36,6 +36,6 @@ class OrderController extends Controller
 
         event(new OrderCreated($order->id));
 
-        return api_resource('Order')->make($order);
+        return api_resource('Order')->make($order->fresh());
     }
 }

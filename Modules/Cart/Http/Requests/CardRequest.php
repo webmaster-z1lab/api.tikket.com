@@ -3,6 +3,7 @@
 namespace Modules\Cart\Http\Requests;
 
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
+use Z1lab\OpenID\Services\ApiService;
 
 class CardRequest extends ApiFormRequest
 {
@@ -27,9 +28,9 @@ class CardRequest extends ApiFormRequest
             'callback' => 'bail|required|string',
             'hash'     => 'bail|required|string',
 
-            'costumer'          => 'bail|required|array',
-            'costumer.document' => 'bail|required|cpf',
-            'costumer.phone'    => 'bail|required|cell_phone',
+            'costumer'          => 'bail|nullable|array',
+            'costumer.document' => 'bail|required_with:costumer|cpf',
+            'costumer.phone'    => 'bail|required_with:costumer|cell_phone',
 
             'card'              => 'bail|required|array',
             'card.brand'        => 'bail|required|string',
@@ -53,5 +54,25 @@ class CardRequest extends ApiFormRequest
             'card.holder.address.city'        => 'bail|required|string',
             'card.holder.address.state'       => 'bail|required|string|size:2',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator $validator
+     *
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->costumer === NULL) {
+                if (\Auth::user()->document === NULL)
+                    $validator->errors()->add('costumer.document', 'O campo do documento do comprador é necessário.');
+                $user = (new ApiService())->getUser(\Request::bearerToken())->data;
+                if ($user->attributes->phone === NULL)
+                    $validator->errors()->add('costumer.phone', 'O campo do telefone do comprador é necessário.');
+            }
+        });
     }
 }

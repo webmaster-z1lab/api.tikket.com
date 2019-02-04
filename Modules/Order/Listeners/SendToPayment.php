@@ -52,13 +52,16 @@ class SendToPayment
 
         foreach ($order->tickets()->groupBy('entrance_id') as $entrance_id => $tickets) {
             $entrance = $this->entranceRepository->find($entrance_id);
+            $lot = $entrance->lots()->where('number', $tickets->first()->lot)->first();
             $data['items'][] = [
                 'item_id'     => $entrance_id,
                 'description' => $entrance->name,
                 'quantity'    => count($tickets),
-                'amount'      => $entrance->lots()->where('number', $tickets->first()->lot)->first()->value,
+                'amount'      => $lot->value + $lot->fee,
             ];
         }
+
+        $data['card']['holder']['birth_date'] = $data['card']['holder']['birth_date']->toDateTime()->format('Y-m-d');
 
         $client = new Client(['base_uri' => config('payment.server')]);
 

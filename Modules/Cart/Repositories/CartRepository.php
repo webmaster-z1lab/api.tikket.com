@@ -8,9 +8,9 @@
 
 namespace Modules\Cart\Repositories;
 
-
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
+use Z1lab\OpenID\Services\ApiService;
 
 class CartRepository
 {
@@ -151,11 +151,19 @@ class CartRepository
 
         $card->save();
 
-        if (array_key_exists('costumer', $data) && !empty($data['costumer'])) {
-            $costumer = $cart->costumer()->create(array_except($data['costumer'], ['phone']));
+        if (array_key_exists('costumer', $data)) {
+            $costumer = $cart->costumer()->create(['document' => $data['costumer']['document']]);
             $costumer->phone()->create([
                 'area_code' => substr($data['costumer']['phone'], 0, 2),
                 'phone'     => substr($data['costumer']['phone'], 2),
+            ]);
+            $costumer->save();
+        } else {
+            $costumer = $cart->costumer()->create(['document' => \Auth::user()->document]);
+            $user = (new ApiService())->getUser(\Request::bearerToken())->data;
+            $costumer->phone()->create([
+                'area_code' => $user->attributes->phone->area_code,
+                'phone'     => $user->attributes->phone->phone,
             ]);
             $costumer->save();
         }

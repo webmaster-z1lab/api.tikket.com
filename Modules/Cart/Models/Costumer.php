@@ -8,7 +8,7 @@ class Costumer extends Model
 {
     public $timestamps = FALSE;
 
-    protected $fillable = ['documet'];
+    protected $fillable = ['document'];
 
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
