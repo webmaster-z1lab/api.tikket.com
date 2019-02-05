@@ -78,4 +78,21 @@ class OrderRepository
 
         return $order->fresh();
     }
+
+    /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Order\Models\Order|null
+     */
+    public function setStatus(array $data, string $id)
+    {
+        $order = $this->find($id);
+
+        $order->status = $data['status'];
+
+        $order->save();
+
+        return $order->fresh();
+    }
 }

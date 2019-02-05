@@ -5,6 +5,7 @@ namespace Modules\Order\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Http\Requests\OrderRequest;
+use Modules\Order\Http\Requests\StatusRequest;
 use Modules\Order\Repositories\OrderRepository;
 
 class OrderController extends Controller
@@ -37,5 +38,16 @@ class OrderController extends Controller
         event(new OrderCreated($order->id));
 
         return api_resource('Order')->make($order->fresh());
+    }
+
+    /**
+     * @param \Modules\Order\Http\Requests\StatusRequest $request
+     * @param string                                     $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function status(StatusRequest $request, string $id)
+    {
+        return api_resource('Order')->make($this->repository->setStatus($request->validated(), $id));
     }
 }
