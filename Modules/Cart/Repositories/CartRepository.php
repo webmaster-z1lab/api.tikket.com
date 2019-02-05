@@ -8,6 +8,7 @@
 
 namespace Modules\Cart\Repositories;
 
+use Modules\Cart\Events\UserInformationReceived;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Z1lab\OpenID\Services\ApiService;
@@ -158,6 +159,8 @@ class CartRepository
                 'phone'     => substr($data['costumer']['phone'], 2),
             ]);
             $costumer->save();
+
+            event(new UserInformationReceived(\Request::bearerToken(), \Auth::id(), $data['costumer']['document'], $data['costumer']['phone']));
         } else {
             $costumer = $cart->costumer()->create(['document' => \Auth::user()->document]);
             $user = (new ApiService())->getUser(\Request::bearerToken())->data;
