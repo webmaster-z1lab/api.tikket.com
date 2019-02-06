@@ -40,7 +40,7 @@ class UpdateUser
             'json'    => ['document' => $event->getDocument()],
         ]);
 
-        $this->client->patch('api/v1/users/' . $event->getUserId() . '/phone', [
+        $this->client->post('api/v1/users/' . $event->getUserId() . '/phones', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $event->getToken(),
             ],
