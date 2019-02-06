@@ -8,55 +8,104 @@
 
 namespace Modules\Event\Repositories;
 
+use Carbon\Carbon;
 use Modules\Event\Models\Entrance;
+use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Repositories\ApiRepository;
+use Z1lab\JsonApi\Traits\CacheTrait;
 
-class EntranceRepository extends ApiRepository
+class EntranceRepository
 {
+    use CacheTrait;
+
     /**
-     * EntranceRepository constructor.
-     *
-     * @param \Modules\Event\Models\Entrance $model
+     * @var \Modules\Event\Models\Event
      */
-    public function __construct(Entrance $model)
+    private $model;
+
+    /**
+     * ProducerRepository constructor.
+     *
+     * @param \Modules\Event\Models\Event $model
+     */
+    public function __construct(Event $model)
     {
-        parent::__construct($model, 'event');
+        $this->model = $model;
     }
 
     /**
-     * @param array $data
+     * @param string $id
      *
-     * @return \Modules\Event\Models\Entrance
+     * @return \Modules\Event\Models\Event
      */
-    public function create(array $data)
+    public function event(string $id)
     {
-        $entrance = $this->model->create($data);
+        $event = \Cache::remember("producer-$id", $this->cacheDefault(), function () use ($id) {
+            return $this->model->find($id);
+        });
 
-        $entrance->lots()->createMany($data['lots']);
+        if (NULL === $event) abort(404);
 
-        $this->setCacheKey($entrance->id);
-        $this->remember($entrance);
-
-        return $entrance;
+        return $event;
     }
 
     /**
      * @param array  $data
+     * @param string $event
+     *
+     * @return \Modules\Event\Models\Event
+     */
+    public function insert(array $data, string $event)
+    {
+        $event = $this->event($event);
+
+        $event->update(['fee_is_hidden' => $data['fee_is_hidden']]);
+
+        if ($event->entrances()->exists()) $event->entrances()->delete();
+
+        foreach ($data['entrances'] as $datum) {
+            $datum['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $datum['starts_at']);
+            $entrance = $event->entrances()->create(array_except($datum, ['lots']));
+            foreach ($datum['lots'] as $key => $lot) {
+                $lot['number'] = $key + 1;
+                $lot['value'] = (int)($lot['value'] * 100);
+                $lot['fee'] = (int)($lot['value'] / 10);
+                $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $lot['finishes_at']);
+                $entrance->lots()->create($lot);
+            }
+        }
+
+        return $event->fresh();
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Modules\Event\Models\Event
+     */
+    public function destroy(string $event)
+    {
+        $event = $this->event($event);
+
+        $event->entrances()->delete();
+
+        return $event->fresh();
+    }
+
+    /**
+     * @param string $event
      * @param string $id
      *
-     * @return \Modules\Event\Models\Entrance
+     * @return null|\Modules\Event\Models\Entrance
      */
-    public function update(array $data, string $id)
+    public function find(string $event, string $id)
     {
-        $item = $this->find($id);
-        $item->update($data);
+        $event = $this->event($event);
 
-        $item->lots()->delete();
-        $item->lots()->createMany($data['lots']);
+        $entrance = $event->entrances()->find($id);
 
-        $this->setCacheKey($id);
-        $this->flush()->remember($item);
+        if (NULL === $entrance) abort(404);
 
-        return $item->fresh();
+        return $entrance;
     }
 }

@@ -16,9 +16,13 @@ class Producer extends Resource
     public function toArray($request)
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'description' => $this->description,
+            'id'         => $this->id,
+            'type'       => 'producers',
+            'attributes' => [
+                'user_id'     => $this->user_id,
+                'name'        => $this->name,
+                'description' => $this->description,
+            ],
         ];
     }
 }
