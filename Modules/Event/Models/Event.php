@@ -35,8 +35,8 @@ class Event extends Model
 {
     use SoftDeletes;
 
-    const STATUS_ACTIVE = TRUE;
-    const STATUS_PUBLIC = FALSE;
+    const STATUS_ACTIVE = FALSE;
+    const STATUS_PUBLIC = TRUE;
     const STATUS_FEE = TRUE;
 
     protected $attributes = [
@@ -63,9 +63,6 @@ class Event extends Model
     ];
 
     protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
         'starts_at',
         'finishes_at',
     ];
@@ -93,10 +90,10 @@ class Event extends Model
     }
 
     /**
-     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function producer()
     {
-        return $this->embedsOne(Producer::class);
+        return $this->hasOne(Producer::class);
     }
 }

@@ -13,6 +13,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property bool                      is_public
  * @property int                       min_buy
  * @property int                       max_buy
+ * @property \Carbon\Carbon            starts_at
  * @property \Modules\Event\Models\Lot lots
  */
 class Entrance extends Model
@@ -31,10 +32,14 @@ class Entrance extends Model
 
     protected $fillable = [
         'name',
-        'is_public',
         'is_free',
         'min_buy',
         'max_buy',
+        'starts_at',
+    ];
+
+    protected $dates = [
+        'starts_at',
     ];
 
     /**

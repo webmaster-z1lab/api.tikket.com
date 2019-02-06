@@ -11,7 +11,6 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @property int            amount
  * @property int            value
- * @property \Carbon\Carbon starts_at
  * @property \Carbon\Carbon finishes_at
  */
 class Lot extends Model
@@ -21,7 +20,6 @@ class Lot extends Model
         'amount',
         'value',
         'fee',
-        'starts_at',
         'finishes_at',
     ];
 
@@ -33,7 +31,6 @@ class Lot extends Model
     ];
 
     protected $dates = [
-        'starts_at',
         'finishes_at',
     ];
 
