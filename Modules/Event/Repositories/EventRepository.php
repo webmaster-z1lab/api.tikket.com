@@ -8,6 +8,7 @@
 
 namespace Modules\Event\Repositories;
 
+use Carbon\Carbon;
 use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Repositories\ApiRepository;
 
@@ -30,14 +31,30 @@ class EventRepository extends ApiRepository
      */
     public function create(array $data)
     {
+        $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
+        $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
+        $data['url'] = snake_case($data['name']);
+        $data['referer'] = \Request::url();
+        $data['user_id'] = \Auth::id();
+
         $event = $this->model->create($data);
-
-        $event->address()->create($data['address']);
-
-        $event->producer()->create($data['producer']);
 
         $this->setCacheKey($event->id);
         $this->remember($event);
+
+        return $event;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return mixed
+     */
+    public function findByUrl(string $url)
+    {
+        $event = $this->model->where('url', $url)->first();
+
+        if (NULL === $event) abort(404);
 
         return $event;
     }
@@ -48,32 +65,14 @@ class EventRepository extends ApiRepository
      *
      * @return \Modules\Event\Models\Event
      */
-    public function update(array $data, string $id)
+    public function setAddress(array $data, string $id)
     {
         $event = $this->find($id);
-        $event->update($data);
 
-        $event->address->update($data['address']);
+        if ($event->address()->exists()) $event->address()->delete();
 
-        $event->producer->update($data['producer']);
-
-        $this->setCacheKey($id);
-        $this->flush()->remember($event);
+        $event->address()->create($data);
 
         return $event->fresh();
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return mixed
-     */
-    public function findByUrl(string $url)
-    {
-        $place = $this->model->where('url', $url)->first();
-
-        if (NULL === $place) abort(404);
-
-        return $place;
     }
 }

@@ -11,6 +11,10 @@ Route::middleware('api.v:1,event')
         });
 
         Route::prefix('events/{event}')->group(function () {
+            Route::patch('address', 'EventController@address');
+
             Route::apiResource('entrances', 'EntranceController');
+
+            Route::apiResource('producers', 'ProducerController');
         });
     });

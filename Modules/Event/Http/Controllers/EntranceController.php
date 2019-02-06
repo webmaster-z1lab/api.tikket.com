@@ -2,12 +2,18 @@
 
 namespace Modules\Event\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Event\Http\Requests\EntrancesRequest;
 use Modules\Event\Repositories\EntranceRepository;
-use Z1lab\JsonApi\Http\Controllers\ApiController;
 
-class EntranceController extends ApiController
+class EntranceController extends Controller
 {
+    /**
+     * @var \Modules\Event\Repositories\EntranceRepository
+     */
+    private $repository;
+
     /**
      * EntranceController constructor.
      *
@@ -15,27 +21,38 @@ class EntranceController extends ApiController
      */
     public function __construct(EntranceRepository $repository)
     {
-        parent::__construct($repository, 'Entrance');
+        $this->repository = $repository;
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Event\Http\Requests\EntrancesRequest $request
+     * @param string                                       $event
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function store(Request $request, string $event)
+    public function store(EntrancesRequest $request, string $event)
     {
-        return $this->makeResource($this->repository->create($request->all()));
+        return api_resource('Event')->make($this->repository->insert($request->validated(), $event));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param string                   $id
+     * @param string $event
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function update(Request $request, string $event, string $id)
+    public function destroy(string $event)
     {
-        return $this->makeResource($this->repository->update($request->all(), $id));
+        return api_resource('Event')->make($this->repository->destroy($event));
+    }
+
+    /**
+     * @param string $event
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function show(string $event, string $id)
+    {
+        return api_resource('Entrance')->make($this->repository->find($event, $id));
     }
 }

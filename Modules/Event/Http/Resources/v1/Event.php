@@ -27,7 +27,7 @@ class Event extends Resource
                 'url'           => $this->url,
                 'description'   => $this->description,
                 'body'          => $this->body,
-                'cover'         => $this->cover,
+                'cover'         => $this->cover,/*\Storage::url($this->cover),*/
                 'category'      => $this->category,
                 'types'         => $this->types,
                 'referer'       => $this->referer,
@@ -39,9 +39,9 @@ class Event extends Resource
                 'created_at'    => $this->created_at,
                 'updated_at'    => $this->updated_at,
                 'address'       => $event->resolve('Address')->make($this->address),
-                'producer'      => $event->resolve('Producer')->make($this->producer),
             ],
             'relationships' => [
+                'producer'  => $event->resolve('Producer')->make($this->producer),
                 'entrances' => $event->resolve('Entrance')->collection($this->entrances),
             ],
         ];
