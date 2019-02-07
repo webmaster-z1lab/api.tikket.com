@@ -22,8 +22,8 @@ class Lot extends Resource
             'value'       => $this->value,
             'fee'         => $this->fee,
             'price'       => $this->price,
-            'starts_at'   => $this->starts_at->toW3cString(),
-            'finishes_at' => $this->finishes_at->toW3cString(),
+            'starts_at'   => $this->starts_at,
+            'finishes_at' => $this->finishes_at,
         ];
     }
 }
