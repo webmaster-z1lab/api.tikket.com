@@ -18,6 +18,7 @@ use Modules\Event\Models\Event;
  * @property string                        callback
  * @property integer                       amount
  * @property integer                       fee
+ * @property integer                       fee_percentage
  * @property boolean                       fee_is_hidden
  * @property \Carbon\Carbon                expires_at
  * @property \Modules\Event\Models\Event   event
@@ -38,6 +39,7 @@ class Cart extends Model
         'callback',
         'amount',
         'fee',
+        'fee_percentage',
         'fee_is_hidden',
         'expires_at',
     ];
@@ -45,16 +47,16 @@ class Cart extends Model
     protected $dates = ['expires_at'];
 
     protected $casts = [
-        'fee_is_hidden' => 'boolean',
-        'amount'        => 'integer',
-        'fee'           => 'integer',
+        'fee_is_hidden'  => 'boolean',
+        'fee_percentage' => 'integer',
+        'amount'         => 'integer',
+        'fee'            => 'integer',
     ];
 
     protected $attributes = [
-        'type'          => 'credit_card',
-        'amount'        => 0,
-        'fee'           => 0,
-        'fee_is_hidden' => TRUE,
+        'type'   => 'credit_card',
+        'amount' => 0,
+        'fee'    => 0,
     ];
 
     /**

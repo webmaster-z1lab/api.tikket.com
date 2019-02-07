@@ -22,8 +22,7 @@ class OrderRepository
     {
         $order = Order::find($id);
 
-        if ($order === NULL)
-            abort(404);
+        if ($order === NULL) abort(404);
 
         return $order;
     }
@@ -39,17 +38,18 @@ class OrderRepository
     {
         $cart = Cart::find($cart_id);
 
-        if ($cart === NULL)
-            abort(404);
+        if ($cart === NULL) abort(404);
 
         $data = $cart->toArray();
 
         $order = Order::create([
-            'hash'   => $data['hash'],
-            'ip'     => $ip,
-            'type'   => $data['type'],
-            'amount' => $data['amount'],
-            'fee'    => $data['fee'],
+            'hash'           => $data['hash'],
+            'ip'             => $ip,
+            'type'           => $data['type'],
+            'amount'         => $data['amount'],
+            'fee_percentage' => $data['fee_percentage'],
+            'fee_is_hidden'  => $data['fee_is_hidden'],
+            'fee'            => $data['fee'],
         ]);
 
         $order->tickets()->createMany($data['tickets']);
@@ -69,11 +69,10 @@ class OrderRepository
         $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
         $holder->phone()->create($data['card']['holder']['phone']);
         $holder->address()->create($data['card']['holder']['address']);
+
         $holder->save();
         $card->save();
-
         $order->save();
-
         $cart->delete();
 
         return $order->fresh();
@@ -90,7 +89,6 @@ class OrderRepository
         $order = $this->find($id);
 
         $order->status = $data['status'];
-
         $order->save();
 
         return $order->fresh();

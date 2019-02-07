@@ -75,6 +75,7 @@ class CartRepository
 
         $cart->amount = $amount;
         $cart->fee = $fee;
+        $cart->fee_percentage = $cart->event->fee_percentage;
         $cart->fee_is_hidden = $cart->event->fee_is_hidden;
         $cart->expires_at = now()->addMinutes(15)->addSeconds(2);
         $cart->save();

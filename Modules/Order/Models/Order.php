@@ -16,6 +16,8 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property string                         hash
  * @property string                         ip
  * @property string                         type
+ * @property integer                        fee_percentage
+ * @property boolean                        fee_is_hidden
  * @property \Modules\Order\Models\Costumer costumer
  * @property \Modules\Order\Models\Card     card
  * @property \Modules\Order\Models\Ticket   tickets
@@ -30,14 +32,18 @@ class Order extends Model
         'status',
         'amount',
         'fee',
+        'fee_percentage',
+        'fee_is_hidden',
         'hash',
         'ip',
         'type',
     ];
 
     protected $casts = [
-        'amount' => 'integer',
-        'fee'    => 'integer',
+        'amount'         => 'integer',
+        'fee'            => 'integer',
+        'fee_percentage' => 'integer',
+        'fee_is_hidden'  => 'boolean',
     ];
 
     protected $attributes = [
