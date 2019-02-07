@@ -19,4 +19,6 @@ Route::middleware('api.v:1,event')
         });
 
         Route::get('categories', 'CategoryController@index');
+
+        Route::get('producer', 'ProducerController@getByUser');
     });

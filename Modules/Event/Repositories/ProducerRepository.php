@@ -9,6 +9,7 @@
 namespace Modules\Event\Repositories;
 
 use Modules\Event\Models\Event;
+use Modules\Event\Models\Producer;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
 class ProducerRepository
@@ -100,5 +101,13 @@ class ProducerRepository
         if (NULL === $producer) abort(404);
 
         return $producer;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getByUser()
+    {
+        return Producer::where('user_id', \Auth::id())->get();
     }
 }
