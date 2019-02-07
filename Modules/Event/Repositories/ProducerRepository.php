@@ -8,7 +8,6 @@
 
 namespace Modules\Event\Repositories;
 
-
 use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
@@ -68,15 +67,38 @@ class ProducerRepository
 
     /**
      * @param string $event
+     * @param string $id
      *
      * @return \Modules\Event\Models\Event
+     * @throws \Exception
      */
-    public function destroy(string $event)
+    public function destroy(string $event, string $id)
     {
         $event = $this->event($event);
 
-        $event->producer()->delete();
+        $producer = $event->producer()->find($id);
+
+        if (NULL === $producer) abort(404);
+
+        $producer->delete();
 
         return $event->fresh();
+    }
+
+    /**
+     * @param string $event
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Producer|null
+     */
+    public function find(string $event, string $id)
+    {
+        $event = $this->event($event);
+
+        $producer = $event->producer()->find($id);
+
+        if (NULL === $producer) abort(404);
+
+        return $producer;
     }
 }

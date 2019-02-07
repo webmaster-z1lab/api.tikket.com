@@ -1,5 +1,9 @@
 <?php
 
 return [
-    'name' => 'Event'
+    'name'       => 'Event',
+    'categories' => [
+        ['name' => 'show'],
+        ['name' => 'festa'],
+    ],
 ];

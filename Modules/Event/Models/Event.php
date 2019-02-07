@@ -26,7 +26,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property bool                           fee_is_hidden
  * @property bool                           is_active
  * @property bool                           is_public
- * @property \Modules\Event\Models\Entrance entrances
+ * @property \Jenssegers\Mongodb\Collection entrances
  * @property \Modules\Event\Models\Address  address
  * @property \Modules\Event\Models\Producer producer
  *

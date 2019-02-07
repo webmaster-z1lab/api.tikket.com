@@ -36,11 +36,23 @@ class ProducerController extends Controller
 
     /**
      * @param string $event
+     * @param string $id
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function destroy(string $event)
+    public function destroy(string $event, string $id)
     {
-        return api_resource('Event')->make($this->repository->destroy($event));
+        return api_resource('Event')->make($this->repository->destroy($event, $id));
+    }
+
+    /**
+     * @param string $event
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function show(string $event, string $id)
+    {
+        return api_resource('Producer')->make($this->repository->find($event, $id));
     }
 }
