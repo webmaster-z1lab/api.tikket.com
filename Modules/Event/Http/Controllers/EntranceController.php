@@ -25,8 +25,18 @@ class EntranceController extends Controller
     }
 
     /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function index(string $event)
+    {
+        return api_resource('Entrance')->collection($this->repository->get($event));
+    }
+
+    /**
      * @param \Modules\Event\Http\Requests\EntrancesRequest $request
-     * @param string                                       $event
+     * @param string                                        $event
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
@@ -39,10 +49,11 @@ class EntranceController extends Controller
      * @param string $event
      *
      * @return \Illuminate\Http\Resources\Json\Resource
+     * @throws \Exception
      */
-    public function destroy(string $event)
+    public function destroy(string $event, string  $id)
     {
-        return api_resource('Event')->make($this->repository->destroy($event));
+        return api_resource('Event')->make($this->repository->destroy($event, $id));
     }
 
     /**

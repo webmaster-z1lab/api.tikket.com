@@ -13,8 +13,12 @@ Route::middleware('api.v:1,event')
         Route::prefix('events/{event}')->group(function () {
             Route::patch('address', 'EventController@address');
 
-            Route::apiResource('entrances', 'EntranceController');
+            Route::apiResource('entrances', 'EntranceController')->except(['update']);
 
-            Route::apiResource('producers', 'ProducerController');
+            Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);
         });
+
+        Route::get('categories', 'CategoryController@index');
+
+        Route::get('producer', 'ProducerController@getByUser');
     });

@@ -9,9 +9,7 @@
 namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
-use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
-use Z1lab\JsonApi\Repositories\ApiRepository;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
 class EntranceRepository
@@ -82,12 +80,17 @@ class EntranceRepository
      * @param string $event
      *
      * @return \Modules\Event\Models\Event
+     * @throws \Exception
      */
-    public function destroy(string $event)
+    public function destroy(string $event, string $id)
     {
         $event = $this->event($event);
 
-        $event->entrances()->delete();
+        $entrance = $event->entrances()->find($id);
+
+        if (NULL === $entrance) abort(404);
+
+        $entrance->delete();
 
         return $event->fresh();
     }
@@ -107,5 +110,17 @@ class EntranceRepository
         if (NULL === $entrance) abort(404);
 
         return $entrance;
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Jenssegers\Mongodb\Collection
+     */
+    public function get(string $event)
+    {
+        $event = $this->event($event);
+
+        return $event->entrances;
     }
 }
