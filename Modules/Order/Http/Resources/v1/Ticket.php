@@ -23,6 +23,7 @@ class Ticket extends Resource
             'name'        => $this->name,
             'document'    => substr($this->document, 0, 3) . '.***.***-**',
             'email'       => $this->email,
+            'value'       => $this->value,
             'price'       => $this->price,
             'fee'         => $this->fee,
         ];

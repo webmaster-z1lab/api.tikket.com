@@ -15,7 +15,6 @@ use Z1lab\OpenID\Services\ApiService;
 
 class CartRepository
 {
-
     /**
      * @param string $id
      *
@@ -25,14 +24,13 @@ class CartRepository
     {
         $cart = Cart::find($id);
 
-        if ($cart === NULL)
-            abort(404);
+        if ($cart === NULL) abort(404);
 
         return $cart;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|\Modules\Cart\Models\Cart|object|null
+     * @return \Illuminate\Database\Eloquent\Model|\Modules\Cart\Models\Cart|null
      */
     public function getByUser()
     {
@@ -47,28 +45,29 @@ class CartRepository
     public function create(array $data)
     {
         $cart = Cart::create([
-            'user_id'    => \Auth::check() ? \Auth::id() : NULL,
-            'callback'   => $data['callback'],
-            'expires_at' => now()->addMinutes(15),
+            'user_id'  => \Auth::check() ? \Auth::id() : NULL,
+            'callback' => $data['callback'],
         ]);
 
         $cart->event()->associate($data['event']);
 
         $amount = 0;
         $fee = 0;
+
         foreach ($data['tickets'] as $ticket) {
             $ticket['quantity'] = intval($ticket['quantity']);
             $entrance = Entrance::find($ticket['entrance']);
             $lot = $entrance->lots()->where('number', $ticket['lot'])->first();
+
             $amount += ($ticket['quantity'] * $lot->value);
             $fee += ($ticket['quantity'] * $lot->fee);
 
-            for ($aux = 0; $aux < $ticket['quantity']; $aux++) {
+            for ($i = 0; $i < $ticket['quantity']; $i++) {
                 $cart->tickets()->create([
                     'entrance_id' => $ticket['entrance'],
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
-                    'price'       => $lot->value,
+                    'value'       => $lot->value,
                     'fee'         => $lot->fee,
                 ]);
             }
@@ -76,6 +75,8 @@ class CartRepository
 
         $cart->amount = $amount;
         $cart->fee = $fee;
+        $cart->fee_is_hidden = $cart->event->fee_is_hidden;
+        $cart->expires_at = now()->addMinutes(15)->addSeconds(2);
         $cart->save();
 
         return $cart->fresh();

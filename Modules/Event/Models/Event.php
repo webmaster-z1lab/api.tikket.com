@@ -18,9 +18,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property string                         category
  * @property string                         types
  * @property string                         referer
- * @property \Carbon\Carbon                 created_at
- * @property \Carbon\Carbon                 updated_at
- * @property \Carbon\Carbon                 deleted_at
  * @property \Carbon\Carbon                 starts_at
  * @property \Carbon\Carbon                 finishes_at
  * @property bool                           fee_is_hidden
@@ -29,7 +26,8 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Modules\Event\Models\Entrance entrances
  * @property \Modules\Event\Models\Address  address
  * @property \Modules\Event\Models\Producer producer
- *
+ * @property-read \Carbon\Carbon            created_at
+ * @property-read \Carbon\Carbon            updated_at
  */
 class Event extends Model
 {
@@ -90,10 +88,10 @@ class Event extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function producer()
     {
-        return $this->hasOne(Producer::class);
+        return $this->belongsTo(Producer::class);
     }
 }

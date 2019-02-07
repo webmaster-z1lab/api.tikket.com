@@ -24,6 +24,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class Address extends Model
 {
+    public $timestamps = FALSE;
+
     protected $fillable = [
         'name',
         'street',

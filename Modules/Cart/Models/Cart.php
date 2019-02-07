@@ -7,23 +7,54 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\Cart\Scopes\NotExpiredScope;
 use Modules\Event\Models\Event;
 
+/**
+ * Class Cart
+ *
+ * @package Modules\Cart\Models
+ *
+ * @property string                        user_id
+ * @property string                        type
+ * @property string                        hash
+ * @property string                        callback
+ * @property integer                       amount
+ * @property integer                       fee
+ * @property boolean                       fee_is_hidden
+ * @property \Carbon\Carbon                expires_at
+ * @property \Modules\Event\Models\Event   event
+ * @property \Modules\Cart\Models\Ticket   tickets
+ * @property \Modules\Cart\Models\Card     card
+ * @property \Modules\Cart\Models\Costumer costumer
+ * @property-read \Carbon\Carbon           created_at
+ * @property-read \Carbon\Carbon           updated_at
+ */
 class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'type', 'hash', 'callback', 'amount', 'fee', 'expires_at'];
+    protected $fillable = [
+        'user_id',
+        'type',
+        'hash',
+        'callback',
+        'amount',
+        'fee',
+        'fee_is_hidden',
+        'expires_at',
+    ];
 
     protected $dates = ['expires_at'];
 
     protected $casts = [
-        'amount' => 'integer',
-        'fee'    => 'integer',
+        'fee_is_hidden' => 'boolean',
+        'amount'        => 'integer',
+        'fee'           => 'integer',
     ];
 
     protected $attributes = [
-        'type'   => 'credit_card',
-        'amount' => 0,
-        'fee'    => 0,
+        'type'          => 'credit_card',
+        'amount'        => 0,
+        'fee'           => 0,
+        'fee_is_hidden' => TRUE,
     ];
 
     /**

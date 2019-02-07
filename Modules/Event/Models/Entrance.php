@@ -3,6 +3,7 @@
 namespace Modules\Event\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 /**
  * Class Entrance
@@ -10,24 +11,27 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @package Modules\Event\Models
  *
  * @property string                    name
- * @property bool                      is_public
+ * @property bool                      is_free
  * @property int                       min_buy
  * @property int                       max_buy
  * @property \Carbon\Carbon            starts_at
  * @property \Modules\Event\Models\Lot lots
+ * @property-read \Carbon\Carbon       created_at
+ * @property-read \Carbon\Carbon       updated_at
  */
 class Entrance extends Model
 {
+    use SoftDeletes;
+
     const STATUS_PUBLIC = TRUE;
     const STATUS_FREE = FALSE;
     const MIN_BUY = 1;
     const MAX_BUY = 5;
 
     protected $attributes = [
-        'is_public' => self::STATUS_PUBLIC,
-        'is_free'   => self::STATUS_PUBLIC,
-        'min_buy'   => self::MIN_BUY,
-        'max_buy'   => self::MAX_BUY,
+        'is_free' => self::STATUS_PUBLIC,
+        'min_buy' => self::MIN_BUY,
+        'max_buy' => self::MAX_BUY,
     ];
 
     protected $fillable = [
