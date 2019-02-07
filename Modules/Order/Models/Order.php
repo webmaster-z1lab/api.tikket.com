@@ -4,6 +4,7 @@ namespace Modules\Order\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\Event\Models\Event;
 
 /**
  * Class Order
@@ -21,6 +22,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Modules\Order\Models\Costumer costumer
  * @property \Modules\Order\Models\Card     card
  * @property \Modules\Order\Models\Ticket   tickets
+ * @property \Modules\Event\Models\Event    event
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
  */
@@ -72,5 +74,13 @@ class Order extends Model
     public function tickets()
     {
         return $this->embedsMany(Ticket::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
     }
 }

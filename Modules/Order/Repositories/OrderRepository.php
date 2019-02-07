@@ -52,6 +52,7 @@ class OrderRepository
             'fee'            => $data['fee'],
         ]);
 
+        $order->event()->associate($data['event_id']);
         $order->tickets()->createMany($data['tickets']);
 
         $user = \Auth::user();
