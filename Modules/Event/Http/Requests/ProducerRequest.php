@@ -2,9 +2,9 @@
 
 namespace Modules\Event\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
-class ProducerRequest extends FormRequest
+class ProducerRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
