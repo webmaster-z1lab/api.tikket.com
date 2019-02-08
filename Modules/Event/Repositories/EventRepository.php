@@ -63,8 +63,8 @@ class EventRepository extends ApiRepository
 
         $event->update($data);
 
-        $this->setCacheKey($event->id);
-        $this->remember($event);
+        $this->setCacheKey($id);
+        $this->flush()->remember($event);
 
         return $event;
     }
@@ -95,7 +95,9 @@ class EventRepository extends ApiRepository
 
         if ($event->address()->exists()) $event->address()->delete();
 
-        $event->address()->create($data);
+        $address = $event->address()->create(array_except($data, ['coordinate']));
+
+        $address->coordinate()->create(['location' => $data['coordinate']]);
 
         return $event->fresh();
     }

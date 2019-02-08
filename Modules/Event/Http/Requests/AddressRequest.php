@@ -32,6 +32,11 @@ class AddressRequest extends FormRequest
             'city'        => 'bail|required|string',
             'state'       => 'bail|required|string|size:2',
             'postal_code' => 'bail|required|digits:8',
+            'maps_url'    => 'bail|required|url',
+
+            'coordinate'     => 'bail|required|array',
+            'coordinate.lat' => 'bail|required|numeric',
+            'coordinate.lng' => 'bail|required|numeric',
         ];
     }
 }
