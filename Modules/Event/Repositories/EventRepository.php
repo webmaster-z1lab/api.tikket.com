@@ -46,6 +46,30 @@ class EventRepository extends ApiRepository
     }
 
     /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event
+     */
+    public function update(array $data, string $id)
+    {
+        $event = $this->find($id);
+
+        $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
+        $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
+        $data['url'] = snake_case($data['name']);
+        $data['referer'] = \Request::url();
+        $data['user_id'] = \Auth::id();
+
+        $event->update($data);
+
+        $this->setCacheKey($event->id);
+        $this->remember($event);
+
+        return $event;
+    }
+
+    /**
      * @param string $url
      *
      * @return mixed
