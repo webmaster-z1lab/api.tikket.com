@@ -29,7 +29,7 @@ class BasicInformationRequest extends ApiFormRequest
             'body'          => 'bail|required|string',
 //            'cover'         => 'bail|required|file|image',
             'category'      => 'bail|required|string',
-            'types'         => 'bail|required|string',
+//            'types'         => 'bail|required|string',
             'starts_at'     => 'bail|required|date_format:Y-m-d H:i|after:now',
             'finishes_at'   => 'bail|required|date_format:Y-m-d H:i|after:starts_at',
 //            'is_active'     => 'bail|required|boolean',

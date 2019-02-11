@@ -33,6 +33,7 @@ class AddressRequest extends ApiFormRequest
             'state'       => 'bail|required|string|size:2',
             'postal_code' => 'bail|required|digits:8',
             'maps_url'    => 'bail|required|url',
+            'formatted'   => 'bail|required|string',
 
             'coordinate'     => 'bail|required|array',
             'coordinate.lat' => 'bail|required|numeric',

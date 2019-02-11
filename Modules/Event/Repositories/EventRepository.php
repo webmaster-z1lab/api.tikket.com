@@ -95,6 +95,9 @@ class EventRepository extends ApiRepository
 
         if ($event->address()->exists()) $event->address()->delete();
 
+        if (ends_with($data['formatted'], 'Brasil'))
+            $data['formatted'] = str_replace_last(', Brasil', '', $data['formatted']);
+
         $address = $event->address()->create(array_except($data, ['coordinate']));
 
         $address->coordinate()->create(['location' => $data['coordinate']]);

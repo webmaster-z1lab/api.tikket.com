@@ -61,7 +61,11 @@ class ProducerRepository
 
         $data['user_id'] = \Auth::id();
 
-        $event->producer()->create($data);
+        $producer = $event->producer()->create($data);
+
+        $event->producer()->associate($producer);
+
+        $event->save();
 
         return $event->fresh();
     }
