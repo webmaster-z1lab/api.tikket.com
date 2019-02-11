@@ -106,6 +106,21 @@ class EventRepository extends ApiRepository
     }
 
     /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event|null
+     */
+    public function setFeeIsHidden(array $data, string $id)
+    {
+        $event = $this->find($id);
+
+        $event->update($data);
+
+        return $event->fresh();
+    }
+
+    /**
      * @param string $id
      *
      * @return \Modules\Event\Models\Event|null

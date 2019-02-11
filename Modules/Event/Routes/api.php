@@ -15,6 +15,8 @@ Route::middleware('api.v:1,event')
 
             Route::patch('finalize', 'EventController@finilize');
 
+            Route::patch('fee', 'EventController@fee');
+
             Route::apiResource('entrances', 'EntranceController');
 
             Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);

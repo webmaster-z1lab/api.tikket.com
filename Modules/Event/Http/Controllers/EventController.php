@@ -4,6 +4,7 @@ namespace Modules\Event\Http\Controllers;
 
 use Modules\Event\Http\Requests\AddressRequest;
 use Modules\Event\Http\Requests\BasicInformationRequest;
+use Modules\Event\Http\Requests\FeeRequest;
 use Modules\Event\Repositories\EventRepository;
 use Z1lab\JsonApi\Http\Controllers\ApiController;
 
@@ -62,6 +63,17 @@ class EventController extends ApiController
     public function address(AddressRequest $request, string $id)
     {
         return $this->makeResource($this->repository->setAddress($request->validated(), $id));
+    }
+
+    /**
+     * @param \Modules\Event\Http\Requests\FeeRequest $request
+     * @param string                                  $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function fee(FeeRequest $request, string $id)
+    {
+        return $this->makeResource($this->repository->setFeeIsHidden($request->validated(), $id));
     }
 
     /**
