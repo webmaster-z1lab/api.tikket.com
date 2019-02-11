@@ -63,4 +63,14 @@ class EventController extends ApiController
     {
         return $this->makeResource($this->repository->setAddress($request->validated(), $id));
     }
+
+    /**
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function finilize(string $id)
+    {
+        return $this->makeResource($this->repository->finalize($id));
+    }
 }

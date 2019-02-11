@@ -104,4 +104,20 @@ class EventRepository extends ApiRepository
 
         return $event->fresh();
     }
+
+    /**
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event|null
+     */
+    public function finilize(string $id)
+    {
+        $event = $this->find($id);
+
+        if ($event->status !== 'draft') abort(400, 'This event is not a draft.');
+
+        $event->update(['status' => 'complete']);
+
+        return $event->fresh();
+    }
 }
