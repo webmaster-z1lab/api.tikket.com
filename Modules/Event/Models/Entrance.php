@@ -40,6 +40,7 @@ class Entrance extends Model
         'min_buy',
         'max_buy',
         'starts_at',
+        'description'
     ];
 
     protected $dates = [
