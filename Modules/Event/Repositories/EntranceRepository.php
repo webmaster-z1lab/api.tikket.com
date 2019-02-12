@@ -57,13 +57,13 @@ class EntranceRepository
     {
         $event = $this->event($event);
 
-        $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
+        $data['starts_at'] = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
         $entrance = $event->entrances()->create(array_except($data, ['lots']));
         foreach ($data['lots'] as $key => $lot) {
             $lot['number'] = $key + 1;
             $lot['value'] = (int)($lot['value'] * 100);
             $lot['fee'] = (int)($lot['value'] / 10);
-            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $lot['finishes_at']);
+            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
             $entrance->lots()->create($lot);
         }
 
@@ -81,7 +81,7 @@ class EntranceRepository
     {
         $event = $this->event($event);
 
-        $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
+        $data['starts_at'] = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
         $entrance = $event->entrances()->find($id);
         $entrance->update(array_except($data, ['lots']));
 
@@ -91,7 +91,7 @@ class EntranceRepository
             $lot['number'] = $key + 1;
             $lot['value'] = (int)($lot['value'] * 100);
             $lot['fee'] = (int)($lot['value'] / 10);
-            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $lot['finishes_at']);
+            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
             $entrance->lots()->create($lot);
         }
 

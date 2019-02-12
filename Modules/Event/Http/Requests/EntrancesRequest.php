@@ -28,14 +28,14 @@ class EntrancesRequest extends ApiFormRequest
             'is_free'     => 'bail|required|boolean',
             'min_buy'     => 'bail|nullable|integer|min:0|lte:max_buy',
             'max_buy'     => 'bail|required|integer|gte:min_buy',
-            'starts_at'   => 'bail|required|date_format:Y-m-d H:i|after:now',
+            'starts_at'   => 'bail|required|date_format:Y-m-d|after:today',
             'description' => 'bail|nullable|string',
 
             'lots' => 'bail|required|array|min:1',
 
             'lots.*.amount'      => 'bail|required|integer|min:1',
             'lots.*.value'       => 'bail|required_if:entrances.*.is_free,false|numeric',
-            'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d H:i|after:entrances.*.starts_at',
+            'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after:entrances.*.starts_at',
         ];
     }
 }
