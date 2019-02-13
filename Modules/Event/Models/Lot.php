@@ -31,7 +31,6 @@ class Lot extends Model
     ];
 
     protected $dates = [
-        'starts_at',
         'finishes_at',
     ];
 

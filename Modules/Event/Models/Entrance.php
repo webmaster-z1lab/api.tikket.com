@@ -53,4 +53,12 @@ class Entrance extends Model
     {
         return $this->embedsMany(Lot::class);
     }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function available()
+    {
+        return $this->embedsOne(Available::class);
+    }
 }
