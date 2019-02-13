@@ -27,8 +27,8 @@ class EventController extends ApiController
      */
     public function store(BasicInformationRequest $request)
     {
-//        $data = $request->validated();
-//        $data['cover'] = $request->file('cover')->store('events');
+        $data = $request->validated();
+        $data['cover'] = $request->file('cover')->store('events');
 
         return $this->makeResource($this->repository->create($request->all()));
     }

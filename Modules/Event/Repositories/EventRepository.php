@@ -37,7 +37,11 @@ class EventRepository extends ApiRepository
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
 
-        $event = $this->model->create($data);
+        $event = $this->model->create(array_except($data, ['cover']));
+
+        $image = $event->image()->create(['original' => $data['cover']]);
+        $image->event()->associate($event);
+        $image->save();
 
         $this->setCacheKey($event->id);
         $this->remember($event);
@@ -61,7 +65,13 @@ class EventRepository extends ApiRepository
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
 
-        $event->update($data);
+        $event = $event->update(array_except($data, ['cover']));
+
+        if ($event->image()->exists()) $event->image()->delete();
+
+        $image = $event->image()->create(['original' => $data['cover']]);
+        $image->event()->associate($event);
+        $image->save();
 
         $this->setCacheKey($id);
         $this->flush()->remember($event);

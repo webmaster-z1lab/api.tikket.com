@@ -54,7 +54,6 @@ class Event extends Model
         'url',
         'description',
         'body',
-        'cover',
         'category',
         'types',
         'referer',
@@ -101,5 +100,13 @@ class Event extends Model
     public function producer()
     {
         return $this->belongsTo(Producer::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class);
     }
 }
