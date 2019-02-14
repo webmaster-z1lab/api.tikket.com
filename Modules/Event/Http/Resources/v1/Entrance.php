@@ -29,6 +29,7 @@ class Entrance extends Resource
                 'is_free'   => $this->is_free,
                 'min_buy'   => $this->min_buy,
                 'max_buy'   => $this->max_buy,
+                'starts_at' => $this->starts_at->format('d/m/Y'),
                 'lot'       => $event->resolve('Lot')->make($this->getActiveLot()),
                 'lots'      => $event->resolve('Lot')->collection($this->lots),
             ],
