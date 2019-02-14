@@ -4,7 +4,6 @@ namespace Modules\Cart\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
-use Modules\Cart\Scopes\NotExpiredScope;
 use Modules\Event\Models\Event;
 
 /**
@@ -27,6 +26,7 @@ use Modules\Event\Models\Event;
  * @property \Modules\Cart\Models\Costumer costumer
  * @property-read \Carbon\Carbon           created_at
  * @property-read \Carbon\Carbon           updated_at
+ * @method $this active()
  */
 class Cart extends Model
 {
@@ -59,6 +59,11 @@ class Cart extends Model
         'fee'    => 0,
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -89,12 +94,5 @@ class Cart extends Model
     public function costumer()
     {
         return $this->embedsOne(Costumer::class);
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new NotExpiredScope());
     }
 }

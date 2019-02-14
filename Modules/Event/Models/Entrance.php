@@ -10,16 +10,17 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @package Modules\Event\Models
  *
- * @property string                    name
- * @property bool                      is_free
- * @property int                       min_buy
- * @property int                       max_buy
- * @property \Carbon\Carbon            starts_at
- * @property \Modules\Event\Models\Lot lots
- * @property-read \Carbon\Carbon       created_at
- * @property-read \Carbon\Carbon       updated_at
+ * @property string                          name
+ * @property bool                            is_free
+ * @property int                             min_buy
+ * @property int                             max_buy
+ * @property \Carbon\Carbon                  starts_at
+ * @property \Modules\Event\Models\Available available
+ * @property \Modules\Event\Models\Lot       lots
+ * @property-read \Carbon\Carbon             created_at
+ * @property-read \Carbon\Carbon             updated_at
  */
-class Entrance extends Model
+class Entrance extends Model implements TicketStatus
 {
     use SoftDeletes;
 

@@ -8,13 +8,16 @@
 
 namespace Modules\Cart\Repositories;
 
+use App\Traits\AvailableEntrances;
 use Modules\Cart\Events\UserInformationReceived;
+use Modules\Cart\Jobs\RecycleTickets;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Z1lab\OpenID\Services\ApiService;
 
 class CartRepository
 {
+    use AvailableEntrances;
     /**
      * @param string $id
      *
@@ -22,7 +25,7 @@ class CartRepository
      */
     public function find(string $id)
     {
-        $cart = Cart::find($id);
+        $cart = Cart::where('_id', $id)->active()->first();
 
         if ($cart === NULL) abort(404);
 
@@ -34,7 +37,7 @@ class CartRepository
      */
     public function getByUser()
     {
-        return Cart::where('user_id', \Auth::id())->latest()->first();
+        return Cart::where('user_id', \Auth::id())->active()->latest()->first();
     }
 
     /**
@@ -71,14 +74,18 @@ class CartRepository
                     'fee'         => $lot->fee,
                 ]);
             }
+
+            $this->incrementReserved($entrance, $ticket['quantity']);
         }
 
         $cart->amount = $amount;
         $cart->fee = $fee;
         $cart->fee_percentage = $cart->event->fee_percentage;
         $cart->fee_is_hidden = $cart->event->fee_is_hidden;
-        $cart->expires_at = now()->addMinutes(15)->addSeconds(2);
+        $cart->expires_at = now()->addMinutes(14)->addSeconds(2);
         $cart->save();
+
+        RecycleTickets::dispatch($cart)->delay($cart->expires_at->addSeconds(58));
 
         return $cart->fresh();
     }
@@ -114,8 +121,7 @@ class CartRepository
         }
 
         $cart->callback = $data['callback'];
-        if ($cart->user_id === NULL)
-            $cart->user_id = \Auth::id();
+        if ($cart->user_id === NULL) $cart->user_id = \Auth::id();
 
         $cart->save();
 
@@ -156,20 +162,24 @@ class CartRepository
 
         if (array_key_exists('costumer', $data)) {
             $costumer = $cart->costumer()->create(['document' => $data['costumer']['document']]);
+
             $costumer->phone()->create([
                 'area_code' => substr($data['costumer']['phone'], 0, 2),
                 'phone'     => substr($data['costumer']['phone'], 2),
             ]);
+
             $costumer->save();
 
             event(new UserInformationReceived(\Request::bearerToken(), \Auth::id(), $data['costumer']['document'], $data['costumer']['phone']));
         } else {
             $costumer = $cart->costumer()->create(['document' => \Auth::user()->document]);
             $user = (new ApiService())->getUser(\Request::bearerToken())->data;
+
             $costumer->phone()->create([
                 'area_code' => $user->attributes->phone->area_code,
                 'phone'     => $user->attributes->phone->phone,
             ]);
+
             $costumer->save();
         }
 

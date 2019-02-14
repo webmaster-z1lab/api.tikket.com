@@ -63,6 +63,7 @@ class OrderRepository
             'email'    => $user->email,
             'document' => $data['costumer']['document'],
         ]);
+
         $costumer->phone()->create($data['costumer']['phone']);
         $costumer->save();
 
@@ -74,6 +75,7 @@ class OrderRepository
         $holder->save();
         $card->save();
         $order->save();
+
         $cart->delete();
 
         return $order->fresh();
