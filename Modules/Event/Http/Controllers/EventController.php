@@ -30,7 +30,7 @@ class EventController extends ApiController
         $data = $request->validated();
         $data['cover'] = $request->file('cover')->store('events');
 
-        return $this->makeResource($this->repository->create($request->all()));
+        return $this->makeResource($this->repository->create($data));
     }
 
     /**
