@@ -25,6 +25,14 @@ class EventRepository extends ApiRepository
     }
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getByUser()
+    {
+        return $this->model->where('user_id', \Auth::id())->latest()->get();
+    }
+
+    /**
      * @param array $data
      *
      * @return \Modules\Event\Models\Event

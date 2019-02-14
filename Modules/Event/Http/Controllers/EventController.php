@@ -88,4 +88,12 @@ class EventController extends ApiController
     {
         return $this->makeResource($this->repository->finalize($id));
     }
+
+    /**
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function getByUser()
+    {
+        return $this->collectResource($this->repository->getByUser());
+    }
 }

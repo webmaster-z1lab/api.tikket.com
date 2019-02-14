@@ -6,6 +6,7 @@ Route::middleware('api.v:1,event')
         Route::apiResource('events', 'EventController')->except(['show']);
 
         Route::prefix('events')->as('events.')->group(function () {
+            Route::get('my_events', 'EventController@getByUser');
             Route::get('{event}', 'EventController@show')->name('show')->where('event', '\b[0-9a-fA-F]{24}\b');
             Route::get('{url}', 'EventController@findByUrl');
         });
