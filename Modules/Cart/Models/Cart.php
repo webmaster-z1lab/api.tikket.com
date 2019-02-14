@@ -21,6 +21,7 @@ use Modules\Event\Models\Event;
  * @property boolean                       fee_is_hidden
  * @property \Carbon\Carbon                expires_at
  * @property \Modules\Event\Models\Event   event
+ * @property \Modules\Cart\Models\Bag      bags
  * @property \Modules\Cart\Models\Ticket   tickets
  * @property \Modules\Cart\Models\Card     card
  * @property \Modules\Cart\Models\Costumer costumer
@@ -70,6 +71,14 @@ class Cart extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsMany
+     */
+    public function bags()
+    {
+        return $this->embedsMany(Bag::class);
     }
 
     /**

@@ -10,7 +10,7 @@ namespace Modules\Cart\Repositories;
 
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Events\UserInformationReceived;
-use Modules\Cart\Jobs\RecycleTickets;
+use Modules\Cart\Jobs\RecycleCart;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Z1lab\OpenID\Services\ApiService;
@@ -18,6 +18,7 @@ use Z1lab\OpenID\Services\ApiService;
 class CartRepository
 {
     use AvailableEntrances;
+
     /**
      * @param string $id
      *
@@ -75,6 +76,11 @@ class CartRepository
                 ]);
             }
 
+            $cart->bags()->create([
+                'entrance_id' => $ticket['entrance'],
+                'amount'      => $ticket['quantity'],
+            ]);
+
             $this->incrementReserved($entrance, $ticket['quantity']);
         }
 
@@ -85,7 +91,7 @@ class CartRepository
         $cart->expires_at = now()->addMinutes(14)->addSeconds(2);
         $cart->save();
 
-        RecycleTickets::dispatch($cart)->delay($cart->expires_at->addSeconds(58));
+        RecycleCart::dispatch($cart)->delay($cart->expires_at->addSeconds(58));
 
         return $cart->fresh();
     }

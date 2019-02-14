@@ -21,12 +21,13 @@ use Modules\Event\Models\Event;
  * @property boolean                        fee_is_hidden
  * @property \Modules\Order\Models\Costumer costumer
  * @property \Modules\Order\Models\Card     card
+ * @property \Modules\Order\Models\Bag      bags
  * @property \Modules\Order\Models\Ticket   tickets
  * @property \Modules\Event\Models\Event    event
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
  */
-class Order extends Model
+class Order extends Model implements OrderStatus
 {
     use SoftDeletes;
 
@@ -66,6 +67,14 @@ class Order extends Model
     public function card()
     {
         return $this->embedsOne(Card::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsMany
+     */
+    public function bags()
+    {
+        return $this->embedsMany(Bag::class);
     }
 
     /**

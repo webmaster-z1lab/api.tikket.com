@@ -23,8 +23,6 @@ trait AvailableEntrances
      * @param \Modules\Event\Models\Entrance $entrance
      * @param string                         $source
      * @param int                            $value
-     *
-     * @throws \Exception
      */
     public function incrementAvailable(Entrance $entrance, string $source, int $value = 1)
     {

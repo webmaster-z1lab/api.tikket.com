@@ -8,11 +8,15 @@
 
 namespace Modules\Order\Repositories;
 
+use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
+use Modules\Event\Models\Entrance;
 use Modules\Order\Models\Order;
 
 class OrderRepository
 {
+    use AvailableEntrances;
+
     /**
      * @param string $id
      *
@@ -76,6 +80,8 @@ class OrderRepository
         $card->save();
         $order->save();
 
+        $this->setWaitingEntrances($cart);
+
         $cart->delete();
 
         return $order->fresh();
@@ -91,9 +97,44 @@ class OrderRepository
     {
         $order = $this->find($id);
 
+        $this->checkStatusForEntrances($order, $data['status']);
+
         $order->status = $data['status'];
         $order->save();
 
         return $order->fresh();
+    }
+
+    /**
+     * @param \Modules\Cart\Models\Cart $cart
+     */
+    private function setWaitingEntrances(Cart $cart)
+    {
+        foreach ($cart->bags as $bag) {
+            $entrance = Entrance::find($bag->entrance_id);
+            $this->incrementWaiting($entrance);
+        }
+    }
+
+    /**
+     * @param \Modules\Order\Models\Order $order
+     * @param string                      $status
+     */
+    private function checkStatusForEntrances(Order $order, string $status)
+    {
+        foreach ($order->bags as $bag) {
+            $entrance = Entrance::find($bag->entrance_id);
+
+            switch ($status) {
+                case Order::PAID:
+                    $this->incrementSold($entrance, $bag->amount);
+                    break;
+                case Order::CANCELED:
+                case Order::REVERSED:
+                    $this->incrementAvailable($entrance, Entrance::WAITING, $bag->amount);
+                    break;
+                default:
+            }
+        }
     }
 }

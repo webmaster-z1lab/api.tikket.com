@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 
-class RecycleTickets implements ShouldQueue
+class RecycleCart implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, AvailableEntrances;
 
@@ -20,10 +20,6 @@ class RecycleTickets implements ShouldQueue
      * @var \Modules\Cart\Models\Cart
      */
     protected $cart;
-    /**
-     * @var \Modules\Event\Models\Entrance
-     */
-    protected $entrance;
 
     /**
      * RecycleTickets constructor.
@@ -40,12 +36,11 @@ class RecycleTickets implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($this->cart->tickets as $ticket) {
-            if (NULL === $this->entrance || $this->entrance->id !== $ticket->entrance_id) {
-                $this->entrance = Entrance::find($ticket->entrance_id);
-            }
-
-            $this->incrementAvailable($this->entrance, Entrance::RESERVED);
+        foreach ($this->cart->bags as $bag) {
+            $entrance = Entrance::find($bag->entrance_id);
+            $this->incrementAvailable($entrance, Entrance::RESERVED, $bag->amount);
         }
+
+        $this->cart->delete();
     }
 }
