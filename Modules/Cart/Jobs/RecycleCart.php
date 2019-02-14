@@ -28,7 +28,7 @@ class RecycleCart implements ShouldQueue
      */
     public function __construct(Cart $cart)
     {
-        $this->cart = $cart;
+        $this->cart = $cart->fresh();
     }
 
     /**
