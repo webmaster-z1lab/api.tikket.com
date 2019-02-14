@@ -131,24 +131,6 @@ class EventRepository extends ApiRepository
 
         $event->update($data);
 
-        if ($event->fee_is_hidden) {
-            foreach ($event->entrances as $entrance) {
-                foreach ($entrance->lots as $lot) {
-                    $lot->value = $lot->value - $lot->fee;
-                    $lot->save();
-                }
-                $entrance->save();
-            }
-        } else {
-            foreach ($event->entrances as $entrance) {
-                foreach ($entrance->lots as $lot) {
-                    $lot->value = $lot->fee * 10;
-                    $lot->save();
-                }
-                $entrance->save();
-            }
-        }
-
         return $event->fresh();
     }
 
