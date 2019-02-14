@@ -139,7 +139,7 @@ class EventRepository extends ApiRepository
      *
      * @return \Modules\Event\Models\Event|null
      */
-    public function finilize(string $id)
+    public function finalize(string $id)
     {
         $event = $this->find($id);
 
