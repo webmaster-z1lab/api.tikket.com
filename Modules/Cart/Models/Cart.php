@@ -15,6 +15,7 @@ use Modules\Event\Models\Event;
  * @property string                        type
  * @property string                        hash
  * @property string                        callback
+ * @property string                        status
  * @property integer                       amount
  * @property integer                       fee
  * @property integer                       fee_percentage
@@ -29,9 +30,11 @@ use Modules\Event\Models\Event;
  * @property-read \Carbon\Carbon           updated_at
  * @method $this active()
  */
-class Cart extends Model
+class Cart extends Model implements CartStatus
 {
     use SoftDeletes;
+
+    const CART_TYPE = 'credit_card';
 
     protected $fillable = [
         'user_id',
@@ -40,6 +43,7 @@ class Cart extends Model
         'callback',
         'amount',
         'fee',
+        'status',
         'fee_percentage',
         'fee_is_hidden',
         'expires_at',
@@ -55,7 +59,8 @@ class Cart extends Model
     ];
 
     protected $attributes = [
-        'type'   => 'credit_card',
+        'type'   => self::CART_TYPE,
+        'status' => self::OPENED,
         'amount' => 0,
         'fee'    => 0,
     ];

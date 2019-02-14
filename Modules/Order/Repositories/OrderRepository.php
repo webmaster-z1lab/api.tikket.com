@@ -46,6 +46,11 @@ class OrderRepository
 
         $data = $cart->toArray();
 
+        $this->setWaitingEntrances($cart);
+        $cart->status = Cart::FINISHED;
+        $cart->save();
+        $cart->delete();
+
         $order = Order::create([
             'hash'           => $data['hash'],
             'ip'             => $ip,
@@ -79,10 +84,6 @@ class OrderRepository
         $holder->save();
         $card->save();
         $order->save();
-
-        $this->setWaitingEntrances($cart);
-
-        $cart->delete();
 
         return $order->fresh();
     }

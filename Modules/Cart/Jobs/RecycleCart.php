@@ -41,6 +41,8 @@ class RecycleCart implements ShouldQueue
             $this->incrementAvailable($entrance, Entrance::RESERVED, $bag->amount);
         }
 
+        $this->cart->status = Cart::RECYCLED;
+        $this->cart->save();
         $this->cart->delete();
     }
 }
