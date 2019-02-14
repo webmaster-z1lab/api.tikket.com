@@ -43,7 +43,7 @@ class Event extends Resource
             'relationships' => [
                 'producer'  => $event->resolve('Producer')->make($this->producer),
                 'entrances' => $event->resolve('Entrance')->collection($this->entrances),
-                'image'     => $event->resolve('Image')->make($this->image),
+                'image'     => $this->when($this->image !== NULL, $event->resolve('Image')->make($this->image)),
             ],
         ];
     }

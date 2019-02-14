@@ -41,7 +41,10 @@ class EventController extends ApiController
      */
     public function update(BasicInformationRequest $request, string $id)
     {
-        return $this->makeResource($this->repository->update($request->all(), $id));
+        $data = $request->validated();
+        $data['cover'] = $request->file('cover')->store('events');
+
+        return $this->makeResource($this->repository->update($data, $id));
     }
 
     /**

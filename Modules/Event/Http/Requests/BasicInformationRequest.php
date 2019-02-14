@@ -33,7 +33,7 @@ class BasicInformationRequest extends ApiFormRequest
             'starts_at'     => 'bail|required|date_format:Y-m-d H:i|after:now',
             'finishes_at'   => 'bail|required|date_format:Y-m-d H:i|after:starts_at',
 //            'is_active'     => 'bail|required|boolean',
-            'is_public'     => 'bail|required|boolean',
+            'is_public'     => 'bail|required|bool_custom',
         ];
     }
 }

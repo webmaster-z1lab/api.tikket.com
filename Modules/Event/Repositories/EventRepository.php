@@ -36,6 +36,7 @@ class EventRepository extends ApiRepository
         $data['url'] = snake_case($data['name']);
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
+        $data['is_public'] = $data['is_public'] === 'false' ? false : (bool) $data['is_public'];
 
         $event = $this->model->create(array_except($data, ['cover']));
 
@@ -64,10 +65,13 @@ class EventRepository extends ApiRepository
         $data['url'] = snake_case($data['name']);
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
+        $data['is_public'] = $data['is_public'] === 'false' ? false : (bool) $data['is_public'];
 
-        $event = $event->update(array_except($data, ['cover']));
+        $event->update(array_except($data, ['cover']));
 
-        if ($event->image()->exists()) $event->image()->delete();
+        if ($event->image()->exists()) {
+            $event->image()->delete();
+        }
 
         $image = $event->image()->create(['original' => $data['cover']]);
         $image->event()->associate($event);
