@@ -27,12 +27,11 @@ class Event extends Resource
                 'url'            => $this->url,
                 'description'    => $this->description,
                 'body'           => $this->body,
-                'cover'          => $this->cover,/*\Storage::url($this->cover),*/
                 'category'       => $this->category,
                 'types'          => $this->types,
                 'referer'        => $this->referer,
-                'starts_at'      => $this->starts_at->format('d/m/Y, H\hi'),
-                'finishes_at'    => $this->finishes_at->format('d/m/Y, H\hi'),
+                'starts_at'      => $this->starts_at->format('d/m/Y H:i'),
+                'finishes_at'    => $this->finishes_at->format('d/m/Y H:i'),
                 'fee_percentage' => $this->fee_percentage,
                 'fee_is_hidden'  => $this->fee_is_hidden,
                 'is_public'      => $this->is_public,
@@ -44,6 +43,7 @@ class Event extends Resource
             'relationships' => [
                 'producer'  => $event->resolve('Producer')->make($this->producer),
                 'entrances' => $event->resolve('Entrance')->collection($this->entrances),
+                'image'     => $this->when($this->image !== NULL, $event->resolve('Image')->make($this->image)),
             ],
         ];
     }

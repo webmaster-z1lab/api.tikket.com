@@ -46,6 +46,18 @@ class EntranceController extends Controller
     }
 
     /**
+     * @param \Modules\Event\Http\Requests\EntrancesRequest $request
+     * @param string                                        $event
+     * @param string                                        $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function update(EntrancesRequest $request, string $event, string $id)
+    {
+        return api_resource('Event')->make($this->repository->update($request->validated(), $event, $id));
+    }
+
+    /**
      * @param string $event
      *
      * @return \Illuminate\Http\Resources\Json\Resource

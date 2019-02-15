@@ -57,20 +57,47 @@ class EntranceRepository
     {
         $event = $this->event($event);
 
-        $event->update(['fee_is_hidden' => $data['fee_is_hidden']]);
+        $data['starts_at'] = $previous = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
+        $entrance = $event->entrances()->create(array_except($data, ['lots']));
 
-        if ($event->entrances()->exists()) $event->entrances()->delete();
+        foreach ($data['lots'] as $key => $lot) {
+            $lot['number'] = $key + 1;
+            $lot['value'] = (int)($lot['value'] * 100);
+            $lot['fee'] = (int)($lot['value'] / 10);
+            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
+            $lot['starts_at'] = $previous;
+            $entrance->lots()->create($lot);
+            $previous = $lot['finishes_at']->addDay()->startOfDay();
+        }
 
-        foreach ($data['entrances'] as $datum) {
-            $datum['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $datum['starts_at']);
-            $entrance = $event->entrances()->create(array_except($datum, ['lots']));
-            foreach ($datum['lots'] as $key => $lot) {
-                $lot['number'] = $key + 1;
-                $lot['value'] = (int)($lot['value'] * 100);
-                $lot['fee'] = (int)($lot['value'] / 10);
-                $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $lot['finishes_at']);
-                $entrance->lots()->create($lot);
-            }
+        return $event->fresh();
+    }
+
+    /**
+     * @param array  $data
+     * @param string $event
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event
+     */
+    public function update(array $data, string $event, string $id)
+    {
+        $event = $this->event($event);
+
+        $data['starts_at'] = $previous = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
+        $entrance = $event->entrances()->find($id);
+        $entrance->update(array_except($data, ['lots']));
+
+        if ($entrance->lots()->exists()) $entrance->lots()->delete();
+
+        foreach ($data['lots'] as $key => $lot) {
+            $lot['number'] = $key + 1;
+            $lot['value'] = (int)($lot['value'] * 100);
+            $lot['fee'] = (int)($lot['value'] / 10);
+            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
+            $lot['starts_at'] = $previous;
+            $entrance->lots()->create($lot);
+            $previous = $lot['finishes_at']->addDay()->startOfDay();
         }
 
         return $event->fresh();

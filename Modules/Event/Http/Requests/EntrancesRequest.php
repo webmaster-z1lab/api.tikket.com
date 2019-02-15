@@ -2,9 +2,9 @@
 
 namespace Modules\Event\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
-class EntrancesRequest extends FormRequest
+class EntrancesRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,18 @@ class EntrancesRequest extends FormRequest
     public function rules()
     {
         return [
-            'fee_is_hidden' => 'bail|required|boolean',
-            'entrances'     => 'bail|required|array|min:1',
+            'name'        => 'bail|required|string|between:3,25',
+            'is_free'     => 'bail|required|boolean',
+            'min_buy'     => 'bail|nullable|integer|min:0|lte:max_buy',
+            'max_buy'     => 'bail|required|integer|gte:min_buy',
+            'starts_at'   => 'bail|required|date_format:Y-m-d|after:today',
+            'description' => 'bail|nullable|string',
 
-            'entrances.*.name'      => 'bail|required|string|between:3,25',
-            'entrances.*.is_free'   => 'bail|required|boolean',
-            'entrances.*.min_buy'   => 'bail|nullable|integer|min:0|lte:max_buy',
-            'entrances.*.max_buy'   => 'bail|required|integer|gte:min_buy',
-            'entrances.*.starts_at' => 'bail|required|date_format:Y-m-d H:i|after:now',
+            'lots' => 'bail|required|array|min:1',
 
-            'entrances.*.lots' => 'bail|required|array|min:1',
-
-            'entrances.*.lots.*.amount'      => 'bail|required|integer|min:1',
-            'entrances.*.lots.*.value'       => 'bail|required_if:entrances.*.is_free,false|numeric',
-            'entrances.*.lots.*.finishes_at' => 'bail|required|date_format:Y-m-d H:i|after:entrances.*.starts_at',
+            'lots.*.amount'      => 'bail|required|integer|min:1',
+            'lots.*.value'       => 'bail|required_if:entrances.*.is_free,false|numeric',
+            'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after:entrances.*.starts_at',
         ];
     }
 }

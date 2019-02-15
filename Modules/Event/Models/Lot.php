@@ -21,6 +21,7 @@ class Lot extends Model
         'value',
         'fee',
         'finishes_at',
+        'starts_at',
     ];
 
     protected $casts = [

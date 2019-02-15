@@ -4,7 +4,7 @@ namespace Modules\Event\Http\Requests;
 
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
-class ProducerRequest extends ApiFormRequest
+class FeeRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class ProducerRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            'name'        => 'bail|required|string',
-            'description' => 'bail|required|string',
+            'fee_is_hidden' => 'bail|required|boolean',
         ];
     }
 }

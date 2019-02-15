@@ -41,6 +41,7 @@ class Entrance extends Model implements TicketStatus
         'min_buy',
         'max_buy',
         'starts_at',
+        'description'
     ];
 
     protected $dates = [

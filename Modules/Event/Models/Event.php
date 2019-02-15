@@ -38,12 +38,14 @@ class Event extends Model
     const STATUS_PUBLIC = TRUE;
     const STATUS_FEE = TRUE;
     const FEE_PERCENTAGE = 10;
+    const STATUS = 'draft';
 
     protected $attributes = [
         'is_active'      => self::STATUS_ACTIVE,
         'is_public'      => self::STATUS_PUBLIC,
         'fee_is_hidden'  => self::STATUS_FEE,
         'fee_percentage' => self::FEE_PERCENTAGE,
+        'status'         => self::STATUS,
     ];
 
     protected $fillable = [
@@ -52,7 +54,6 @@ class Event extends Model
         'url',
         'description',
         'body',
-        'cover',
         'category',
         'types',
         'referer',
@@ -62,6 +63,7 @@ class Event extends Model
         'fee_is_hidden',
         'is_public',
         'is_active',
+        'status',
     ];
 
     protected $dates = [
@@ -98,5 +100,13 @@ class Event extends Model
     public function producer()
     {
         return $this->belongsTo(Producer::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class);
     }
 }
