@@ -153,7 +153,7 @@ class EventRepository extends ApiRepository
 
         if ($event->status !== 'draft') abort(400, 'This event is not a draft.');
 
-        $event->update(['status' => 'complete']);
+        $event->update(['status' => Event::COMPLETE_STATUS]);
 
         return $event->fresh();
     }

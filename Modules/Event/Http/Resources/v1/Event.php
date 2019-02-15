@@ -36,6 +36,7 @@ class Event extends Resource
                 'fee_is_hidden'  => $this->fee_is_hidden,
                 'is_public'      => $this->is_public,
                 'is_active'      => $this->is_active,
+                'status'         => $this->status,
                 'created_at'     => $this->created_at,
                 'updated_at'     => $this->updated_at,
                 'address'        => $event->resolve('Address')->make($this->address),
