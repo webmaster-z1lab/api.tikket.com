@@ -28,7 +28,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class Available extends Model
 {
-    const STATUS_ACTIVE = FALSE;
+    const STATUS_ACTIVE = TRUE;
     const STATUS_SOLD_OUT = FALSE;
     const QNT_RESERVED = 0;
     const QNT_WAITING = 0;

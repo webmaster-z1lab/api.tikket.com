@@ -9,6 +9,7 @@
 namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
+use Modules\Event\Jobs\MakeAvailableLot;
 use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Repositories\ApiRepository;
 
@@ -41,16 +42,18 @@ class EventRepository extends ApiRepository
     {
         $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
         $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
-        $data['url'] = snake_case($data['name']);
+        $data['url'] = str_slug($data['name']);
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
-        $data['is_public'] = $data['is_public'] === 'false' ? false : (bool) $data['is_public'];
+        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
 
         $event = $this->model->create(array_except($data, ['cover']));
 
         $image = $event->image()->create(['original' => $data['cover']]);
         $image->event()->associate($event);
         $image->save();
+
+        MakeAvailableLot::dispatch($event);
 
         $this->setCacheKey($event->id);
         $this->remember($event);
@@ -70,10 +73,9 @@ class EventRepository extends ApiRepository
 
         $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
         $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
-        $data['url'] = snake_case($data['name']);
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
-        $data['is_public'] = $data['is_public'] === 'false' ? false : (bool) $data['is_public'];
+        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
 
         $event->update(array_except($data, ['cover']));
 
