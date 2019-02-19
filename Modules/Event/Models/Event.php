@@ -14,7 +14,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property string                         url
  * @property string                         description
  * @property string                         body
- * @property string                         cover
  * @property string                         category
  * @property string                         types
  * @property string                         referer
@@ -27,6 +26,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Modules\Event\Models\Entrance entrances
  * @property \Modules\Event\Models\Address  address
  * @property \Modules\Event\Models\Producer producer
+ * @property \Modules\Event\Models\Image    image
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
  */
@@ -41,7 +41,7 @@ class Event extends Model
 
 
     const DRAFT_STATUS = 'draft';
-    const COMPLETE_STATUS = 'complete';
+    const COMPLETE_STATUS = 'completed';
     const FINALIZED_STATUS = 'finalized';
     const CANCELED_STATUS = 'canceled';
     const PUBLISHED_STATUS = 'published';
