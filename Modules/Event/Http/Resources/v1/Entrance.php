@@ -30,7 +30,7 @@ class Entrance extends Resource
                 'max_buy'     => $this->max_buy,
                 'description' => $this->description,
                 'starts_at'   => $this->starts_at->format('d/m/Y'),
-                'lot'         => $event->resolve('Lot')->make($this->available),
+                'lot'         => $event->resolve('Available')->make($this->available),
                 'lots'        => $event->resolve('Lot')->collection($this->lots),
             ],
             'relationships' => [
