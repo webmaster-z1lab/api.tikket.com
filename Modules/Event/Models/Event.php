@@ -27,6 +27,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Modules\Event\Models\Entrance entrances
  * @property \Modules\Event\Models\Address  address
  * @property \Modules\Event\Models\Producer producer
+ * @property \Modules\Event\Models\Image    image
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
  */

@@ -10,6 +10,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @package Modules\Item\Models
  *
  * @property string                      id
+ * @property string                      event_id
  * @property string                      original
  * @property string                      cover
  * @property string                      thumbnail

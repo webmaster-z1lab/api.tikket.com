@@ -9,7 +9,6 @@
 namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
-use Modules\Event\Jobs\MakeAvailableLot;
 use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Repositories\ApiRepository;
 
@@ -52,8 +51,6 @@ class EventRepository extends ApiRepository
         $image = $event->image()->create(['original' => $data['cover']]);
         $image->event()->associate($event);
         $image->save();
-
-        MakeAvailableLot::dispatch($event);
 
         $this->setCacheKey($event->id);
         $this->remember($event);

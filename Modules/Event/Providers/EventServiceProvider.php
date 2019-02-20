@@ -3,6 +3,10 @@
 namespace Modules\Event\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Event\Models\Event;
+use Modules\Event\Models\Image;
+use Modules\Event\Observers\EventObserver;
+use Modules\Event\Observers\ImageObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
+
+        Event::observe(EventObserver::class);
+        Image::observe(ImageObserver::class);
     }
 
     /**
