@@ -10,25 +10,25 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @package Modules\Event\Models
  *
- * @property string                         name
- * @property string                         url
- * @property string                         description
- * @property string                         body
- * @property string                         category
- * @property string                         types
- * @property string                         referer
- * @property \Carbon\Carbon                 starts_at
- * @property \Carbon\Carbon                 finishes_at
- * @property integer                        fee_percentage
- * @property bool                           fee_is_hidden
- * @property bool                           is_active
- * @property bool                           is_public
- * @property \Modules\Event\Models\Entrance entrances
- * @property \Modules\Event\Models\Address  address
- * @property \Modules\Event\Models\Producer producer
- * @property \Modules\Event\Models\Image    image
- * @property-read \Carbon\Carbon            created_at
- * @property-read \Carbon\Carbon            updated_at
+ * @property string                                   name
+ * @property string                                   url
+ * @property string                                   description
+ * @property string                                   body
+ * @property string                                   category
+ * @property string                                   types
+ * @property string                                   referer
+ * @property \Carbon\Carbon                           starts_at
+ * @property \Carbon\Carbon                           finishes_at
+ * @property integer                                  fee_percentage
+ * @property bool                                     fee_is_hidden
+ * @property bool                                     is_active
+ * @property bool                                     is_public
+ * @property \Illuminate\Database\Eloquent\Collection entrances
+ * @property \Modules\Event\Models\Address            address
+ * @property \Modules\Event\Models\Producer           producer
+ * @property \Modules\Event\Models\Image              image
+ * @property-read \Carbon\Carbon                      created_at
+ * @property-read \Carbon\Carbon                      updated_at
  */
 class Event extends Model
 {

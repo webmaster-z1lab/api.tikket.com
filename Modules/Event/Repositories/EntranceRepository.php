@@ -9,6 +9,7 @@
 namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
+use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
@@ -126,12 +127,13 @@ class EntranceRepository
      * @param string $event
      * @param string $id
      *
-     * @return null|\Modules\Event\Models\Entrance
+     * @return \Modules\Event\Models\Entrance
      */
     public function find(string $event, string $id)
     {
         $event = $this->event($event);
 
+        /** @var \Modules\Event\Models\Entrance $entrance */
         $entrance = $event->entrances()->find($id);
 
         if (NULL === $entrance) abort(404);
@@ -142,12 +144,21 @@ class EntranceRepository
     /**
      * @param string $event
      *
-     * @return \Jenssegers\Mongodb\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function get(string $event)
     {
         $event = $this->event($event);
 
         return $event->entrances;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getEntrances()
+    {
+        return Entrance::where('available.finishes_at', '<', now())
+            ->get();
     }
 }

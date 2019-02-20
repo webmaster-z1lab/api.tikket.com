@@ -9,7 +9,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Event\Models
  *
- * @property string              lot
+ * @property integer             lot
  * @property string              lot_id
  * @property integer             available
  * @property integer             reserved
@@ -70,6 +70,7 @@ class Available extends Model
         'fee'       => 'integer',
         'price'     => 'integer',
         'is_active' => 'boolean',
+        'lot'       => 'integer',
     ];
 
     protected $dates = [
