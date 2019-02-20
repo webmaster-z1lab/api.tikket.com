@@ -14,7 +14,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property string                         url
  * @property string                         description
  * @property string                         body
- * @property string                         cover
  * @property string                         category
  * @property string                         types
  * @property string                         referer
@@ -39,14 +38,20 @@ class Event extends Model
     const STATUS_PUBLIC = TRUE;
     const STATUS_FEE = TRUE;
     const FEE_PERCENTAGE = 10;
-    const STATUS = 'draft';
+
+
+    const DRAFT_STATUS = 'draft';
+    const COMPLETE_STATUS = 'completed';
+    const FINALIZED_STATUS = 'finalized';
+    const CANCELED_STATUS = 'canceled';
+    const PUBLISHED_STATUS = 'published';
 
     protected $attributes = [
         'is_active'      => self::STATUS_ACTIVE,
         'is_public'      => self::STATUS_PUBLIC,
         'fee_is_hidden'  => self::STATUS_FEE,
         'fee_percentage' => self::FEE_PERCENTAGE,
-        'status'         => self::STATUS,
+        'status'         => self::DRAFT_STATUS,
     ];
 
     protected $fillable = [

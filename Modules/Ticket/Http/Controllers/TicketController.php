@@ -2,71 +2,13 @@
 
 namespace Modules\Ticket\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use Modules\Ticket\Repositories\TicketRepository;
+use Z1lab\JsonApi\Http\Controllers\ApiController;
 
-class TicketController extends Controller
+class TicketController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function index()
+    public function __construct(TicketRepository $repository)
     {
-        return view('ticket::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('ticket::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function show()
-    {
-        return view('ticket::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('ticket::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
+        parent::__construct($repository, 'Ticket');
     }
 }

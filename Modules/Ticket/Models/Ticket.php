@@ -4,6 +4,8 @@ namespace Modules\Ticket\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\Event\Models\Entrance;
+use Modules\Order\Models\Order;
 
 /**
  * Class Ticket
@@ -11,21 +13,25 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @package Modules\Ticket\Models
  *
  * @property string                             order_id
+ * @property string                             entrance_id
  * @property string                             name
  * @property string                             lot
- * @property string                             barcode
+ * @property string                             code
  * @property string                             status
  * @property \Modules\Ticket\Models\Participant participant
  * @property \Modules\Ticket\Models\Event       event
- * @property-read \Carbon\Carbon created_at
- * @property-read \Carbon\Carbon updated_at
+ * @property \Modules\Order\Models\Order        order
+ * @property \Modules\Event\Models\Entrance     entrance
+ * @property-read \Carbon\Carbon                created_at
+ * @property-read \Carbon\Carbon                updated_at
  */
 class Ticket extends Model
 {
     use SoftDeletes;
 
+    const CODE_LENGTH = 10;
+
     protected $fillable = [
-        'order_id',
         'name',
         'lot',
         'code',
@@ -46,5 +52,21 @@ class Ticket extends Model
     public function event()
     {
         return $this->embedsOne(Event::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function entrance()
+    {
+        return $this->belongsTo(Entrance::class);
     }
 }

@@ -9,11 +9,12 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Ticket\Models
  *
- * @property string event_id
- * @property string name
- * @property string cover
- * @property string local
- * @property string starts_at
+ * @property string                       event_id
+ * @property string                       name
+ * @property string                       url
+ * @property string                       address
+ * @property \Carbon\Carbon               starts_at
+ * @property \Modules\Ticket\Models\Image image
  */
 class Event extends Model
 {
@@ -21,9 +22,15 @@ class Event extends Model
         'event_id',
         'name',
         'url',
-        'cover',
         'address',
-        'address_url',
         'starts_at',
     ];
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function image()
+    {
+        return $this->embedsOne(Image::class);
+    }
 }
