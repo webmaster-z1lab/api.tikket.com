@@ -29,6 +29,8 @@ class Ticket extends Model
 {
     use SoftDeletes;
 
+    const CODE_LENGTH = 10;
+
     protected $fillable = [
         'name',
         'lot',

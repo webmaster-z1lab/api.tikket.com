@@ -8,6 +8,7 @@
 
 namespace Modules\Ticket\Repositories;
 
+use Illuminate\Support\Str;
 use Modules\Order\Repositories\OrderRepository;
 use Modules\Ticket\Models\Ticket;
 use Z1lab\JsonApi\Repositories\ApiRepository;
@@ -38,8 +39,10 @@ class TicketRepository extends ApiRepository
      */
     public function create(array $data)
     {
+        $data['code'] = strtoupper(Str::random(Ticket::CODE_LENGTH));
+
         /** @var \Modules\Ticket\Models\Ticket $ticket */
-        $ticket = $this->model->create(array_only($data, ['name', '1ot']));
+        $ticket = $this->model->create(array_only($data, ['name', '1ot', 'code']));
 
         $ticket->participant()->create($data['participant']);
 
