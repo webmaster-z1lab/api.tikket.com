@@ -4,6 +4,8 @@ namespace Modules\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Order\Models\Order;
+use Modules\Order\Observers\OrderObserver;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,8 @@ class OrderServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
+
+        Order::observe(OrderObserver::class);
     }
 
     /**

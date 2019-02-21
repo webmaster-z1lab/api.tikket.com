@@ -12,13 +12,41 @@ class OrderFailed extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
-     *
-     * @return void
+     * @var \Modules\Order\Models\Order
      */
-    public function __construct()
+    public $order;
+
+    /**
+     * @var array
+     */
+    public $url = [
+        'link' => 'https://tikket.com.br',
+        'text' => 'Refazer compra',
+    ];
+
+    /**
+     * @var array
+     */
+    public $image = [
+        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_alert.png',
+        'text'   => 'Falha ao realizar compra',
+    ];
+
+    /**
+     * @var string
+     */
+    public $subject = 'Falha ao realizar pedido';
+
+    public $description = 'Infelizmente não conseguimos concluir o seu pedido. A operadora do seu cartão de crédito não aprovou o pagamento da sua compra.';
+
+    /**
+     * NeedsUpdatePayment constructor.
+     *
+     * @param $order
+     */
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -28,6 +56,6 @@ class OrderFailed extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('emails.order.order-failed');
     }
 }
