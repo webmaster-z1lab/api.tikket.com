@@ -27,9 +27,26 @@ use Modules\Event\Models\Event;
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
  */
-class Order extends Model implements OrderStatus
+class Order extends Model
 {
     use SoftDeletes;
+
+    /**
+     * Order waiting for cardholder approval
+     */
+    public const WAITING = 'waiting';
+    /**
+     * Order payment approved
+     */
+    public const PAID = 'paid';
+    /**
+     * Order canceled by user or cardholder
+     */
+    public const CANCELED = 'canceled';
+    /**
+     * Order reversed to buyer
+     */
+    public const REVERSED = 'reversed';
 
     protected $fillable = [
         'status',

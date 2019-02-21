@@ -19,6 +19,19 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class Lot extends Model
 {
+    /**
+     * Lot closed for exceeding the deadline or available vacancies
+     */
+    public const CLOSED = 'closed';
+    /**
+     * Lot not yet started or no sale made
+     */
+    public const OPEN = 'open';
+    /**
+     * Lot partially blocked because you have already started sales
+     */
+    public const LOCKED = 'locked';
+
     protected $fillable = [
         'number',
         'amount',

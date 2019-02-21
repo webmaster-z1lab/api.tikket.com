@@ -20,9 +20,30 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property-read \Carbon\Carbon                      created_at
  * @property-read \Carbon\Carbon                      updated_at
  */
-class Entrance extends Model implements TicketStatus
+class Entrance extends Model
 {
     use SoftDeletes;
+
+    /**
+     * Entrances available for sell
+     */
+    public const AVAILABLE = 'available';
+    /**
+     * Entrances in orders waiting for payment
+     */
+    public const WAITING = 'waiting';
+    /**
+     * Entrances in opened carts
+     */
+    public const RESERVED = 'reserved';
+    /**
+     * Entrances sold
+     */
+    public const SOLD = 'sold';
+    /**
+     * Entrances offered for sell
+     */
+    public const AMOUNT = 'amount';
 
     const STATUS_PUBLIC = TRUE;
     const STATUS_FREE = FALSE;
