@@ -35,4 +35,15 @@ class DeleteImage implements ShouldQueue
     {
         \Storage::delete($this->path);
     }
+
+    /**
+     * The job failed to process.
+     *
+     * @param  \Exception  $e
+     * @return void
+     */
+    public function failed(\Exception $e)
+    {
+        \Log::error($e->getMessage());
+    }
 }

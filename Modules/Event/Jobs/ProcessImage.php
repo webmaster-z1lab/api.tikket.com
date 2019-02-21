@@ -59,4 +59,15 @@ class ProcessImage implements ShouldQueue
 
         $this->image->save();
     }
+
+    /**
+     * The job failed to process.
+     *
+     * @param  \Exception  $e
+     * @return void
+     */
+    public function failed(\Exception $e)
+    {
+        \Log::error($e->getMessage());
+    }
 }

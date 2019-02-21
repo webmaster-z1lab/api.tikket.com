@@ -14,6 +14,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property int            value
  * @property integer        fee
  * @property integer        price
+ * @property string         status
  * @property \Carbon\Carbon starts_at
  * @property \Carbon\Carbon finishes_at
  */
@@ -37,6 +38,7 @@ class Lot extends Model
         'amount',
         'value',
         'fee',
+        'status',
         'finishes_at',
         'starts_at',
     ];

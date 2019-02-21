@@ -26,4 +26,17 @@ Route::middleware('api.v:1,event')
         Route::get('categories', 'CategoryController@index');
 
         Route::get('producers', 'ProducerController@getByUser');
+
+        Route::get('test', function () {
+            $entrance = \Modules\Event\Models\Entrance::find('5c6ab664e7a6cd0ca0006917');
+
+            $entrance->available->increment('sold');
+
+            \Modules\Event\Jobs\LockEntrance::dispatchNow($entrance, $entrance->available->lot);
+            \Modules\Event\Jobs\LockEvent::dispatchNow($entrance->event);
+
+            return response()->json($entrance->event->fresh());
+        });
     });
+
+

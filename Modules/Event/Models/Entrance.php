@@ -12,9 +12,11 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @property string                                   name
  * @property bool                                     is_free
+ * @property bool                                     is_locked
  * @property int                                      min_buy
  * @property int                                      max_buy
  * @property \Carbon\Carbon                           starts_at
+ * @property \Modules\Event\Models\Event              event
  * @property \Modules\Event\Models\Available          available
  * @property \Illuminate\Database\Eloquent\Collection lots
  * @property-read \Carbon\Carbon                      created_at
@@ -63,6 +65,7 @@ class Entrance extends Model
         'max_buy',
         'starts_at',
         'description',
+        'is_locked',
     ];
 
     protected $dates = [
@@ -83,5 +86,31 @@ class Entrance extends Model
     public function available()
     {
         return $this->embedsOne(Available::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * @return \Modules\Event\Models\Lot
+     */
+    public function firstLot()
+    {
+        return $this->lots->firstWhere('number', 1);
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return \Modules\Event\Models\Lot
+     */
+    public function getLot(int $number)
+    {
+        return $this->lots->firstWhere('number', $number);
     }
 }

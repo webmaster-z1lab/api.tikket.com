@@ -23,6 +23,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property bool                                     fee_is_hidden
  * @property bool                                     is_active
  * @property bool                                     is_public
+ * @property bool                                     is_locked
  * @property \Illuminate\Database\Eloquent\Collection entrances
  * @property \Modules\Event\Models\Address            address
  * @property \Modules\Event\Models\Producer           producer
@@ -69,6 +70,7 @@ class Event extends Model
         'fee_is_hidden',
         'is_public',
         'is_active',
+        'is_locked',
         'status',
     ];
 

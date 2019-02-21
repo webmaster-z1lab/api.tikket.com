@@ -9,6 +9,8 @@
 namespace App\Traits;
 
 
+use Modules\Event\Jobs\LockEntrance;
+use Modules\Event\Jobs\LockEvent;
 use Modules\Event\Models\Entrance;
 
 trait AvailableEntrances
@@ -62,8 +64,15 @@ trait AvailableEntrances
      */
     public function incrementSold(Entrance $entrance, int $value = 1)
     {
+        if($entrance->available->sold === 0) {
+            LockEntrance::dispatch($entrance);
+            LockEvent::dispatch($entrance);
+        }
+
         $entrance->available->increment(Entrance::SOLD, $value);
         $entrance->available->decrement(Entrance::WAITING, $value);
+
+
     }
 
     /**

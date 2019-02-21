@@ -9,23 +9,28 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Modules\Event\Models\Entrance;
 
-class MakeAvailableLot implements ShouldQueue
+class LockEntrance implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     /**
-     * @var \Modules\Event\Models\Event
+     * @var \Modules\Event\Models\Entrance|null
      */
     protected $entrance;
+    /**
+     * @var int
+     */
+    protected $lot;
 
     /**
-     * MakeAvailableLot constructor.
+     * LockEntrance constructor.
      *
      * @param \Modules\Event\Models\Entrance $entrance
+     * @param int                            $lot
      */
-    public function __construct(Entrance $entrance)
+    public function __construct(Entrance $entrance, int $lot)
     {
         $this->entrance = $entrance->fresh();
+        $this->lot = $this->entrance->getLot($lot);
     }
 
     /**
@@ -35,25 +40,18 @@ class MakeAvailableLot implements ShouldQueue
      */
     public function handle()
     {
-        $lot = $this->entrance->lots->firstWhere('number', 1);
+        $this->entrance->is_locked = TRUE;
+        $this->lot->status = $this->lot::CLOSED;
 
-        $this->entrance->available()->create([
-            'lot_id'      => $lot->_id,
-            'lot'         => $lot->number,
-            'available'   => $lot->amount,
-            'amount'      => $lot->amount,
-            'value'       => $lot->value,
-            'fee'         => $lot->fee,
-            'price'       => $lot->value + $lot->fee,
-            'starts_at'   => $this->entrance->starts_at,
-            'finishes_at' => $lot->finishes_at,
-        ]);
+        $this->lot->save();
+        $this->entrance->save();
     }
 
     /**
      * The job failed to process.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
+     *
      * @return void
      */
     public function failed(\Exception $e)
