@@ -4,6 +4,8 @@ namespace Modules\Order\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Modules\Order\Events\OrderCreated;
+use Modules\Order\Events\StatusChanged;
+use Modules\Order\Listeners\SendOrderUpdateNotification;
 use Modules\Order\Listeners\SendToPayment;
 
 class EventServiceProvider extends ServiceProvider
@@ -14,7 +16,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        OrderCreated::class => [SendToPayment::class],
+        OrderCreated::class  => [SendToPayment::class],
+        StatusChanged::class => [SendOrderUpdateNotification::class],
     ];
 
     /**

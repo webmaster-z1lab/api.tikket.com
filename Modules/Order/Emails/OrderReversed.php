@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Modules\Order\Models\Order;
 
-class OrderApproved extends Mailable
+class OrderReversed extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -22,33 +21,30 @@ class OrderApproved extends Mailable
      */
     public $url = [
         'link' => 'https://tikket.com.br',
-        'text' => 'Meus ingressos',
+        'text' => 'Refazer compra',
     ];
 
     /**
      * @var array
      */
     public $image = [
-        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_super_thank_you.png',
-        'text'   => 'Compra confirmada',
+        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_alert.png',
+        'text'   => 'Estorno realizado com sucesso',
     ];
 
     /**
      * @var string
      */
-    public $subject = 'Compra confirmada';
+    public $subject = 'Estorno do pedido';
 
-    /**
-     * @var string
-     */
-    public $description = 'A sua compra no Tikket foi confirmada e você já tenho acesso ao seu ingresso.';
+    public $description = 'O estorno do seu pedido foi realizado com sucesso';
 
     /**
      * NeedsUpdatePayment constructor.
      *
-     * @param \Modules\Order\Models\Order $order
+     * @param $order
      */
-    public function __construct(Order $order)
+    public function __construct($order)
     {
         $this->order = $order;
     }
@@ -60,6 +56,6 @@ class OrderApproved extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order.order-approved');
+        return $this->view('emails.order.order-reversed');
     }
 }
