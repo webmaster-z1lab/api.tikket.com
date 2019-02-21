@@ -30,9 +30,13 @@ use Modules\Event\Models\Event;
  * @property-read \Carbon\Carbon           updated_at
  * @method $this active()
  */
-class Cart extends Model implements CartStatus
+class Cart extends Model
 {
     use SoftDeletes;
+
+    public const OPENED = 'opened';
+    public const FINISHED = 'finished';
+    public const RECYCLED = 'recycled';
 
     const CART_TYPE = 'credit_card';
 
