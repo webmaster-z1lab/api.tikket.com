@@ -3,7 +3,7 @@
 Route::middleware('api.v:1,event')
     ->prefix('v1')
     ->group(function () {
-        Route::apiResource('coupons', 'CouponController')->except(['update']);
+        Route::apiResource('coupons', 'CouponController');
 
         Route::apiResource('events', 'EventController')->except(['show']);
 

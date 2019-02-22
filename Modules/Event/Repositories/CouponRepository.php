@@ -41,11 +41,34 @@ class CouponRepository extends ApiRepository
 
         $coupon->save();
 
-        $coupon = $coupon->fresh();
-
         $this->setCacheKey($coupon->id);
         $this->remember($coupon);
 
         return $coupon;
+    }
+
+    /**
+     * @param array  $data
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Coupon
+     */
+    public function update(array $data, string $id)
+    {
+        $coupon = $this->find($id);
+
+        $data['valid_until'] = Carbon::createFromFormat('Y-m-d', $data['valid_until']);
+        $data['is_percentage'] = $data['is_percentage'] === 'false' ? false : (bool) $data['is_percentage'];
+
+        $coupon->update($data);
+
+        $coupon->entrance()->associate($data['entrance_id']);
+
+        $coupon->save();
+
+        $this->setCacheKey($id);
+        $this->flush()->remember($coupon);
+
+        return $coupon->fresh();
     }
 }

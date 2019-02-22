@@ -27,4 +27,15 @@ class CouponController extends ApiController
     {
         return $this->makeResource($this->repository->create($request->validated()));
     }
+
+    /**
+     * @param \Modules\Event\Http\Requests\CouponRequest $request
+     * @param string                                     $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function update(CouponRequest $request, string $id)
+    {
+        return $this->makeResource($this->repository->update($request->validated(), $id));
+    }
 }
