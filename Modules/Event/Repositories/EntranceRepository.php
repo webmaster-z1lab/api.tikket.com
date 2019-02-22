@@ -161,4 +161,20 @@ class EntranceRepository
         return Entrance::where('available.finishes_at', '<', now())
             ->get();
     }
+
+    /**
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Entrance
+     */
+    public function getEntrance(string $id)
+    {
+        $entrance = \Cache::remember("entrance-$id", $this->cacheDefault(), function () use ($id) {
+            return Entrance::find($id);
+        });
+
+        if (NULL === $entrance) abort(404);
+
+        return $entrance;
+    }
 }

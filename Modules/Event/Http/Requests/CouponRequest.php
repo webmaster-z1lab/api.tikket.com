@@ -2,6 +2,7 @@
 
 namespace Modules\Event\Http\Requests;
 
+use Modules\Event\Repositories\EntranceRepository;
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
 class CouponRequest extends ApiFormRequest
@@ -32,5 +33,25 @@ class CouponRequest extends ApiFormRequest
             'discount'      => 'bail|required|integer|min:1',
             'quantity'      => 'bail|required|integer|min:1',
         ];
+    }
+
+    /**
+     * @param \Illuminate\Validation\Validator $validator
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            /** @var \Illuminate\Validation\Validator $validator */
+            if ($this->is_percentage && $this->discount > 10000) {
+                $validator->errors()->add('discount', 'O desconto deve ser no máximo de 100%.');
+            } elseif (!$this->is_percentage) {
+                $entranceRepository = resolve(EntranceRepository::class);
+
+                $entrance = $entranceRepository->getEntrance($this->entrance_id);
+
+                if ($this->discount > $entrance->available->price)
+                    $validator->errors()->add('discount', 'O desconto deve ser no máximo igual ao preço do lote atual.');
+            }
+        });
     }
 }
