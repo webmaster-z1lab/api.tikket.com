@@ -12,6 +12,7 @@ use App\Traits\AvailableEntrances;
 use Modules\Cart\Events\UserInformationReceived;
 use Modules\Cart\Jobs\RecycleCart;
 use Modules\Cart\Models\Cart;
+use Modules\Event\Models\Coupon;
 use Modules\Event\Models\Entrance;
 use Z1lab\OpenID\Services\ApiService;
 
@@ -188,6 +189,36 @@ class CartRepository
 
             $costumer->save();
         }
+
+        $cart->save();
+
+        return $cart->fresh();
+    }
+
+    /**
+     * @param string $coupon
+     * @param string $id
+     *
+     * @return \Modules\Cart\Models\Cart|null
+     */
+    public function applyCoupon(string $coupon, string $id)
+    {
+        $cart = $this->find($id);
+
+        $entrances = $cart->tickets->pluck('entrance_id')->toArray();
+
+        $coupon = Coupon::where('code', $coupon)->whereIn('entrance_id', $entrances)->first();
+
+        if ($coupon === NULL) abort(404);
+
+        if ($coupon->is_percentage) {
+            $ticketWillDiscount = $cart->tickets()->where('entrance_id', $coupon->entrance_id)->first();
+            $cart->discount = (int) ($ticketWillDiscount * $coupon->discount / 10000);
+        } else {
+            $cart->discount = $coupon->discount;
+        }
+
+        $cart->coupon()->associate($coupon);
 
         $cart->save();
 

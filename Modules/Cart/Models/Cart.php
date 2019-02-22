@@ -4,6 +4,7 @@ namespace Modules\Cart\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\Event\Models\Coupon;
 use Modules\Event\Models\Event;
 
 /**
@@ -11,23 +12,25 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Cart\Models
  *
- * @property string                        user_id
- * @property string                        type
- * @property string                        hash
- * @property string                        callback
- * @property string                        status
- * @property integer                       amount
- * @property integer                       fee
- * @property integer                       fee_percentage
- * @property boolean                       fee_is_hidden
- * @property \Carbon\Carbon                expires_at
- * @property \Modules\Event\Models\Event   event
- * @property \Modules\Cart\Models\Bag      bags
- * @property \Modules\Cart\Models\Ticket   tickets
- * @property \Modules\Cart\Models\Card     card
- * @property \Modules\Cart\Models\Costumer costumer
- * @property-read \Carbon\Carbon           created_at
- * @property-read \Carbon\Carbon           updated_at
+ * @property string                                   user_id
+ * @property string                                   type
+ * @property string                                   hash
+ * @property string                                   callback
+ * @property string                                   status
+ * @property integer                                  amount
+ * @property integer                                  discount
+ * @property integer                                  fee
+ * @property integer                                  fee_percentage
+ * @property boolean                                  fee_is_hidden
+ * @property \Carbon\Carbon                           expires_at
+ * @property \Modules\Event\Models\Event              event
+ * @property \Modules\Cart\Models\Bag                 bags
+ * @property \Illuminate\Database\Eloquent\Collection tickets
+ * @property \Modules\Cart\Models\Card                card
+ * @property \Modules\Cart\Models\Costumer            costumer
+ * @property \Modules\Event\Models\Coupon             coupon
+ * @property-read \Carbon\Carbon                      created_at
+ * @property-read \Carbon\Carbon                      updated_at
  * @method $this active()
  */
 class Cart extends Model
@@ -59,14 +62,16 @@ class Cart extends Model
         'fee_is_hidden'  => 'boolean',
         'fee_percentage' => 'integer',
         'amount'         => 'integer',
+        'discount'       => 'integer',
         'fee'            => 'integer',
     ];
 
     protected $attributes = [
-        'type'   => self::CART_TYPE,
-        'status' => self::OPENED,
-        'amount' => 0,
-        'fee'    => 0,
+        'type'     => self::CART_TYPE,
+        'status'   => self::OPENED,
+        'amount'   => 0,
+        'fee'      => 0,
+        'discount' => 0,
     ];
 
     public function scopeActive($query)
@@ -112,5 +117,13 @@ class Cart extends Model
     public function costumer()
     {
         return $this->embedsOne(Costumer::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

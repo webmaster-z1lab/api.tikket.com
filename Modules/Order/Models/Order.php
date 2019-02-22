@@ -4,6 +4,7 @@ namespace Modules\Order\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
+use Modules\Event\Models\Coupon;
 use Modules\Event\Models\Event;
 
 /**
@@ -51,6 +52,7 @@ class Order extends Model
     protected $fillable = [
         'status',
         'amount',
+        'discount',
         'fee',
         'fee_percentage',
         'fee_is_hidden',
@@ -61,6 +63,7 @@ class Order extends Model
 
     protected $casts = [
         'amount'         => 'integer',
+        'discount'         => 'integer',
         'fee'            => 'integer',
         'fee_percentage' => 'integer',
         'fee_is_hidden'  => 'boolean',
@@ -108,5 +111,13 @@ class Order extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

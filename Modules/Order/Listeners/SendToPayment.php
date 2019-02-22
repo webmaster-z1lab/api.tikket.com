@@ -47,7 +47,8 @@ class SendToPayment
 
         $data = $order->toArray();
         $data['amount'] += $data['fee'];
-        unset($data['tickets'], $data['fee']);
+        $data['amount'] -= $data['discount'];
+        unset($data['tickets'], $data['fee'], $data['discount']);
         $data['items'] = [];
 
         foreach ($order->tickets()->groupBy('entrance_id') as $entrance_id => $tickets) {

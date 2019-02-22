@@ -56,6 +56,7 @@ class OrderRepository
             'ip'             => $ip,
             'type'           => $data['type'],
             'amount'         => $data['amount'],
+            'discount'       => $data['discount'],
             'fee_percentage' => $data['fee_percentage'],
             'fee_is_hidden'  => $data['fee_is_hidden'],
             'fee'            => $data['fee'],
@@ -63,6 +64,8 @@ class OrderRepository
 
         $order->event()->associate($data['event_id']);
         $order->tickets()->createMany($data['tickets']);
+
+        $order->coupon()->associate($cart->coupon);
 
         $user = \Auth::user();
 
