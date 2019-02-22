@@ -5,6 +5,22 @@ namespace Modules\Event\Models;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
+/**
+ * Class Coupon
+ *
+ * @package Modules\Event\Models
+ *
+ * @property string                         name
+ * @property boolean                        is_percentage
+ * @property \Carbon\Carbon                 valid_until
+ * @property string                         code
+ * @property integer                        discount
+ * @property integer                        quantity
+ * @property \Modules\Event\Models\Event    event
+ * @property \Modules\Event\Models\Entrance entrance
+ * @property \Carbon\Carbon                 created_at
+ * @property \Carbon\Carbon                 updated_at
+ */
 class Coupon extends Model
 {
     use SoftDeletes;
@@ -25,5 +41,13 @@ class Coupon extends Model
     public function entrance()
     {
         return $this->belongsTo(Entrance::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
     }
 }

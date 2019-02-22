@@ -41,6 +41,10 @@ class CouponRepository extends ApiRepository
 
         $coupon->save();
 
+        $coupon->event()->associate($coupon->entrance->event);
+
+        $coupon->save();
+
         $this->setCacheKey($coupon->id);
         $this->remember($coupon);
 
@@ -55,6 +59,7 @@ class CouponRepository extends ApiRepository
      */
     public function update(array $data, string $id)
     {
+        /** @var \Modules\Event\Models\Coupon $coupon */
         $coupon = $this->find($id);
 
         $data['valid_until'] = Carbon::createFromFormat('Y-m-d', $data['valid_until']);
@@ -63,6 +68,10 @@ class CouponRepository extends ApiRepository
         $coupon->update($data);
 
         $coupon->entrance()->associate($data['entrance_id']);
+
+        $coupon->save();
+
+        $coupon->event()->associate($coupon->entrance->event);
 
         $coupon->save();
 
@@ -79,8 +88,6 @@ class CouponRepository extends ApiRepository
      */
     public function getByEvent(string $event)
     {
-        return $this->model->whereHas('entrance', function ($query) use ($event) {
-            $query->where('event_id', $event);
-        })->get();
+        return $this->model->where('event_id', $event)->get();
     }
 }
