@@ -71,4 +71,16 @@ class CouponRepository extends ApiRepository
 
         return $coupon->fresh();
     }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model[]|\Illuminate\Support\Collection
+     */
+    public function getByEvent(string $event)
+    {
+        return $this->model->whereHas('entrance', function ($query) use ($event) {
+            $query->where('event_id', $event);
+        })->get();
+    }
 }

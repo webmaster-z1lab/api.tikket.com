@@ -6,6 +6,13 @@ use Modules\Event\Http\Requests\CouponRequest;
 use Modules\Event\Repositories\CouponRepository;
 use Z1lab\JsonApi\Http\Controllers\ApiController;
 
+/**
+ * Class CouponController
+ *
+ * @package Modules\Event\Http\Controllers
+ *
+ * @property \Modules\Event\Repositories\CouponRepository $repository
+ */
 class CouponController extends ApiController
 {
     /**
@@ -37,5 +44,15 @@ class CouponController extends ApiController
     public function update(CouponRequest $request, string $id)
     {
         return $this->makeResource($this->repository->update($request->validated(), $id));
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function getByEvent(string $event)
+    {
+        return $this->collectResource($this->repository->getByEvent($event));
     }
 }

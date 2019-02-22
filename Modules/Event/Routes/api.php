@@ -23,6 +23,8 @@ Route::middleware('api.v:1,event')
             Route::apiResource('entrances', 'EntranceController');
 
             Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);
+
+            Route::get('coupons', 'CouponController@getByEvent');
         });
 
         Route::get('categories', 'CategoryController@index');
