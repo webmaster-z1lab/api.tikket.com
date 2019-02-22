@@ -158,7 +158,6 @@ class EntranceRepository
      */
     public function getEntrances()
     {
-        return Entrance::where('available.finishes_at', '<', now())
-            ->get();
+        return Entrance::where('available.finishes_at', '<', now())->get();
     }
 }

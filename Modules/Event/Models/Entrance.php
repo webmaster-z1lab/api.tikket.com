@@ -21,6 +21,9 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Illuminate\Database\Eloquent\Collection lots
  * @property-read \Carbon\Carbon                      created_at
  * @property-read \Carbon\Carbon                      updated_at
+ *
+ * @method $this expired()
+ * @method $this soldOut()
  */
 class Entrance extends Model
 {
@@ -71,6 +74,16 @@ class Entrance extends Model
     protected $dates = [
         'starts_at',
     ];
+
+    public function scopeExpired($query)
+    {
+        return $query->where('available.finishes_at', '<', now());
+    }
+
+    public function scopeSoldOut($query)
+    {
+        return $query->where('available.is_sold_out', TRUE);
+    }
 
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsMany

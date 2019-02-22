@@ -3,7 +3,7 @@
 namespace Modules\Event\Console;
 
 use Illuminate\Console\Command;
-use Modules\Event\Repositories\EntranceRepository;
+use Modules\Event\Models\Entrance;
 
 class UpdateLots extends Command
 {
@@ -22,28 +22,32 @@ class UpdateLots extends Command
     protected $description = "Update the entrance's available lot if it is finished or sold out.";
 
     /**
+     * @var \Illuminate\Support\Collection
+     */
+    protected $entrances;
+
+    /**
      * Create a new command instance.
      */
     public function __construct()
     {
+        $this->entrances = Entrance::expired()->soldOut()->get();
+
         parent::__construct();
     }
 
     /**
      * Execute the console command.
      *
-     * @param \Modules\Event\Repositories\EntranceRepository $repository
-     *
      * @return void
      */
-    public function handle(EntranceRepository $repository)
+    public function handle()
     {
-        $entrances = $repository->getEntrances();
-
-        /** @var \Modules\Event\Models\Entrance $entrance */
-        foreach ($entrances as $entrance) {
-            /** @var \Modules\Event\Models\Lot $lot */
-            $lot = $entrance->lots->firstWhere('number', $entrance->available->lot + 1);
+        /**
+         * @var Entrance $entrance
+         */
+        foreach ($this->entrances as $entrance) {
+            $lot = $entrance->getLot($entrance->available->lot + 1);
 
             if ($lot !== NULL) {
                 $entrance->available()->delete();

@@ -20,9 +20,9 @@ class Entrance extends Resource
         $event = (new APIResourceManager())->setVersion(1, 'event');
 
         return [
-            'id'            => $this->id,
-            'type'          => 'entrances',
-            'attributes'    => [
+            'id'         => $this->id,
+            'type'       => 'entrances',
+            'attributes' => [
                 'name'        => $this->name,
                 'is_public'   => $this->is_public,
                 'is_free'     => $this->is_free,
@@ -32,9 +32,6 @@ class Entrance extends Resource
                 'starts_at'   => $this->starts_at->format('d/m/Y'),
                 'lot'         => $event->resolve('Available')->make($this->available),
                 'lots'        => $event->resolve('Lot')->collection($this->lots),
-            ],
-            'relationships' => [
-                'event' => $event->resolve('Event')->make($this->event),
             ],
         ];
     }

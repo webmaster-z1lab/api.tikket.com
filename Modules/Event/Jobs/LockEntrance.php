@@ -40,8 +40,8 @@ class LockEntrance implements ShouldQueue
      */
     public function handle()
     {
-        $this->entrance->is_locked = TRUE;
         $this->lot->status = $this->lot::CLOSED;
+        $this->entrance->is_locked = TRUE;
 
         $this->lot->save();
         $this->entrance->save();
