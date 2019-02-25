@@ -19,7 +19,6 @@ class Image extends Resource
             'id'         => $this->id,
             'type'       => 'images',
             'attributes' => [
-                'original'       => \Storage::url($this->original),
                 'cover'          => $this->cover_url,
                 'thumbnail'      => $this->thumbnail_url,
                 'square'         => $this->square_url,

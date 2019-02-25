@@ -57,9 +57,9 @@ class Entrance extends Model
     const MAX_BUY = 5;
 
     protected $attributes = [
-        'is_free' => self::STATUS_PUBLIC,
-        'min_buy' => self::MIN_BUY,
-        'max_buy' => self::MAX_BUY,
+        'is_free'   => self::STATUS_PUBLIC,
+        'min_buy'   => self::MIN_BUY,
+        'max_buy'   => self::MAX_BUY,
         'is_locked' => self::STATUS_LOCKED,
     ];
 
