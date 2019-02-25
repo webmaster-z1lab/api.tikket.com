@@ -35,24 +35,25 @@ class Event extends Model
 {
     use SoftDeletes;
 
+    public const DRAFT = 'draft';
+    public const COMPLETE = 'completed';
+    public const FINALIZED = 'finalized';
+    public const CANCELED = 'canceled';
+    public const PUBLISHED = 'published';
+
     const STATUS_ACTIVE = FALSE;
     const STATUS_PUBLIC = TRUE;
     const STATUS_FEE = TRUE;
+    const STATUS_LOCKED = FALSE;
     const FEE_PERCENTAGE = 10;
-
-
-    const DRAFT_STATUS = 'draft';
-    const COMPLETE_STATUS = 'completed';
-    const FINALIZED_STATUS = 'finalized';
-    const CANCELED_STATUS = 'canceled';
-    const PUBLISHED_STATUS = 'published';
 
     protected $attributes = [
         'is_active'      => self::STATUS_ACTIVE,
         'is_public'      => self::STATUS_PUBLIC,
         'fee_is_hidden'  => self::STATUS_FEE,
         'fee_percentage' => self::FEE_PERCENTAGE,
-        'status'         => self::DRAFT_STATUS,
+        'is_locked'      => self::STATUS_LOCKED,
+        'status'         => self::DRAFT,
     ];
 
     protected $fillable = [
@@ -84,6 +85,7 @@ class Event extends Model
         'fee_is_hidden'  => 'boolean',
         'is_public'      => 'boolean',
         'is_active'      => 'boolean',
+        'is_locked'      => 'boolean',
     ];
 
     /**
