@@ -50,6 +50,10 @@ class Lot extends Model
         'fee'    => 'integer',
     ];
 
+    protected $attributes = [
+        'status' => self::OPEN,
+    ];
+
     protected $dates = [
         'starts_at',
         'finishes_at',

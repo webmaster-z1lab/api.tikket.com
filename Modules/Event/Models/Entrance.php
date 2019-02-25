@@ -52,6 +52,7 @@ class Entrance extends Model
 
     const STATUS_PUBLIC = TRUE;
     const STATUS_FREE = FALSE;
+    const STATUS_LOCKED = FALSE;
     const MIN_BUY = 1;
     const MAX_BUY = 5;
 
@@ -59,6 +60,7 @@ class Entrance extends Model
         'is_free' => self::STATUS_PUBLIC,
         'min_buy' => self::MIN_BUY,
         'max_buy' => self::MAX_BUY,
+        'is_locked' => self::STATUS_LOCKED,
     ];
 
     protected $fillable = [
