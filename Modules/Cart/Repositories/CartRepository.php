@@ -213,7 +213,7 @@ class CartRepository
 
         if ($coupon->is_percentage) {
             $ticketWillDiscount = $cart->tickets()->where('entrance_id', $coupon->entrance_id)->first();
-            $cart->discount = (int) ($ticketWillDiscount * $coupon->discount / 10000);
+            $cart->discount = (int) ($ticketWillDiscount * $coupon->discount / 100);
         } else {
             $cart->discount = $coupon->discount;
         }

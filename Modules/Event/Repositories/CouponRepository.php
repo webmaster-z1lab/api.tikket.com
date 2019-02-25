@@ -33,6 +33,7 @@ class CouponRepository extends ApiRepository
     {
         $data['valid_until'] = Carbon::createFromFormat('Y-m-d', $data['valid_until']);
         $data['is_percentage'] = $data['is_percentage'] === 'false' ? false : (bool) $data['is_percentage'];
+        if (!$data['is_percentage']) $data['discount'] = (int) ($data['discount'] * 100);
 
         /** @var \Modules\Event\Models\Coupon $coupon */
         $coupon = $this->model->create($data);
@@ -64,6 +65,7 @@ class CouponRepository extends ApiRepository
 
         $data['valid_until'] = Carbon::createFromFormat('Y-m-d', $data['valid_until']);
         $data['is_percentage'] = $data['is_percentage'] === 'false' ? false : (bool) $data['is_percentage'];
+        if (!$data['is_percentage']) $data['discount'] = (int) ($data['discount'] * 100);
 
         $coupon->update($data);
 

@@ -42,7 +42,7 @@ class CouponRequest extends ApiFormRequest
     {
         $validator->after(function ($validator) {
             /** @var \Illuminate\Validation\Validator $validator */
-            if ($this->is_percentage && $this->discount > 10000) {
+            if ($this->is_percentage && $this->discount > 100) {
                 $validator->errors()->add('discount', 'O desconto deve ser no máximo de 100%.');
             } elseif (!$this->is_percentage) {
                 $entranceRepository = resolve(EntranceRepository::class);
