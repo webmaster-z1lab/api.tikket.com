@@ -24,6 +24,8 @@ Route::middleware('api.v:1,event')
 
             Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);
 
+            Route::apiResource('permissions', 'PermissionController')->except(['update']);
+
             Route::get('coupons', 'CouponController@getByEvent');
         });
 
