@@ -119,4 +119,12 @@ class Event extends Model
     {
         return $this->hasOne(Image::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
 }

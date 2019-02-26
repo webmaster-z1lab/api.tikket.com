@@ -9,15 +9,15 @@ class Permission extends Model
 {
     use SoftDeletes;
 
-    const MASTER_PERMISSION = 'master';
-    const ORGANIZER_PERMISSION = 'organizer';
-    const CHECKIN_PERMISSION = 'check-in';
-    const PDV_PERMISSION = 'pdv';
+    public const MASTER = 'master';
+    public const ORGANIZER = 'organizer';
+    public const CHECKIN = 'checkin';
+    public const PDV = 'pdv';
 
-    const POSSIBLE_PERMISSIONS = [
-        self::ORGANIZER_PERMISSION,
-        self::CHECKIN_PERMISSION,
-        self::PDV_PERMISSION,
+    public const POSSIBLE_PERMISSIONS = [
+        self::ORGANIZER,
+        self::CHECKIN,
+        self::PDV,
     ];
 
     protected $fillable = ['type', 'email', 'parent_id'];

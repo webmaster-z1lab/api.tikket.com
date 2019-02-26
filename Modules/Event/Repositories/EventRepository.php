@@ -10,6 +10,7 @@ namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
 use Modules\Event\Models\Event;
+use Modules\Event\Models\Permission;
 use Z1lab\JsonApi\Repositories\ApiRepository;
 
 class EventRepository extends ApiRepository
@@ -46,11 +47,21 @@ class EventRepository extends ApiRepository
         $data['user_id'] = \Auth::id();
         $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
 
+        /** @var \Modules\Event\Models\Event $event */
         $event = $this->model->create(array_except($data, ['cover']));
 
+        /** @var \Modules\Event\Models\Image $image */
         $image = $event->image()->create(['original' => $data['cover']]);
         $image->event()->associate($event);
         $image->save();
+
+        $event->permissions()->save(new Permission([
+                'type'  => Permission::MASTER,
+                'email' => \Auth::user()->email,
+            ])
+        );
+
+        $event->save();
 
         $this->setCacheKey($event->id);
         $this->remember($event);
@@ -66,12 +77,12 @@ class EventRepository extends ApiRepository
      */
     public function update(array $data, string $id)
     {
+        /** @var \Modules\Event\Models\Event $event */
         $event = $this->find($id);
 
         $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
         $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
         $data['referer'] = \Request::url();
-        $data['user_id'] = \Auth::id();
         $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
 
         $event->update(array_except($data, ['cover']));
@@ -80,6 +91,7 @@ class EventRepository extends ApiRepository
             $event->image()->delete();
         }
 
+        /** @var \Modules\Event\Models\Image $image */
         $image = $event->image()->create(['original' => $data['cover']]);
         $image->event()->associate($event);
         $image->save();
