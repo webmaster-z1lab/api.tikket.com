@@ -44,4 +44,14 @@ class PermissionRepository extends ApiRepository
 
         return $permission;
     }
+
+    /**
+     * @param string $event_id
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getByEvent(string $event_id)
+    {
+        return $this->model->where('event_id', $event_id)->get();
+    }
 }

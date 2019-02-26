@@ -19,6 +19,14 @@ class PermissionController extends ApiController
     }
 
     /**
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function index()
+    {
+        return $this->collectResource($this->repository->getByEvent(\Route::current()->parameter('event', '')));
+    }
+
+    /**
      * @param \Modules\Event\Http\Requests\PermissionRequest $request
      * @param string                                         $event
      *
