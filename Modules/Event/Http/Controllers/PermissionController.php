@@ -39,4 +39,12 @@ class PermissionController extends ApiController
 
         return $this->makeResource($this->repository->create($data));
     }
+
+    /**
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function getByUser()
+    {
+        return $this->collectResource($this->repository->getByUser());
+    }
 }

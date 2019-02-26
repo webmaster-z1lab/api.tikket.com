@@ -28,7 +28,7 @@ class Permission extends Resource
                 'parent_id' => $this->parent_id,
             ],
             'relationships' => [
-                'event' => $event->resolve('Event')->make($this->event),
+                'event' => $event->resolve('SmallEvent')->make($this->event),
             ],
         ];
     }
