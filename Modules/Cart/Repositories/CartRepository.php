@@ -39,7 +39,11 @@ class CartRepository
      */
     public function getByUser()
     {
-        return Cart::where('user_id', \Auth::id())->active()->latest()->first();
+        $cart = Cart::where('user_id', \Auth::id())->active()->latest()->first();
+
+        if(null === $cart) abort(404);
+
+        return $cart;
     }
 
     /**
