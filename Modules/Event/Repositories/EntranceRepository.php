@@ -11,6 +11,7 @@ namespace Modules\Event\Repositories;
 use Carbon\Carbon;
 use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
+use Modules\Event\Models\Lot;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
 class EntranceRepository
@@ -64,7 +65,7 @@ class EntranceRepository
         foreach ($data['lots'] as $key => $lot) {
             $lot['number'] = $key + 1;
             $lot['value'] = (int)($lot['value'] * 100);
-            $lot['fee'] = (int)($lot['value'] / 10);
+            $lot['fee'] = max((int)($lot['value'] / 10), Lot::MIN_FEE);
             $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
             $lot['starts_at'] = $previous;
             $entrance->lots()->create($lot);
@@ -94,7 +95,7 @@ class EntranceRepository
         foreach ($data['lots'] as $key => $lot) {
             $lot['number'] = $key + 1;
             $lot['value'] = (int)($lot['value'] * 100);
-            $lot['fee'] = (int)($lot['value'] / 10);
+            $lot['fee'] = max((int)($lot['value'] / 10), Lot::MIN_FEE);
             $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
             $lot['starts_at'] = $previous;
             $entrance->lots()->create($lot);
