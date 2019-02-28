@@ -8,6 +8,7 @@
 
 namespace Modules\Cart\Repositories;
 
+use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Events\UserInformationReceived;
 use Modules\Cart\Jobs\RecycleCart;
@@ -18,7 +19,7 @@ use Z1lab\OpenID\Services\ApiService;
 
 class CartRepository
 {
-    use AvailableEntrances;
+    use AvailableEntrances, AvailableCoupons;
 
     /**
      * @param string $id
@@ -214,6 +215,8 @@ class CartRepository
         $coupon = Coupon::where('code', $coupon)->whereIn('entrance_id', $entrances)->first();
 
         if ($coupon === NULL) abort(404);
+
+        $this->incrementUsed($coupon);
 
         if ($coupon->is_percentage) {
             $ticketWillDiscount = $cart->tickets()->where('entrance_id', $coupon->entrance_id)->first();

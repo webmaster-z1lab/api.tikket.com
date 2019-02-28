@@ -43,6 +43,8 @@ class Lot extends Model
      */
     public const LOCKED = 'locked';
 
+    public const MIN_FEE = 400;
+
     protected $fillable = [
         'number',
         'amount',
