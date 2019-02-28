@@ -2,6 +2,7 @@
 
 namespace Modules\Cart\Jobs;
 
+use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,7 @@ use Modules\Event\Models\Entrance;
 
 class RecycleCart implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, AvailableEntrances;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, AvailableEntrances, AvailableCoupons;
 
     public $deleteWhenMissingModels = TRUE;
     /**
@@ -40,6 +41,8 @@ class RecycleCart implements ShouldQueue
             $entrance = Entrance::find($bag->entrance_id);
             $this->incrementAvailable($entrance, Entrance::RESERVED, $bag->amount);
         }
+
+        if ($this->cart->coupon()->exists()) $this->decrementUsed($this->cart->coupon);
 
         $this->cart->status = Cart::RECYCLED;
         $this->cart->save();

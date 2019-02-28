@@ -25,12 +25,21 @@ class Coupon extends Model
 {
     use SoftDeletes;
 
+    public const USED = "used";
+
     protected $fillable = ['name', 'is_percentage', 'valid_until', 'code', 'discount', 'quantity'];
 
     protected $casts = [
         'is_percentage' => 'boolean',
         'discount'      => 'integer',
         'quantity'      => 'integer',
+        'used'          => 'integer',
+        'is_locked'     => 'boolean',
+    ];
+
+    protected $attributes = [
+        'used'      => 0,
+        'is_locked' => FALSE,
     ];
 
     protected $dates = ['valid_until'];

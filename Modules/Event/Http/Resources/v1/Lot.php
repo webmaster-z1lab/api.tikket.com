@@ -19,6 +19,7 @@ class Lot extends Resource
             'id'          => $this->id,
             'number'      => $this->number,
             'amount'      => $this->amount,
+            'status'      => $this->status,
             'value'       => $this->value,
             'fee'         => $this->fee,
             'price'       => $this->price,

@@ -8,6 +8,7 @@
 
 namespace Modules\Order\Repositories;
 
+use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
@@ -15,7 +16,7 @@ use Modules\Order\Models\Order;
 
 class OrderRepository
 {
-    use AvailableEntrances;
+    use AvailableEntrances, AvailableCoupons;
 
     /**
      * @param string $id
@@ -41,8 +42,6 @@ class OrderRepository
     public function createByCart(string $cart_id, string $ip)
     {
         $cart = Cart::find($cart_id);
-
-        if ($cart === NULL) abort(404);
 
         $data = $cart->toArray();
 
@@ -103,6 +102,8 @@ class OrderRepository
 
         $this->checkStatusForEntrances($order, $data['status']);
 
+        $this->checkStatusForCoupons($order, $data['status']);
+
         $order->status = $data['status'];
         $order->save();
 
@@ -139,6 +140,21 @@ class OrderRepository
                     break;
                 default:
             }
+        }
+    }
+
+    /**
+     * @param \Modules\Order\Models\Order $order
+     * @param string                      $status
+     */
+    private function checkStatusForCoupons(Order $order, string $status)
+    {
+        switch ($status) {
+            case Order::CANCELED:
+            case Order::REVERSED:
+                $this->decrementUsed($order->coupon);
+                break;
+            default:
         }
     }
 }
