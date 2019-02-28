@@ -5,6 +5,7 @@ namespace Modules\Order\Http\Requests;
 use Carbon\Carbon;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
+use Modules\Order\Models\Order;
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
 class OrderRequest extends ApiFormRequest
@@ -34,7 +35,8 @@ class OrderRequest extends ApiFormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param  \Illuminate\Validation\Validator $validator
+     *
      * @return void
      */
     public function withValidator($validator)
@@ -43,7 +45,7 @@ class OrderRequest extends ApiFormRequest
             $cart = Cart::find($this->request->get('cart'));
             $sent_at = Carbon::createFromFormat('Y-m-d H:i:s', $this->request->get('sent_at'));
 
-            if($sent_at > $cart->expires_at) {
+            if ($sent_at > $cart->expires_at) {
                 $validator->errors()->add('cart', "Your cart expired before you completed the purchase");
             }
 
@@ -51,8 +53,18 @@ class OrderRequest extends ApiFormRequest
                 $entrance = Entrance::find($bag->entrance_id);
                 $sold = $entrance->available->waiting + $entrance->available->sold;
 
-                if($sold + $bag->amount > $entrance->available->amount) {
+                if ($sold + $bag->amount > $entrance->available->amount) {
                     $validator->errors()->add('tickets', "There are no tickets for entrance '$entrance->name' at the moment.");
+                } else {
+                    $buyed = Order::paid()->byPerson($cart->costumer->document)->get();
+
+                    if (NULL !== $buyed) {
+                        $bagBuy = $buyed->bags()->where('entrance_id', $bag->entrance_id)->first();
+
+                        if (NULL !== $bagBuy && $bagBuy->amount + $cart->bag->amount > $entrance->max_buy) {
+                            $validator->errors()->add('tickets', "Entry '$entrance->name' only allows $entrance->max_buy tickets per person.");
+                        }
+                    }
                 }
             }
         });
