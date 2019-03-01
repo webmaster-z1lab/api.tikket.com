@@ -47,4 +47,18 @@ class PermissionController extends ApiController
     {
         return $this->collectResource($this->repository->getByUser());
     }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getLevels(string $event)
+    {
+        $possible = $this->repository->getPossibleLevels($event);
+
+        if (empty($possible)) return response()->json($possible, 204);
+
+        return response()->json($possible);
+    }
 }

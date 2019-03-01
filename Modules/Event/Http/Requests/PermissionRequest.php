@@ -2,6 +2,7 @@
 
 namespace Modules\Event\Http\Requests;
 
+use Illuminate\Support\Arr;
 use Modules\Event\Models\Permission;
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
@@ -14,7 +15,9 @@ class PermissionRequest extends ApiFormRequest
      */
     public function authorize()
     {
-        return TRUE;
+        return Permission::where('email', \Auth::user()->email)
+            ->where('event_id', \Route::current()->parameter('event'))
+            ->exists();
     }
 
     /**
@@ -24,8 +27,14 @@ class PermissionRequest extends ApiFormRequest
      */
     public function rules()
     {
+        $permission = Permission::where('email', \Auth::user()->email)
+            ->where('event_id', \Route::current()->parameter('event'))
+            ->first();
+
+        $possible = Arr::pluck(config('event.permissions.' . $permission->type), 'value');
+
         return [
-            'type'  => 'bail|required|string|in:' . implode(',', Permission::POSSIBLE_PERMISSIONS),
+            'type'  => 'bail|required|string|in:' . implode(',', $possible),
             'email' => 'bail|required|email',
         ];
     }

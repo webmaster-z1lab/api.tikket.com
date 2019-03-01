@@ -14,12 +14,6 @@ class Permission extends Model
     public const CHECKIN = 'checkin';
     public const PDV = 'pdv';
 
-    public const POSSIBLE_PERMISSIONS = [
-        self::ORGANIZER,
-        self::CHECKIN,
-        self::PDV,
-    ];
-
     protected $fillable = ['type', 'email', 'parent_id'];
 
     /**

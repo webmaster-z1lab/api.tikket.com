@@ -64,4 +64,20 @@ class PermissionRepository extends ApiRepository
     {
         return $this->model->where('email', \Auth::user()->email)->get();
     }
+
+    /**
+     * @param string $event
+     *
+     * @return array
+     */
+    public function getPossibleLevels(string $event) : array
+    {
+        $permission = $this->model->where('email', \Auth::user()->email)
+            ->where('event_id', $event)
+            ->first();
+
+        if ($permission === NULL) return [];
+
+        return config('event.permissions.' . $permission->type);
+    }
 }
