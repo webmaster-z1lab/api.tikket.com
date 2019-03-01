@@ -20,6 +20,8 @@ Route::middleware('api.v:1,event')
 
             Route::patch('fee', 'EventController@fee');
 
+            Route::get('my-permissions', 'PermissionController@getLevels');
+
             Route::apiResource('entrances', 'EntranceController');
 
             Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);
