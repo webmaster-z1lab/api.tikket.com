@@ -22,8 +22,8 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property-read \Carbon\Carbon                      created_at
  * @property-read \Carbon\Carbon                      updated_at
  *
- * @method $this expired()
- * @method $this soldOut()
+ * @method $this orExpired()
+ * @method $this orSoldOut()
  */
 class Entrance extends Model
 {
@@ -77,14 +77,24 @@ class Entrance extends Model
         'starts_at',
     ];
 
-    public function scopeExpired($query)
+    /**
+     * @param $query
+     *
+     * @return $this
+     */
+    public function scopeOrExpired($query)
     {
-        return $query->where('available.finishes_at', '<', now());
+        return $query->orWhere('available.finishes_at', '<', now());
     }
 
-    public function scopeSoldOut($query)
+    /**
+     * @param $query
+     *
+     * @return $this
+     */
+    public function scopeOrSoldOut($query)
     {
-        return $query->where('available.is_sold_out', TRUE);
+        return $query->orWhere('available.is_sold_out', TRUE);
     }
 
     /**

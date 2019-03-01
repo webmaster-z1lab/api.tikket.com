@@ -4,6 +4,7 @@ namespace Modules\Event\Console;
 
 use Illuminate\Console\Command;
 use Modules\Event\Models\Entrance;
+use Modules\Event\Models\Lot;
 
 class UpdateLots extends Command
 {
@@ -31,9 +32,9 @@ class UpdateLots extends Command
      */
     public function __construct()
     {
-        $this->entrances = Entrance::expired()->soldOut()->get();
-
         parent::__construct();
+
+        $this->entrances = Entrance::orExpired()->orSoldOut()->get();
     }
 
     /**
@@ -43,26 +44,38 @@ class UpdateLots extends Command
      */
     public function handle()
     {
-        /**
-         * @var Entrance $entrance
-         */
-        foreach ($this->entrances as $entrance) {
-            $lot = $entrance->getLot($entrance->available->lot + 1);
+        if (NULL !== $this->entrances) {
+            /**
+             * @var Entrance $entrance
+             */
+            foreach ($this->entrances as $entrance) {
+                $current = $entrance->getLot($entrance->available->lot);
+                $next = $entrance->getLot($entrance->available->lot + 1);
 
-            if ($lot !== NULL) {
-                $entrance->available()->delete();
+                $current->available = $entrance->available->available;
+                $current->reserved = $entrance->available->reserved;
+                $current->waiting = $entrance->available->waiting;
+                $current->sold = $entrance->available->sold;
+                $current->status = $entrance->available->isSoldOut() ? Lot::EXPIRED : Lot::CLOSED;
 
-                $entrance->available()->create([
-                    'lot_id'      => $lot->_id,
-                    'lot'         => $lot->number,
-                    'available'   => $lot->amount,
-                    'amount'      => $lot->amount,
-                    'value'       => $lot->value,
-                    'fee'         => $lot->fee,
-                    'price'       => $lot->value + $lot->fee,
-                    'starts_at'   => $entrance->starts_at,
-                    'finishes_at' => $lot->finishes_at,
-                ]);
+                $current->save();
+
+                if (NULL !== $next) {
+                    $entrance->available()->delete();
+
+                    $entrance->available()->create([
+                        'lot_id'      => $next->_id,
+                        'lot'         => $next->number,
+                        'available'   => $next->amount + $current->available,
+                        'amount'      => $next->amount,
+                        'remainder'   => $current->available,
+                        'value'       => $next->value,
+                        'fee'         => $next->fee,
+                        'price'       => $next->value + $next->fee,
+                        'starts_at'   => $current->finishes_at->addSecond(),
+                        'finishes_at' => $next->finishes_at,
+                    ]);
+                }
             }
         }
     }

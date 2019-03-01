@@ -26,6 +26,7 @@ class Entrance extends Resource
                 'name'        => $this->name,
                 'is_public'   => $this->is_public,
                 'is_free'     => $this->is_free,
+                'is_locked'   => $this->is_locked,
                 'min_buy'     => $this->min_buy,
                 'max_buy'     => $this->max_buy,
                 'description' => $this->description,

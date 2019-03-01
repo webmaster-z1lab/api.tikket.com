@@ -16,6 +16,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property integer             waiting
  * @property integer             sold
  * @property integer             amount
+ * @property integer             remainder
  * @property integer             value
  * @property integer             fee
  * @property integer             price
@@ -34,6 +35,7 @@ class Available extends Model
     const QNT_WAITING = 0;
     const QNT_SOLD = 0;
     const QNT_AMOUNT = 0;
+    const QNT_REMAINDER = 0;
 
     protected $fillable = [
         'lot_id',
@@ -43,6 +45,7 @@ class Available extends Model
         'waiting',
         'sold',
         'amount',
+        'remainder',
         'value',
         'fee',
         'price',
@@ -57,12 +60,15 @@ class Available extends Model
         'amount'      => self::QNT_AMOUNT,
         'waiting'     => self::QNT_WAITING,
         'reserved'    => self::QNT_RESERVED,
+        'remainder'   => self::QNT_REMAINDER,
         'is_active'   => self::STATUS_ACTIVE,
         'is_sold_out' => self::STATUS_SOLD_OUT,
     ];
 
     protected $casts = [
         'available' => 'integer',
+        'amount'    => 'integer',
+        'remainder' => 'integer',
         'reserved'  => 'integer',
         'waiting'   => 'integer',
         'sold'      => 'integer',
@@ -77,4 +83,20 @@ class Available extends Model
         'starts_at',
         'finishes_at',
     ];
+
+    /**
+     * @return bool
+     */
+    public function isExpired()
+    {
+        return !now()->between($this->attributes['starts_at'], $this->attributes['finishes_at']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSoldOut()
+    {
+        return $this->attributes['amount'] === $this->attributes['sold'];
+    }
 }

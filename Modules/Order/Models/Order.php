@@ -27,6 +27,9 @@ use Modules\Event\Models\Event;
  * @property \Modules\Event\Models\Event    event
  * @property-read \Carbon\Carbon            created_at
  * @property-read \Carbon\Carbon            updated_at
+ *
+ * @method $this paid()
+ * @method $this byPerson(string $document)
  */
 class Order extends Model
 {
@@ -63,7 +66,7 @@ class Order extends Model
 
     protected $casts = [
         'amount'         => 'integer',
-        'discount'         => 'integer',
+        'discount'       => 'integer',
         'fee'            => 'integer',
         'fee_percentage' => 'integer',
         'fee_is_hidden'  => 'boolean',
@@ -72,6 +75,27 @@ class Order extends Model
     protected $attributes = [
         'status' => 'waiting',
     ];
+
+    /**
+     * @param $query
+     *
+     * @return $this
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('status', self::PAID);
+    }
+
+    /**
+     * @param        $query
+     * @param string $document
+     *
+     * @return $this
+     */
+    public function scopeByPerson($query, $document)
+    {
+        return $query->where('costumer.document', $document);
+    }
 
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
