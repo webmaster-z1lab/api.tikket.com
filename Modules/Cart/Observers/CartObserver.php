@@ -12,6 +12,6 @@ class CartObserver
     public function saving(Cart $cart)
     {
         if ($cart->isDirty(['amount', 'fee', 'discount']))
-            $cart->update(['is_free' => $cart->discount === ($cart->amount + $cart->fee)]);
+            $cart->is_free  = $cart->discount === ($cart->amount + $cart->fee);
     }
 }
