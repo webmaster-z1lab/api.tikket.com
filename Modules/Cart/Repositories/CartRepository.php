@@ -42,7 +42,7 @@ class CartRepository
     {
         $cart = Cart::where('user_id', \Auth::id())->active()->latest()->first();
 
-        if(null === $cart) abort(404);
+        if (NULL === $cart) abort(404);
 
         return $cart;
     }
@@ -69,16 +69,18 @@ class CartRepository
             $entrance = Entrance::find($ticket['entrance']);
             $lot = $entrance->lots()->where('number', $ticket['lot'])->first();
 
-            $amount += ($ticket['quantity'] * $lot->value);
-            $fee += ($ticket['quantity'] * $lot->fee);
+            if (!$entrance->is_free) {
+                $amount += ($ticket['quantity'] * $lot->value);
+                $fee += ($ticket['quantity'] * $lot->fee);
+            }
 
             for ($i = 0; $i < $ticket['quantity']; $i++) {
                 $cart->tickets()->create([
                     'entrance_id' => $ticket['entrance'],
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
-                    'value'       => $lot->value,
-                    'fee'         => $lot->fee,
+                    'value'       => $entrance->is_free ? 0 : $lot->value,
+                    'fee'         => $entrance->is_free ? 0 : $lot->fee,
                 ]);
             }
 
@@ -220,7 +222,7 @@ class CartRepository
 
         if ($coupon->is_percentage) {
             $ticketWillDiscount = $cart->tickets()->where('entrance_id', $coupon->entrance_id)->first();
-            $cart->discount = (int) ($ticketWillDiscount * $coupon->discount / 100);
+            $cart->discount = (int)($ticketWillDiscount * $coupon->discount / 100);
         } else {
             $cart->discount = $coupon->discount;
         }

@@ -3,6 +3,8 @@
 namespace Modules\Cart\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Cart\Models\Cart;
+use Modules\Cart\Observers\CartObserver;
 
 class CartServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,8 @@ class CartServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
+
+        Cart::observe(CartObserver::class);
     }
 
     /**

@@ -49,7 +49,9 @@ class CouponRequest extends ApiFormRequest
 
                 $entrance = $entranceRepository->getEntrance($this->entrance_id);
 
-                if ($this->discount > $entrance->available->price)
+                if ($entrance->is_free)
+                    $validator->errors()->add('discount', 'Não é possível aplicar desconto em uma entrada gratuita.');
+                elseif ($this->discount > $entrance->available->price)
                     $validator->errors()->add('discount', 'O desconto deve ser no máximo igual ao preço do lote atual.');
             }
         });

@@ -49,11 +49,13 @@ class Cart extends Model
         'hash',
         'callback',
         'amount',
+        'discount',
         'fee',
         'status',
         'fee_percentage',
         'fee_is_hidden',
         'expires_at',
+        'is_free',
     ];
 
     protected $dates = ['expires_at'];
@@ -64,6 +66,7 @@ class Cart extends Model
         'amount'         => 'integer',
         'discount'       => 'integer',
         'fee'            => 'integer',
+        'is_free'        => 'boolean',
     ];
 
     protected $attributes = [
