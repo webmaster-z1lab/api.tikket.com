@@ -75,6 +75,7 @@ class Cart extends Model
         'amount'   => 0,
         'fee'      => 0,
         'discount' => 0,
+        'is_free'  => TRUE,
     ];
 
     public function scopeActive($query)

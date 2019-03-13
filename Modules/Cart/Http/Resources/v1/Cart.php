@@ -33,6 +33,7 @@ class Cart extends Resource
                 'fee_percentage' => $this->fee_percentage,
                 'fee_is_hidden'  => $this->fee_is_hidden,
                 'discount'       => $this->discount,
+                'is_free'        => $this->is_free,
                 'expires_at'     => $this->expires_at->toW3cString(),
                 'tickets'        => $cart->resolve('Ticket')->collection($this->tickets),
                 'card'           => $this->when(ends_with($this->type, 'card'), $cart->resolve('Card')->make($this->card)),
