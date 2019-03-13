@@ -3,7 +3,6 @@
 namespace Modules\Order\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Order\Events\OrderCreated;
 use Modules\Order\Http\Requests\OrderRequest;
 use Modules\Order\Http\Requests\StatusRequest;
 use Modules\Order\Repositories\OrderRepository;
@@ -33,11 +32,7 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        $order = $this->repository->createByCart($request->get('cart'), $request->ip());
-
-        event(new OrderCreated($order->id));
-
-        return api_resource('Order')->make($order->fresh());
+        return api_resource('Order')->make($this->repository->createByCart($request->get('cart'), $request->ip()));
     }
 
     /**

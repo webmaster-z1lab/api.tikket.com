@@ -12,6 +12,7 @@ use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
+use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 
 class OrderRepository
@@ -87,7 +88,15 @@ class OrderRepository
         $card->save();
         $order->save();
 
-        return $order->fresh();
+        if (! $data['is_free']) {
+            event(new OrderCreated($order->id));
+        }
+        else {
+            $order->status = Order::PAID;
+            $order->save();
+        }
+
+        return $order;
     }
 
     /**
