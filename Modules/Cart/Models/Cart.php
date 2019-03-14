@@ -24,7 +24,7 @@ use Modules\Event\Models\Event;
  * @property boolean                                  fee_is_hidden
  * @property \Carbon\Carbon                           expires_at
  * @property \Modules\Event\Models\Event              event
- * @property \Modules\Cart\Models\Bag                 bags
+ * @property \Illuminate\Database\Eloquent\Collection bags
  * @property \Illuminate\Database\Eloquent\Collection tickets
  * @property \Modules\Cart\Models\Card                card
  * @property \Modules\Cart\Models\Costumer            costumer

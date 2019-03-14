@@ -73,7 +73,6 @@ class SendToPayment
         if (!$credential)
             throw new \Exception('Not possible to generate the client credential.');
 
-
         $response = $client->post('api/v1/transactions', [
             'headers' => [
                 'Authorization' => "Bearer $credential",

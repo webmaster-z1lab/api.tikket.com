@@ -12,21 +12,21 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Order\Models
  *
- * @property string                         status
- * @property string                         amount
- * @property string                         fee
- * @property string                         hash
- * @property string                         ip
- * @property string                         type
- * @property integer                        fee_percentage
- * @property boolean                        fee_is_hidden
- * @property \Modules\Order\Models\Costumer costumer
- * @property \Modules\Order\Models\Card     card
- * @property \Modules\Order\Models\Bag      bags
- * @property \Modules\Order\Models\Ticket   tickets
- * @property \Modules\Event\Models\Event    event
- * @property-read \Carbon\Carbon            created_at
- * @property-read \Carbon\Carbon            updated_at
+ * @property string                                   status
+ * @property string                                   amount
+ * @property string                                   fee
+ * @property string                                   hash
+ * @property string                                   ip
+ * @property string                                   type
+ * @property integer                                  fee_percentage
+ * @property boolean                                  fee_is_hidden
+ * @property \Modules\Order\Models\Costumer           costumer
+ * @property \Modules\Order\Models\Card               card
+ * @property \Illuminate\Database\Eloquent\Collection bags
+ * @property \Illuminate\Database\Eloquent\Collection tickets
+ * @property \Modules\Event\Models\Event              event
+ * @property-read \Carbon\Carbon                      created_at
+ * @property-read \Carbon\Carbon                      updated_at
  *
  * @method $this paid()
  * @method $this byPerson(string $document)
