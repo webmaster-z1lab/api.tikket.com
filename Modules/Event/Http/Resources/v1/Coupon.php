@@ -29,6 +29,8 @@ class Coupon extends Resource
                 'code'          => $this->code,
                 'discount'      => $this->discount,
                 'quantity'      => $this->quantity,
+                'used'          => $this->used,
+                'is_locked'     => $this->is_locked,
             ],
             'relationships' => [
                 'entrance' => $event->resolve('Entrance')->make($this->entrance),
