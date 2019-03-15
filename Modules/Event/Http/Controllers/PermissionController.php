@@ -2,12 +2,27 @@
 
 namespace Modules\Event\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Modules\Event\Http\Requests\PermissionRequest;
 use Modules\Event\Repositories\PermissionRepository;
-use Z1lab\JsonApi\Http\Controllers\ApiController;
 
-class PermissionController extends ApiController
+class PermissionController extends Controller
 {
+    /**
+     * Set the base repository
+     *
+     * @var \Modules\Event\Repositories\PermissionRepository
+     */
+    protected $repository;
+
+    /**
+     * Set the resource base ClassName
+     *
+     * @var string
+     */
+    protected $resource;
+
     /**
      * PermissionController constructor.
      *
@@ -15,7 +30,8 @@ class PermissionController extends ApiController
      */
     public function __construct(PermissionRepository $repository)
     {
-        parent::__construct($repository, 'Permission');
+        $this->repository = $repository;
+        $this->resource = 'Permission';
     }
 
     /**
@@ -41,6 +57,19 @@ class PermissionController extends ApiController
     }
 
     /**
+     * @param string $event
+     * @param string $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(string $event, string $id)
+    {
+        $this->repository->destroy($id);
+
+        return response()->json(NULL, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
      * @return \Illuminate\Http\Resources\Json\Resource
      */
     public function getByUser()
@@ -60,5 +89,23 @@ class PermissionController extends ApiController
         if (empty($possible)) return response()->json($possible, 204);
 
         return response()->json($possible);
+    }
+
+    /**
+     * @param $obj
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    protected function makeResource($obj)
+    {
+        return api_resource($this->resource)->make($obj);
+    }
+
+    /**
+     * @param $collection
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    protected function collectResource($collection)
+    {
+        return api_resource($this->resource)->collection($collection);
     }
 }
