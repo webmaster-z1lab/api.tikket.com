@@ -23,4 +23,20 @@ class Permission extends Model
     {
         return $this->belongsTo(Event::class);
     }
+
+    /**
+     * @return string
+     */
+    public function getNameAttribute(): string
+    {
+        return config('event.levels.' . $this->type . '.name');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescriptionAttribute(): string
+    {
+        return config('event.levels.' . $this->type . '.description');
+    }
 }

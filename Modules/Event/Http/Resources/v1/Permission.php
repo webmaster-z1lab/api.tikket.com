@@ -23,9 +23,11 @@ class Permission extends Resource
             'id'            => $this->id,
             'type'          => 'permissions',
             'attributes'    => [
-                'type'      => $this->type,
-                'email'     => $this->email,
-                'parent_id' => $this->parent_id,
+                'type'        => $this->type,
+                'name'        => $this->name,
+                'description' => $this->description,
+                'email'       => $this->email,
+                'parent_id'   => $this->parent_id,
             ],
             'relationships' => [
                 'event' => $event->resolve('SmallEvent')->make($this->event),
