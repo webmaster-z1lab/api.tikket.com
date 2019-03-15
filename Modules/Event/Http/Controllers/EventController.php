@@ -68,16 +68,16 @@ class EventController extends ApiController
         return $this->makeResource($this->repository->setAddress($request->validated(), $id));
     }
 
-    /**
-     * @param \Modules\Event\Http\Requests\FeeRequest $request
-     * @param string                                  $id
-     *
-     * @return \Illuminate\Http\Resources\Json\Resource
-     */
-    public function fee(FeeRequest $request, string $id)
-    {
-        return $this->makeResource($this->repository->setFeeIsHidden($request->validated(), $id));
-    }
+//    /**
+//     * @param \Modules\Event\Http\Requests\FeeRequest $request
+//     * @param string                                  $id
+//     *
+//     * @return \Illuminate\Http\Resources\Json\Resource
+//     */
+//    public function fee(FeeRequest $request, string $id)
+//    {
+//        return $this->makeResource($this->repository->setFeeIsHidden($request->validated(), $id));
+//    }
 
     /**
      * @param string $id
@@ -87,6 +87,16 @@ class EventController extends ApiController
     public function finilize(string $id)
     {
         return $this->makeResource($this->repository->finalize($id));
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function publish(string $id)
+    {
+        return $this->makeResource($this->repository->publish($id));
     }
 
     /**

@@ -36,7 +36,7 @@ class Event extends Model
     use SoftDeletes;
 
     public const DRAFT = 'draft';
-    public const COMPLETE = 'completed';
+    public const COMPLETED = 'completed';
     public const FINALIZED = 'finalized';
     public const CANCELED = 'canceled';
     public const PUBLISHED = 'published';

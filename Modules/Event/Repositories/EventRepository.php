@@ -103,6 +103,34 @@ class EventRepository extends ApiRepository
     }
 
     /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function destroy(string $id): bool
+    {
+        $event = $this->find($id);
+
+        switch ($event->status) {
+            case Event::DRAFT:
+            case Event::COMPLETED:
+                $this->flush();
+
+                return $event->delete();
+            case Event::PUBLISHED:
+                $result = $event->update(['status' => $event->is_locked ? Event::CANCELED : Event::COMPLETED]);
+                $this->setCacheKey($id);
+                $this->flush()->remember($event);
+
+                return $result;
+            default:
+                abort(400, "This event can't be canceled or unpublished.");
+        }
+
+        return TRUE;
+    }
+
+    /**
      * @param string $url
      *
      * @return mixed
@@ -162,9 +190,25 @@ class EventRepository extends ApiRepository
     {
         $event = $this->find($id);
 
-        if ($event->status !== 'draft') abort(400, 'This event is not a draft.');
+        if ($event->status !== Event::DRAFT) abort(400, 'This event is not a draft.');
 
-        $event->update(['status' => Event::COMPLETE]);
+        $event->update(['status' => Event::COMPLETED]);
+
+        return $event->fresh();
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event
+     */
+    public function publish(string $id)
+    {
+        $event = $this->find($id);
+
+        if ($event->status !== Event::COMPLETED) abort(400, 'This event can not be published.');
+
+        $event->update(['status' => Event::PUBLISHED]);
 
         return $event->fresh();
     }
