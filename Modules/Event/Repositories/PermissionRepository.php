@@ -32,8 +32,6 @@ class PermissionRepository extends ApiRepository
     {
         $data['parent_id'] = \Auth::id();
 
-        if ($this->model->where('email', $data['email'])->where('event_id', $data['event_id'])->exists()) abort(400);
-
         /** @var \Modules\Event\Models\Permission $permission */
         $permission = $this->model->create(array_except($data, ['event_id']));
 
@@ -54,7 +52,7 @@ class PermissionRepository extends ApiRepository
      */
     public function getByEvent(string $event_id)
     {
-        return $this->model->where('event_id', $event_id)->get();
+        return $this->model->where('event_id', $event_id)->where('type', '<>', Permission::MASTER)->get();
     }
 
     /**

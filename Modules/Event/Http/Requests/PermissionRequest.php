@@ -38,4 +38,21 @@ class PermissionRequest extends ApiFormRequest
             'email' => 'bail|required|email',
         ];
     }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator $validator
+     *
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            /** @var \Illuminate\Validation\Validator $validator */
+            if (Permission::where('email', $this->email)->where('event_id', \Route::current()->parameter('event'))->exists()) {
+                $validator->errors()->add('email', 'This user already has a permission for this event.');
+            }
+        });
+    }
 }
