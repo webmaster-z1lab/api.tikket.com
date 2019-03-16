@@ -45,8 +45,7 @@ class UpdateUser
                 'Authorization' => 'Bearer ' . $event->getToken(),
             ],
             'json'    => [
-                'area_code'   => substr($event->getPhone(), 0, 2),
-                'phone'       => substr($event->getPhone(), 2),
+                'phone'       => $event->getPhone(),
                 'is_whatsapp' => FALSE,
             ],
         ]);

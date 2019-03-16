@@ -18,6 +18,7 @@ class Order extends Resource
     public function toArray($request)
     {
         $order = (new APIResourceManager())->setVersion(1, 'order');
+        $event = (new APIResourceManager())->setVersion(1, 'event');
 
         return [
             'id'         => $this->id,
@@ -25,6 +26,7 @@ class Order extends Resource
             'attributes' => [
                 'status'         => $this->status,
                 'amount'         => $this->amount,
+                'discount'       => $this->discount,
                 'fee'            => $this->fee,
                 'hash'           => $this->hash,
                 'ip'             => $this->ip,
@@ -34,6 +36,9 @@ class Order extends Resource
                 'tickets'        => $order->resolve('Ticket')->collection($this->tickets),
                 'card'           => $this->when(ends_with($this->type, 'card'), $order->resolve('Card')->make($this->card)),
             ],
+            'relationships' => [
+                'coupon' => $this->when($this->coupon !== NULL, $event->make($this->coupon))
+            ]
         ];
     }
 }
