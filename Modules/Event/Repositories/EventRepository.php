@@ -8,6 +8,7 @@
 
 namespace Modules\Event\Repositories;
 
+use App\Traits\EventValidator;
 use Carbon\Carbon;
 use Modules\Event\Models\Event;
 use Modules\Event\Models\Permission;
@@ -15,6 +16,7 @@ use Z1lab\JsonApi\Repositories\ApiRepository;
 
 class EventRepository extends ApiRepository
 {
+    use EventValidator;
     /**
      * EventRepository constructor.
      *
@@ -208,7 +210,9 @@ class EventRepository extends ApiRepository
 
         if ($event->status !== Event::COMPLETED) abort(400, 'This event can not be published.');
 
-        $event->update(['status' => Event::PUBLISHED]);
+        if ($this->is_valid($event)) {
+            $event->update(['status' => Event::PUBLISHED]);
+        }
 
         return $event->fresh();
     }
