@@ -18,6 +18,8 @@ Route::middleware('api.v:1,event')
 
             Route::patch('finalize', 'EventController@finilize');
 
+            Route::patch('publish', 'EventController@publish');
+
             //Route::patch('fee', 'EventController@fee');
 
             Route::get('my-permissions', 'PermissionController@getLevels');
