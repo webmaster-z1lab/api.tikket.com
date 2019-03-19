@@ -12,10 +12,11 @@ return [
      */
 
     'version' => [
-        'app'   => '1',
-        'event' => '1',
-        'cart'  => '1',
-        'order' => '1',
+        'app'    => '1',
+        'event'  => '1',
+        'cart'   => '1',
+        'order'  => '1',
+        'report' => '1',
     ],
 
     /*
@@ -29,10 +30,11 @@ return [
      */
 
     'resources_path' => [
-        'app'   => 'App\Http\Resources',
-        'event' => 'Modules\Event\Http\Resources',
-        'cart'  => 'Modules\Cart\Http\Resources',
-        'order' => 'Modules\Order\Http\Resources',
+        'app'    => 'App\Http\Resources',
+        'event'  => 'Modules\Event\Http\Resources',
+        'cart'   => 'Modules\Cart\Http\Resources',
+        'order'  => 'Modules\Order\Http\Resources',
+        'report' => 'Modules\Report\Http\Resources',
     ],
 
     /*
@@ -45,10 +47,11 @@ return [
      */
 
     'resources' => [
-        'app'   => '',
-        'event' => '',
-        'cart'  => '',
-        'order' => '',
+        'app'    => '',
+        'event'  => '',
+        'cart'   => '',
+        'order'  => '',
+        'report' => '',
     ],
 
 ];

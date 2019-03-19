@@ -1,0 +1,25 @@
+{
+    "name": "z1lab/report",
+    "description": "",
+    "authors": [
+        {
+            "name": "Olimar Ferraz",
+            "email": "webmaster@z1lab.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Report\\Providers\\ReportServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Report\\": ""
+        }
+    }
+}
