@@ -1,6 +1,11 @@
 <?php
 
 $levels = [
+    \Modules\Event\Models\Permission::MASTER    => [
+        'name'        => 'Master',
+        'value'       => \Modules\Event\Models\Permission::MASTER,
+        'description' => 'descrição',
+    ],
     \Modules\Event\Models\Permission::ORGANIZER => [
         'name'        => 'Organizador',
         'value'       => \Modules\Event\Models\Permission::ORGANIZER,
@@ -26,7 +31,8 @@ return [
     ],
     'levels'      => $levels,
     'permissions' => [
-        \Modules\Event\Models\Permission::MASTER    => array_values($levels),
-        \Modules\Event\Models\Permission::ORGANIZER => \Illuminate\Support\Arr::except($levels, \Modules\Event\Models\Permission::ORGANIZER),
+        \Modules\Event\Models\Permission::MASTER    => array_values(\Illuminate\Support\Arr::except($levels, \Modules\Event\Models\Permission::MASTER)),
+        \Modules\Event\Models\Permission::ORGANIZER => array_values(\Illuminate\Support\Arr::except($levels,
+            [\Modules\Event\Models\Permission::MASTER, \Modules\Event\Models\Permission::ORGANIZER])),
     ],
 ];

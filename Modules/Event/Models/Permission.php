@@ -29,7 +29,7 @@ class Permission extends Model
      */
     public function getNameAttribute(): string
     {
-        return config('event.levels.' . $this->type . '.name');
+        return config('event.levels.' . $this->attributes['type'] . '.name');
     }
 
     /**
@@ -37,6 +37,6 @@ class Permission extends Model
      */
     public function getDescriptionAttribute(): string
     {
-        return config('event.levels.' . $this->type . '.description');
+        return config('event.levels.' . $this->attributes['type'] . '.description');
     }
 }
