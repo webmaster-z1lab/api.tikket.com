@@ -35,7 +35,9 @@ class ReportService
         $today = today();
         $date = today()->subDays($this->last_days);
         do {
-            $last_days[] = $orders->whereBetween('created_at', [$date->startOfDay(), $date->endOfDay()])->sum(function ($order) {
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->sum(function ($order) {
                 return $order->amount + $order->fee - $order->discount;
             });
             $date->addDay();
@@ -64,7 +66,9 @@ class ReportService
         $today = today();
         $date = today()->subDays($this->last_days);
         do {
-            $last_days[] = $orders->whereBetween('created_at', [$date->startOfDay(), $date->endOfDay()])->sum('fee');
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->sum('fee');
             $date->addDay();
         } while ($date->lte($today));
 
@@ -91,7 +95,9 @@ class ReportService
         $today = today();
         $date = today()->subDays($this->last_days);
         do {
-            $last_days[] = $orders->whereBetween('created_at', [$date->startOfDay(), $date->endOfDay()])->count();
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->count();
             $date->addDay();
         } while ($date->lte($today));
 
@@ -121,7 +127,9 @@ class ReportService
         $today = today();
         $date = today()->subDays($this->last_days);
         do {
-            $last_days[] = $orders->whereBetween('created_at', [$date->startOfDay(), $date->endOfDay()])->sum(function ($order) {
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->sum(function ($order) {
                 return $order->tickets()->count();
             });
             $date->addDay();
