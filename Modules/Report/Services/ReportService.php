@@ -102,14 +102,15 @@ class ReportService
 
     /**
      * @param string $event
+     * @param string $status
      *
      * @return \Modules\Report\Models\Report
      */
-    public function soldTickets(string $event)
+    public function reportTickets(string $event, string $status)
     {
         $report = new Report();
         $orders = Order::where('event_id', $event)
-            ->where('status', Order::PAID)
+            ->where('status', $status)
             ->get();
 
         $report->total = $orders->sum(function ($order) {
@@ -129,5 +130,18 @@ class ReportService
         $report->last_days = $last_days;
 
         return $report;
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getOrders(string $event)
+    {
+        return Order::where('event_id', $event)
+            ->where('status', Order::CANCELED)
+            ->latest()
+            ->get();
     }
 }

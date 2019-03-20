@@ -8,8 +8,14 @@ Route::middleware('api.v:1,report')
 
             Route::get('canceled', 'ReportController@canceledSales');
 
-            Route::get('tickets', 'ReportController@soldTickets');
+            Route::get('sold-tickets', 'ReportController@soldTickets');
+
+            Route::get('pending-tickets', 'ReportController@pendingTickets');
+
+            Route::get('canceled-tickets', 'ReportController@canceledTickets');
 
             Route::get('fee', 'ReportController@feeValues');
+
+            Route::get('orders', 'ReportController@getOrders');
         });
     });

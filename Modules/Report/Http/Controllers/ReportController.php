@@ -3,6 +3,7 @@
 namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Order\Models\Order;
 use Modules\Report\Services\ReportService;
 
 class ReportController extends Controller
@@ -59,6 +60,36 @@ class ReportController extends Controller
      */
     public function soldTickets(string $event)
     {
-        return api_resource('Report')->make($this->service->soldTickets($event));
+        return api_resource('Report')->make($this->service->reportTickets($event, Order::PAID));
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function pendingTickets(string $event)
+    {
+        return api_resource('Report')->make($this->service->reportTickets($event, Order::WAITING));
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function canceledTickets(string $event)
+    {
+        return api_resource('Report')->make($this->service->reportTickets($event, Order::REVERSED));
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function getOrders(string $event)
+    {
+        return api_resource('Order')->collection($this->service->getOrders($event));
     }
 }
