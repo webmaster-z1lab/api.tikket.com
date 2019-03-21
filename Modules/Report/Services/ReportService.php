@@ -27,6 +27,7 @@ class ReportService
             ->where('status', Order::PAID)
             ->get();
 
+
         $report->total = $orders->sum(function ($order) {
             return $order->amount + $order->fee - $order->discount;
         });
@@ -53,14 +54,14 @@ class ReportService
      *
      * @return \Modules\Report\Models\Report
      */
-    public function feeValues(string $event)
+    public function amountValues(string $event)
     {
         $report = new Report();
         $orders = Order::where('event_id', $event)
             ->where('status', Order::PAID)
             ->get();
 
-        $report->total = $orders->sum('fee');
+        $report->total = $orders->sum('amount');
 
         $last_days = [];
         $today = today();
@@ -68,7 +69,7 @@ class ReportService
         do {
             $last_days[] = $orders->filter( function ($order, $key) use ($date) {
                 return $order->created_at->isSameDay($date);
-            })->sum('fee');
+            })->sum('amount');
             $date->addDay();
         } while ($date->lte($today));
 

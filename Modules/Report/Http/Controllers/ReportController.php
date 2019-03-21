@@ -38,9 +38,9 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function feeValues(string $event)
+    public function amountValues(string $event)
     {
-        return api_resource('Report')->make($this->service->feeValues($event));
+        return api_resource('Report')->make($this->service->amountValues($event));
     }
 
     /**

@@ -14,7 +14,7 @@ Route::middleware('api.v:1,report')
 
             Route::get('canceled-tickets', 'ReportController@canceledTickets');
 
-            Route::get('fee', 'ReportController@feeValues');
+            Route::get('net-value', 'ReportController@amountValues');
 
             Route::get('orders', 'ReportController@getOrders');
         });
