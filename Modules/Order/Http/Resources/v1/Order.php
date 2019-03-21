@@ -40,7 +40,8 @@ class Order extends Resource
                 'sale_point'     => $this->when($this->channel === \Modules\Order\Models\Order::PDV_CHANNEL, $order->resolve('SalePoint')->make($this->sale_point)),
             ],
             'relationships' => [
-                'coupon' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL, $event->make($this->coupon)),
+                'coupon' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL,
+                    $event->resolve('Coupon')->make($this->coupon)),
             ],
         ];
     }

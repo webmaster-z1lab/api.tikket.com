@@ -114,7 +114,6 @@ class OrderRepository
         $ticketsByEntrance = collect($data['tickets'])->groupBy('entrance');
         foreach ($ticketsByEntrance as $entrance_id => $items) {
             $entrance = Entrance::find($entrance_id);
-            $ticket['quantity'] = intval($data['quantity']);
 
             if (!$entrance->is_free) {
                 $amount += ($entrance->available->amount * $items->count());
