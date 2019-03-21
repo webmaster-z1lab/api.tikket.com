@@ -18,6 +18,7 @@ use Modules\Event\Models\Event;
  * @property string                                   hash
  * @property string                                   ip
  * @property string                                   type
+ * @property string                                   channel
  * @property integer                                  fee_percentage
  * @property boolean                                  fee_is_hidden
  * @property \Modules\Order\Models\Costumer           costumer
@@ -52,6 +53,10 @@ class Order extends Model
      */
     public const REVERSED = 'reversed';
 
+    public const ONLINE_CHANNEL = 'online';
+    public const PDV_CHANNEL = 'pdv';
+    public const ADMIN_CHANNEL = 'admin';
+
     protected $fillable = [
         'status',
         'amount',
@@ -62,6 +67,7 @@ class Order extends Model
         'hash',
         'ip',
         'type',
+        'channel',
     ];
 
     protected $casts = [
@@ -143,5 +149,13 @@ class Order extends Model
     public function coupon()
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function sale_point()
+    {
+        return $this->embedsOne(SalePoint::class);
     }
 }

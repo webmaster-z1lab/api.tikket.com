@@ -20,12 +20,13 @@ class Ticket extends Resource
             'entrance_id' => $this->entrance_id,
             'entrance'    => $this->entrance,
             'lot'         => $this->lot,
-            'name'        => $this->name,
-            'document'    => substr($this->document, 0, 3) . '.***.***-**',
-            'email'       => $this->email,
+            'name'        => $this->when($this->name !== NULL, $this->name),
+            'document'    => $this->when($this->document !== NULL, substr($this->document, 0, 3) . '.***.***-**'),
+            'email'       => $this->when($this->email !== NULL, $this->email),
             'value'       => $this->value,
             'price'       => $this->price,
             'fee'         => $this->fee,
+            'code' => $this->when($this->code !== NULL, $this->code)
         ];
     }
 }

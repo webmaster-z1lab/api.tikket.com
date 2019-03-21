@@ -21,24 +21,27 @@ class Order extends Resource
         $event = (new APIResourceManager())->setVersion(1, 'event');
 
         return [
-            'id'         => $this->id,
-            'types'      => 'orders',
-            'attributes' => [
+            'id'            => $this->id,
+            'types'         => 'orders',
+            'attributes'    => [
                 'status'         => $this->status,
                 'amount'         => $this->amount,
-                'discount'       => $this->discount,
+                'discount'       => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->discount),
                 'fee'            => $this->fee,
-                'hash'           => $this->hash,
-                'ip'             => $this->ip,
-                'type'           => $this->type,
-                'transaction_id' => $this->when($this->transaction_id !== NULL, $this->transaction_id),
-                'costumer'       => $order->resolve('Costumer')->make($this->costumer),
+                'hash'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->hash),
+                'ip'             => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->ip),
+                'type'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->type),
+                'channel'        => $this->channel,
+                'transaction_id' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->transaction_id !== NULL, $this->transaction_id),
+                'costumer'       => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $order->resolve('Costumer')->make($this->costumer)),
                 'tickets'        => $order->resolve('Ticket')->collection($this->tickets),
-                'card'           => $this->when(ends_with($this->type, 'card'), $order->resolve('Card')->make($this->card)),
+                'card'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL &&
+                    ends_with($this->type, 'card'), $order->resolve('Card')->make($this->card)),
+                'sale_point'     => $this->when($this->channel === \Modules\Order\Models\Order::PDV_CHANNEL, $order->resolve('SalePoint')->make($this->sale_point)),
             ],
             'relationships' => [
-                'coupon' => $this->when($this->coupon !== NULL, $event->make($this->coupon))
-            ]
+                'coupon' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL, $event->make($this->coupon)),
+            ],
         ];
     }
 }

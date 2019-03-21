@@ -32,6 +32,7 @@ class Ticket extends Model
         'name',
         'document',
         'email',
+        'code'
     ];
 
     protected $casts = [

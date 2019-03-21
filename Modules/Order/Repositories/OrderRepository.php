@@ -14,6 +14,7 @@ use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
+use Modules\Sale\Models\Sale;
 
 class OrderRepository
 {
@@ -37,7 +38,7 @@ class OrderRepository
      * @param string $cart_id
      * @param string $ip
      *
-     * @return \Illuminate\Database\Eloquent\Model|\Modules\Order\Models\Order|null
+     * @return \Modules\Order\Models\Order|null
      * @throws \Exception
      */
     public function createByCart(string $cart_id, string $ip)
@@ -60,6 +61,7 @@ class OrderRepository
             'fee_percentage' => $data['fee_percentage'],
             'fee_is_hidden'  => $data['fee_is_hidden'],
             'fee'            => $data['fee'],
+            'channel'        => Order::ONLINE_CHANNEL,
         ]);
 
         $order->event()->associate($data['event_id']);
@@ -88,15 +90,75 @@ class OrderRepository
         $card->save();
         $order->save();
 
-        if (! $data['is_free']) {
+        if (!$data['is_free']) {
             event(new OrderCreated($order->id));
-        }
-        else {
+        } else {
             $order->status = Order::PAID;
             $order->save();
         }
 
         return $order;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return \Modules\Order\Models\Order|null
+     */
+    public function createBySale(array $data)
+    {
+        $tickets = [];
+        $amount = 0;
+        $fee = 0;
+
+        $ticketsByEntrance = collect($data['tickets'])->groupBy('entrance');
+        foreach ($ticketsByEntrance as $entrance_id => $items) {
+            $entrance = Entrance::find($entrance_id);
+            $ticket['quantity'] = intval($data['quantity']);
+
+            if (!$entrance->is_free) {
+                $amount += ($entrance->available->amount * $items->count());
+                $fee += ($entrance->available->fee * $items->count());
+            }
+
+            foreach ($items as $ticket)
+                $tickets[] = [
+                    'entrance_id' => $ticket['entrance'],
+                    'entrance'    => $entrance->name,
+                    'lot'         => $ticket['lot'],
+                    'value'       => $entrance->is_free ? 0 : $entrance->available->value,
+                    'fee'         => $entrance->is_free ? 0 : $entrance->available->fee,
+                    'name'        => $ticket['name'],
+                    'document'    => $ticket['document'],
+                    'email'       => $ticket['email'],
+                    'code'        => $ticket['code'],
+                ];
+        }
+
+        $order = Order::create([
+            'amount'         => $amount,
+            'fee'            => $fee,
+            'status'         => Order::PAID,
+            'channel'        => Order::PDV_CHANNEL,
+        ]);
+
+        $order->event()->associate($data['event']);
+        $order->tickets()->createMany($tickets);
+        $order->sale_point()->create([
+            'user_id'  => \Auth::id(),
+            'name'     => \Auth::user()->name,
+            'email'    => \Auth::user()->email,
+            'document' => \Auth::user()->document,
+        ]);
+
+        $order->save();
+
+        $order->update([
+            'fee_percentage' => $order->event->fee_percentage,
+            'fee_is_hidden'  => $order->event->fee_is_hidden,
+        ]);
+
+        return $order->fresh();
     }
 
     /**
