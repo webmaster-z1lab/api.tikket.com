@@ -2,10 +2,10 @@
 
 namespace Modules\Order\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Modules\Event\Models\Entrance;
+use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
-class SaleRequest extends FormRequest
+class SaleRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

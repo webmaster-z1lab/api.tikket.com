@@ -134,8 +134,7 @@ class OrderRepository
                 ];
         }
 
-        $user = \Auth::user();
-        $admin = $user->can('master', $data['event']) || $user->can('organizer', $data['event']);
+        $admin = \Gate::allows('master', $data['event']) || \Gate::allows('organizer', $data['event']);
 
         $order = Order::create([
             'amount'         => $amount,
@@ -147,6 +146,7 @@ class OrderRepository
         $order->event()->associate($data['event']);
         $order->tickets()->createMany($tickets);
 
+        $user = \Auth::user();
 
         if ($admin) {
             $order->administrator()->create([
