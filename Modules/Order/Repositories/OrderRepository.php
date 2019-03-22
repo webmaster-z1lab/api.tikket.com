@@ -126,7 +126,7 @@ class OrderRepository
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
                     'value'       => $entrance->is_free ? 0 : $entrance->available->value,
-                    'fee'         => $entrance->is_free ? 0 : $fee,
+                    'fee'         => $entrance->is_free ? 0 : $entrance->available->fee,
                     'discount'    => 0,
                     'name'        => $ticket['name'],
                     'document'    => $ticket['document'],
