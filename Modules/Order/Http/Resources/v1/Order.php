@@ -38,6 +38,8 @@ class Order extends Resource
                 'card'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL &&
                     ends_with($this->type, 'card'), $order->resolve('Card')->make($this->card)),
                 'sale_point'     => $this->when($this->channel === \Modules\Order\Models\Order::PDV_CHANNEL, $order->resolve('SalePoint')->make($this->sale_point)),
+                'administrator'  => $this->when($this->channel === \Modules\Order\Models\Order::ADMIN_CHANNEL,
+                    $order->resolve('SalePoint')->make($this->administrator)),
             ],
             'relationships' => [
                 'coupon' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL,

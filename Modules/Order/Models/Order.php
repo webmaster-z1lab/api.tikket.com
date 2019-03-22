@@ -158,4 +158,12 @@ class Order extends Model
     {
         return $this->embedsOne(SalePoint::class);
     }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function administrator()
+    {
+        return $this->embedsOne(SalePoint::class);
+    }
 }

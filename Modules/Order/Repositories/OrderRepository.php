@@ -134,21 +134,35 @@ class OrderRepository
                 ];
         }
 
+        $user = \Auth::user();
+        $admin = $user->can('master', $data['event']) || $user->can('organizer', $data['event']);
+
         $order = Order::create([
             'amount'         => $amount,
             'fee'            => $fee,
             'status'         => Order::PAID,
-            'channel'        => Order::PDV_CHANNEL,
+            'channel'        => $admin ? Order::ADMIN_CHANNEL : Order::PDV_CHANNEL,
         ]);
 
         $order->event()->associate($data['event']);
         $order->tickets()->createMany($tickets);
-        $order->sale_point()->create([
-            'user_id'  => \Auth::id(),
-            'name'     => \Auth::user()->name,
-            'email'    => \Auth::user()->email,
-            'document' => \Auth::user()->document,
-        ]);
+
+
+        if ($admin) {
+            $order->administrator()->create([
+                'user_id'  => $user->id,
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'document' => $user->document,
+            ]);
+        } else {
+            $order->sale_point()->create([
+                'user_id'  => $user->id,
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'document' => $user->document,
+            ]);
+        }
 
         $order->save();
 

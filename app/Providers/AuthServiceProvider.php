@@ -24,6 +24,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        \Gate::define('master', 'Modules\Event\Policies\EventPolicy@master');
+
+        \Gate::define('organizer', 'Modules\Event\Policies\EventPolicy@organizer');
+
+        \Gate::define('checkin', 'Modules\Event\Policies\EventPolicy@checkin');
+
+        \Gate::define('pdv', 'Modules\Event\Policies\EventPolicy@pdv');
     }
 }
