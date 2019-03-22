@@ -116,7 +116,7 @@ class OrderRepository
             $entrance = Entrance::find($entrance_id);
 
             if (!$entrance->is_free) {
-                $amount += ($entrance->available->amount * $items->count());
+                $amount += ($entrance->available->value * $items->count());
                 $fee += ($entrance->available->fee * $items->count());
             }
 
@@ -126,7 +126,8 @@ class OrderRepository
                     'entrance'    => $entrance->name,
                     'lot'         => $ticket['lot'],
                     'value'       => $entrance->is_free ? 0 : $entrance->available->value,
-                    'fee'         => $entrance->is_free ? 0 : $entrance->available->fee,
+                    'fee'         => $entrance->is_free ? 0 : $fee,
+                    'discount'    => 0,
                     'name'        => $ticket['name'],
                     'document'    => $ticket['document'],
                     'email'       => $ticket['email'],

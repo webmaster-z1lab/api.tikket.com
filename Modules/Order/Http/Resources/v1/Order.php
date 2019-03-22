@@ -26,7 +26,7 @@ class Order extends Resource
             'attributes'    => [
                 'status'         => $this->status,
                 'amount'         => $this->amount,
-                'discount'       => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->discount),
+                'discount'       => $this->discount,
                 'fee'            => $this->fee,
                 'hash'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->hash),
                 'ip'             => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->ip),
