@@ -140,17 +140,4 @@ class ReportService
 
         return $report;
     }
-
-    /**
-     * @param string $event
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getOrders(string $event)
-    {
-        return Order::where('event_id', $event)
-            ->where('status', Order::CANCELED)
-            ->latest()
-            ->get();
-    }
 }

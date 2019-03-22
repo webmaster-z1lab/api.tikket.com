@@ -30,7 +30,7 @@ class ReportController extends Controller
      */
     public function valueSales(string $event)
     {
-        return api_resource('Report')->make($this->service->valueSales($event));
+        return $this->makeResource($this->service->valueSales($event));
     }
 
     /**
@@ -40,7 +40,7 @@ class ReportController extends Controller
      */
     public function amountValues(string $event)
     {
-        return api_resource('Report')->make($this->service->amountValues($event));
+        return $this->makeResource($this->service->amountValues($event));
     }
 
     /**
@@ -50,7 +50,7 @@ class ReportController extends Controller
      */
     public function canceledSales(string $event)
     {
-        return api_resource('Report')->make($this->service->canceledSales($event));
+        return $this->makeResource($this->service->canceledSales($event));
     }
 
     /**
@@ -60,7 +60,7 @@ class ReportController extends Controller
      */
     public function soldTickets(string $event)
     {
-        return api_resource('Report')->make($this->service->reportTickets($event, Order::PAID));
+        return $this->makeResource($this->service->reportTickets($event, Order::PAID));
     }
 
     /**
@@ -70,7 +70,7 @@ class ReportController extends Controller
      */
     public function pendingTickets(string $event)
     {
-        return api_resource('Report')->make($this->service->reportTickets($event, Order::WAITING));
+        return $this->makeResource($this->service->reportTickets($event, Order::WAITING));
     }
 
     /**
@@ -80,16 +80,16 @@ class ReportController extends Controller
      */
     public function canceledTickets(string $event)
     {
-        return api_resource('Report')->make($this->service->reportTickets($event, Order::REVERSED));
+        return $this->makeResource($this->service->reportTickets($event, Order::REVERSED));
     }
 
     /**
-     * @param string $event
+     * @param $obj
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function getOrders(string $event)
+    private function makeResource($obj)
     {
-        return api_resource('Order')->collection($this->service->getOrders($event));
+        return api_resource('Report')->make($obj);
     }
 }
