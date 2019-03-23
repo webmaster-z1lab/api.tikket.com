@@ -54,7 +54,7 @@ class OrderReportService
 
         $version = 'v' . \APIResource::getVersion();
         $event = \Route::current()->parameter('event');
-        $options['path'] = str_finish(env('APP_URL'), '/') . "api/$version/events/$event/reports";
+        $options['path'] = str_finish(env('APP_URL'), '/') . "api/$version/events/$event/reports/orders";
 
         if (NULL !== $query) $options['query'] = $query;
 
