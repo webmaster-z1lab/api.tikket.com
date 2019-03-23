@@ -14,7 +14,6 @@ use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
-use Modules\Sale\Models\Sale;
 
 class OrderRepository
 {
