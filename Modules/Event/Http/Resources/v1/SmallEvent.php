@@ -31,6 +31,7 @@ class SmallEvent extends Resource
                 'finishes_at'    => $this->finishes_at->format('d/m/Y H:i'),
                 'is_public'      => $this->is_public,
                 'is_active'      => $this->is_active,
+                'is_locked'      => $this->is_locked,
                 'status'         => $this->status,
                 'created_at'     => $this->created_at,
                 'updated_at'     => $this->updated_at,
