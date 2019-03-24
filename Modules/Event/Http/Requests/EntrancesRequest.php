@@ -59,12 +59,13 @@ class EntrancesRequest extends ApiFormRequest
             if (!$event->starts_at->gte($start))
                 $validator->errors()->add('starts_at', 'The start must be before event start');
 
+
             $prev = $start;
             foreach ($this->lots as $key => $lot) {
                 $finish = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
-                if (!$event->starts_at->gt($finish->startOfDay()))
+                if ($event->starts_at->lte($finish->startOfDay()))
                     $validator->errors()->add('lots.' . $key . '.finishes_at', 'The end of a lot must be before event start');
-                if ($prev->lt($finish))
+                if ($prev->gte($finish))
                     $validator->errors()->add('lots.' . $key . '.finishes_at', 'The end of a lot must be after the end of previous lot.');
                 $prev = $finish;
             }

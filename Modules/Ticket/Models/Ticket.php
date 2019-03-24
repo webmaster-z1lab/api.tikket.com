@@ -36,6 +36,15 @@ class Ticket extends Model
         'lot',
         'code',
         'status',
+        'first_owner',
+    ];
+
+    protected $casts = [
+        'first_owner' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'first_owner' => TRUE
     ];
 
     /**

@@ -17,5 +17,7 @@ Route::middleware('api.v:1,report')
             Route::get('net-value', 'ReportController@amountValues');
 
             Route::get('orders', 'OrderReportController@get');
+
+            Route::get('participants', 'ParticipantController@get');
         });
     });

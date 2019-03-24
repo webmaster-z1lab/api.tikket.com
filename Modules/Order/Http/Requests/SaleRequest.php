@@ -70,9 +70,9 @@ class SaleRequest extends ApiFormRequest
                         $validator->errors()->add('tickets', 'Linking a ticket requires name, document and email.');
                 }
 
-//                if (!now()->between($entrance->available->starts_at, $entrance->available->finishes_at)) {
-//                    $validator->errors()->add('tickets', "Sales for lot {$entrance->available->lot} are not available.");
-//                }
+                if (!now()->between($entrance->available->starts_at, $entrance->available->finishes_at)) {
+                    $validator->errors()->add('tickets', "Sales for lot {$entrance->available->lot} are not available.");
+                }
             }
         });
     }
