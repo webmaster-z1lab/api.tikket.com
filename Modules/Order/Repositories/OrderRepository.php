@@ -14,6 +14,7 @@ use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
+use Modules\Ticket\Jobs\CreateTickets;
 
 class OrderRepository
 {
@@ -171,7 +172,9 @@ class OrderRepository
             'fee_is_hidden'  => $order->event->fee_is_hidden,
         ]);
 
-        return $order->fresh();
+        CreateTickets::dispatchNow($order);
+
+        return $order;
     }
 
     /**
@@ -188,10 +191,11 @@ class OrderRepository
 
         $this->checkStatusForCoupons($order, $data['status']);
 
-        $order->status = $data['status'];
-        $order->save();
+        $order->update($data);
 
-        return $order->fresh();
+        CreateTickets::dispatchNow($order);
+
+        return $order;
     }
 
     /**
