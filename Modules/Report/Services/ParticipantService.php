@@ -9,9 +9,8 @@
 namespace Modules\Report\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Modules\Order\Models\Ticket;
+use Modules\Ticket\Models\Ticket;
 
 class ParticipantService
 {

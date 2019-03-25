@@ -44,6 +44,12 @@ class TicketRepository extends ApiRepository
         /** @var \Modules\Ticket\Models\Ticket $ticket */
         $ticket = $this->model->create(array_only($data, ['name', '1ot', 'code']));
 
+        $ticket->order()->associate($data['order_id']);
+
+        $ticket->entrance()->associate($data['entrance_id']);
+
+        $ticket->save();
+
         $ticket->participant()->create($data['participant']);
 
         /** @var \Modules\Ticket\Models\Event $event */
@@ -75,8 +81,10 @@ class TicketRepository extends ApiRepository
             'image'     => $order->event->image->toArray(),
         ];
 
-        $order->tickets->each(function ($ticket, $key) use ($event_data) {
+        $order->tickets->each(function ($ticket, $key) use ($event_data, $order_id) {
             $data = [
+                'entrance_id' => $ticket->entrance->id,
+                'order_id'    => $order_id,
                 'name'        => $ticket->entrance,
                 'lot'         => $ticket->lot,
                 'event'       => $event_data,

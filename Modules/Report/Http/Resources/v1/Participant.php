@@ -15,12 +15,16 @@ class Participant extends Resource
      */
     public function toArray($request)
     {
+        \Log::debug(print_r($this->resource, TRUE));
+
         return [
+            'ticket'     => $this->id,
+            'code'       => $this->code,
             'order'      => $this->order_id,
             'status'     => $this->order->status,
             'name'       => $this->participant->name,
             'email'      => $this->participant->email,
-            'entrance'   => $this->entrance->name,
+            'entrance'   => $this->name,
             'channel'    => $this->order->channel,
             'created_at' => $this->order->created_at->format('d/m/Y H:i'),
         ];
