@@ -11,11 +11,12 @@ namespace Modules\Report\Services;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Modules\Order\Models\Ticket;
 
 class ParticipantService
 {
+    private const PER_PAGE = 25;
+
     /**
      * @param string $event_id
      *
@@ -27,68 +28,64 @@ class ParticipantService
     }
 
     /**
-     * @param array  $options
-     *
+     * @param string|NULL $search
      * @param string $event_id
      *
      * @return \Illuminate\Support\Collection
      */
-    public function search(array $options, string $event_id)
+    public function search(string $event_id, string $search = NULL)
     {
-        $search_token = \Request::get('search_token', Str::uuid()->toString());
+        $page = intval(\Request::get('page', 1));
 
-        $results = \Cache::remember($search_token, 10, function () use ($event_id) {
-            return Ticket::where('event.event_id', $event_id)->latest()->get();
-        });
+        if (filled($search)) {
+            $results = Ticket::where('event.event_id', $event_id)
+                ->where(function ($query) use ($search) {
+                    $query->where('order_id', 'LIKE', "%$search%")
+                        ->orWhere('code', 'LIKE', "%$search%")
+                        ->orWhere('participant.name', 'LIKE', "%$search%")
+                        ->orWhere('participant.email', 'LIKE', "%$search%");
+                })->latest()
+                ->skip(($page - 1) * self::PER_PAGE)
+                ->take(self::PER_PAGE)
+                ->get();
 
-        if (!empty($options)) {
-            $results = $results->where(function ($query) use ($options) {
-                foreach ($options as $key => $value)
-                    if (filled($value))
-                        switch ($key) {
-                            case 'name':
-                                $query->where('participant.name', 'LIKE', "%$value%");
-                                break;
-                            case 'email':
-                                $query->where('participant.email', 'LIKE', "%$value%");
-                                break;
-                            case 'code':
-                                $query->where('code', 'LIKE', "%$value%");
-                                break;
-                            case 'order':
-                                $query->where('order_id', 'LIKE', "%$value%");
-                                break;
+            $total = Ticket::where('event.event_id', $event_id)
+                ->where(function ($query) use ($search) {
+                    $query->where('order_id', 'LIKE', "%$search%")
+                        ->orWhere('code', 'LIKE', "%$search%")
+                        ->orWhere('participant.name', 'LIKE', "%$search%")
+                        ->orWhere('participant.email', 'LIKE', "%$search%");
+                })->count();
+        } else {
+            $results = Ticket::where('event.event_id', $event_id)
+                ->latest()
+                ->skip(($page - 1) * self::PER_PAGE)
+                ->take(self::PER_PAGE)
+                ->get();
 
-                        }
-            })->get();
+            $total = Ticket::where('event.event_id', $event_id)->count();
         }
 
-        $page = \Request::get('page', 1);
-
-        return $this->paginate($results, 25, $page, compact('search_token'));
+        return $this->paginate($results, $total,self::PER_PAGE, $page);
     }
 
     /**
      * Paginate the result items
      *
-     * @param \Illuminate\Database\Eloquent\Collection|array $items
+     * @param \Illuminate\Support\Collection $items
+     * @param int                                            $total
      * @param int                                            $perPage
      * @param int                                            $page
-     * @param array|NULL                                     $query
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    private function paginate($items, int $perPage = 15, int $page = NULL, array $query = NULL)
+    private function paginate(Collection $items, int $total, int $perPage, int $page)
     {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
+        $options['path'] = \Request::url();
 
-        $version = 'v' . \APIResource::getVersion();
-        $event = \Route::current()->parameter('event');
-        $options['path'] = str_finish(env('APP_URL'), '/') . "api/$version/events/$event/reports/participants";
-
+        $query = \Request::query();
         if (NULL !== $query) $options['query'] = $query;
 
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return new LengthAwarePaginator($items, $total, $perPage, $page, $options);
     }
 }

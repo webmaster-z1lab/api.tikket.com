@@ -31,7 +31,7 @@ class ParticipantController extends Controller
      */
     public function get(Request $request, string $event)
     {
-        return $this->collectResource($this->service->search($request->only(['name', 'email', 'order', 'code']), $event));
+        return $this->collectResource($this->service->search($event, $request->query('search')));
     }
 
     /**
