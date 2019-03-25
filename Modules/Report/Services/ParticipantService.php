@@ -17,6 +17,16 @@ use Modules\Order\Models\Ticket;
 class ParticipantService
 {
     /**
+     * @param string $event_id
+     *
+     * @return \Illuminate\Database\Query\Builder|\Modules\Order\Models\Ticket
+     */
+    public function latest(string $event_id)
+    {
+        return Ticket::where('event.event_id', $event_id)->latest()->limit(25);
+    }
+
+    /**
      * @param array  $options
      *
      * @param string $event_id
@@ -28,7 +38,7 @@ class ParticipantService
         $search_token = \Request::get('search_token', Str::uuid()->toString());
 
         $results = \Cache::remember($search_token, 10, function () use ($event_id) {
-            return Ticket::withTrashed()->where('event.event_id', $event_id)->get();
+            return Ticket::where('event.event_id', $event_id)->latest()->get();
         });
 
         if (!empty($options)) {
@@ -68,7 +78,7 @@ class ParticipantService
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($items, int $perPage = 15, int $page = NULL, array $query = NULL)
+    private function paginate($items, int $perPage = 15, int $page = NULL, array $query = NULL)
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

@@ -35,6 +35,16 @@ class ParticipantController extends Controller
     }
 
     /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function latest(string $event)
+    {
+        return $this->collectResource($this->service->latest($event));
+    }
+
+    /**
      * @param $obj
      *
      * @return \Illuminate\Http\Resources\Json\Resource
