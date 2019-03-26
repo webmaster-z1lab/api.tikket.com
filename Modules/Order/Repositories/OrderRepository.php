@@ -127,7 +127,6 @@ class OrderRepository
                     'lot'         => $ticket['lot'],
                     'value'       => $entrance->is_free ? 0 : $entrance->available->value,
                     'fee'         => $entrance->is_free ? 0 : $entrance->available->fee,
-                    'discount'    => 0,
                     'name'        => $ticket['name'],
                     'document'    => $ticket['document'],
                     'email'       => $ticket['email'],
@@ -138,10 +137,11 @@ class OrderRepository
         $admin = \Gate::allows('master', $data['event']) || \Gate::allows('organizer', $data['event']);
 
         $order = Order::create([
-            'amount'         => $amount,
-            'fee'            => $fee,
-            'status'         => Order::PAID,
-            'channel'        => $admin ? Order::ADMIN_CHANNEL : Order::PDV_CHANNEL,
+            'amount'   => $amount,
+            'fee'      => $fee,
+            'discount' => 0,
+            'status'   => Order::PAID,
+            'channel'  => $admin ? Order::ADMIN_CHANNEL : Order::PDV_CHANNEL,
         ]);
 
         $order->event()->associate($data['event']);
