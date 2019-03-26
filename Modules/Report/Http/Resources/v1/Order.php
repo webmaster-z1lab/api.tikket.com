@@ -10,21 +10,20 @@ class Order extends Resource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'id'         => $this->id,
-            'types'      => 'orders',
-            'attributes' => [
-                'status'         => $this->status,
-                'amount'         => $this->amount,
-                'discount'       => $this->discount,
-                'fee'            => $this->fee,
-                'type'           => $this->type,
-                'tickets'        => $this->tickets->count(),
-            ]
+            'order'      => $this->id,
+            'status'     => $this->status,
+            'channel'    => $this->channel,
+            'price'      => $this->amount + $this->fee - ($this->discount ?? 0),
+            'created_at' => $this->created_at->format('d/m/Y H:i'),
+            'name'       => $this->costumer->name,
+            'email'      => $this->costumer->email,
+
         ];
     }
 }

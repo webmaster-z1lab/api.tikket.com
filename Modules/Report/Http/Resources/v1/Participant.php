@@ -15,8 +15,6 @@ class Participant extends Resource
      */
     public function toArray($request)
     {
-        \Log::debug(print_r($this->resource, TRUE));
-
         return [
             'ticket'     => $this->id,
             'code'       => $this->code,

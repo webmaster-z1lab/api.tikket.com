@@ -8,32 +8,33 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use \Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
 trait PaginateTrait
 {
     /**
      * Paginate the result items
      *
-     * @param Collection|array $items
-     * @param string           $path
-     * @param int              $perPage
-     * @param int              $page
-     * @param array|NULL       $query
-     * @return LengthAwarePaginator
+     * @param \Illuminate\Support\Collection $items
+     * @param int                                            $total
+     * @param int                                            $perPage
+     * @param int                                            $page
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($items, string $path, int $perPage = 15, int $page = NULL, array $query = NULL)
+    private function paginate(Collection $items, int $total, int $perPage, int $page)
     {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
+        $options['path'] = \Request::url();
 
-        $version = 'v' . config("api.version.$path", 1);
-        $options['path'] = str_finish(env('APP_URL'), '/') . "api/$version/$path";
+        $query = \Request::query();
+        if (NULL !== $query) {
+            $query = Arr::except($query, 'page');
+            if (filled($query))
+                $options['query'] = $query;
+        }
 
-        if (NULL !== $query) $options['query'] = $query;
-
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return new LengthAwarePaginator($items, $total, $perPage, $page, $options);
     }
 }

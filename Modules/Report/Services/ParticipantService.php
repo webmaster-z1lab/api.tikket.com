@@ -8,23 +8,14 @@
 
 namespace Modules\Report\Services;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use App\Traits\PaginateTrait;
 use Modules\Ticket\Models\Ticket;
 
 class ParticipantService
 {
-    private const PER_PAGE = 25;
+    use PaginateTrait;
 
-    /**
-     * @param string $event_id
-     *
-     * @return \Illuminate\Database\Query\Builder|\Modules\Order\Models\Ticket
-     */
-    public function latest(string $event_id)
-    {
-        return Ticket::where('event.event_id', $event_id)->latest()->limit(25);
-    }
+    private const PER_PAGE = 25;
 
     /**
      * @param string|NULL $search
@@ -66,25 +57,5 @@ class ParticipantService
         }
 
         return $this->paginate($results, $total,self::PER_PAGE, $page);
-    }
-
-    /**
-     * Paginate the result items
-     *
-     * @param \Illuminate\Support\Collection $items
-     * @param int                                            $total
-     * @param int                                            $perPage
-     * @param int                                            $page
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    private function paginate(Collection $items, int $total, int $perPage, int $page)
-    {
-        $options['path'] = \Request::url();
-
-        $query = \Request::query();
-        if (NULL !== $query) $options['query'] = $query;
-
-        return new LengthAwarePaginator($items, $total, $perPage, $page, $options);
     }
 }

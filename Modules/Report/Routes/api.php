@@ -16,12 +16,8 @@ Route::middleware('api.v:1,report')
 
             Route::get('net-value', 'ReportController@amountValues');
 
-            Route::get('orders', 'OrderReportController@get');
+            Route::get('orders', 'OrderController@get');
 
-            Route::prefix('participants')->group(function () {
-                Route::get('/', 'ParticipantController@get');
-
-                Route::get('latest', 'ParticipantController@latest');
-            });
+            Route::get('participants', 'ParticipantController@get');
         });
     });
