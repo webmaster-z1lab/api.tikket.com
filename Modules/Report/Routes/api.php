@@ -19,5 +19,12 @@ Route::middleware('api.v:1,report')
             Route::get('orders', 'OrderController@get');
 
             Route::get('participants', 'ParticipantController@get');
+
+            Route::prefix('sale-points/{pdv}')
+                ->group(function () {
+                    Route::get('tickets', 'ReportController@salePointTickets');
+
+                    Route::get('values', 'ReportController@salePointValues');
+                });
         });
     });

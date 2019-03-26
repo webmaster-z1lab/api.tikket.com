@@ -5,6 +5,7 @@ namespace Modules\Event\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Modules\Event\Http\Requests\PermissionRequest;
+use Modules\Event\Models\Permission;
 use Modules\Event\Repositories\PermissionRepository;
 
 class PermissionController extends Controller
@@ -75,6 +76,16 @@ class PermissionController extends Controller
     public function getByUser()
     {
         return $this->collectResource($this->repository->getByUser());
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function salePoints(string $event)
+    {
+        return $this->collectResource($this->repository->getByEventAndType($event, Permission::PDV));
     }
 
     /**

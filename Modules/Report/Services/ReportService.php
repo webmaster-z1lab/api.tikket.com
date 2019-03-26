@@ -8,6 +8,7 @@
 
 namespace Modules\Report\Services;
 
+use Modules\Event\Models\Permission;
 use Modules\Order\Models\Order;
 use Modules\Report\Models\Report;
 
@@ -132,6 +133,86 @@ class ReportService
                 return $order->created_at->isSameDay($date);
             })->sum(function ($order) {
                 return $order->tickets()->count();
+            });
+            $date->addDay();
+        } while ($date->lte($today));
+
+        $report->last_days = $last_days;
+
+        return $report;
+    }
+
+    /**
+     * @param string $event
+     * @param string $pdv
+     *
+     * @return \Modules\Report\Models\Report
+     */
+    public function salePointTickets(string $event, string $pdv)
+    {
+        $permission = Permission::whereKey($pdv)->where('event_id', $event)->first();
+
+        if ($permission === NULL) abort(404);
+
+        $report = new Report();
+
+        $orders = Order::where('event_id', $event)
+            ->where('channel', Order::PDV_CHANNEL)
+            ->where('sale_point.email', $permission->email)
+            ->get();
+
+        $report->total = $orders->sum(function ($order) {
+            return $order->tickets()->count();
+        });
+
+        $last_days = [];
+        $today = today();
+        $date = today()->subDays($this->last_days);
+        do {
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->sum(function ($order) {
+                return $order->tickets()->count();
+            });
+            $date->addDay();
+        } while ($date->lte($today));
+
+        $report->last_days = $last_days;
+
+        return $report;
+    }
+
+    /**
+     * @param string $event
+     * @param string $pdv
+     *
+     * @return \Modules\Report\Models\Report
+     */
+    public function salePointValues(string $event, string $pdv)
+    {
+        $permission = Permission::whereKey($pdv)->where('event_id', $event)->first();
+
+        if ($permission === NULL) abort(404);
+
+        $report = new Report();
+
+        $orders = Order::where('event_id', $event)
+            ->where('channel', Order::PDV_CHANNEL)
+            ->where('sale_point.email', $permission->email)
+            ->get();
+
+        $report->total = $orders->sum(function ($order) {
+            return $order->amount + $order->fee;
+        });
+
+        $last_days = [];
+        $today = today();
+        $date = today()->subDays($this->last_days);
+        do {
+            $last_days[] = $orders->filter( function ($order, $key) use ($date) {
+                return $order->created_at->isSameDay($date);
+            })->sum(function ($order) {
+                return $order->amount + $order->fee;
             });
             $date->addDay();
         } while ($date->lte($today));

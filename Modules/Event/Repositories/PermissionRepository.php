@@ -78,4 +78,15 @@ class PermissionRepository extends ApiRepository
 
         return config('event.permissions.' . $permission->type);
     }
+
+    /**
+     * @param string $event_id
+     * @param string $type
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getByEventAndType(string $event_id, string $type)
+    {
+        return $this->model->where('event_id', $event_id)->where('type', $type)->get();
+    }
 }

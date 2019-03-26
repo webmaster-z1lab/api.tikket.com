@@ -84,6 +84,28 @@ class ReportController extends Controller
     }
 
     /**
+     * @param string $event
+     * @param string $pdv
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function salePointTickets(string $event, string $pdv)
+    {
+        return $this->makeResource($this->service->salePointTickets($event, $pdv));
+    }
+
+    /**
+     * @param string $event
+     * @param string $pdv
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function salePointValues(string $event, string $pdv)
+    {
+        return $this->makeResource($this->service->salePointValues($event, $pdv));
+    }
+
+    /**
      * @param $obj
      *
      * @return \Illuminate\Http\Resources\Json\Resource
