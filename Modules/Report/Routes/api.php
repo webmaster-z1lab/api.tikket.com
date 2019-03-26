@@ -8,6 +8,10 @@ Route::middleware('api.v:1,report')
 
             Route::get('canceled', 'ReportController@canceledSales');
 
+            Route::get('canceled-values', 'ReportController@canceledValues');
+
+            Route::get('pending-values', 'ReportController@pendingValues');
+
             Route::get('sold-tickets', 'ReportController@soldTickets');
 
             Route::get('pending-tickets', 'ReportController@pendingTickets');

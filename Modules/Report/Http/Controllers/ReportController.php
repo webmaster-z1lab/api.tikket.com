@@ -30,8 +30,29 @@ class ReportController extends Controller
      */
     public function valueSales(string $event)
     {
-        return $this->makeResource($this->service->valueSales($event));
+        return $this->makeResource($this->service->valueSales($event, Order::PAID));
     }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function canceledValues(string $event)
+    {
+        return $this->makeResource($this->service->valueSales($event, Order::REVERSED));
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function pendingValues(string $event)
+    {
+        return $this->makeResource($this->service->valueSales($event, Order::WAITING));
+    }
+
 
     /**
      * @param string $event
@@ -50,7 +71,7 @@ class ReportController extends Controller
      */
     public function canceledSales(string $event)
     {
-        return $this->makeResource($this->service->canceledSales($event));
+        return $this->makeResource($this->service->numberOfSales($event, Order::REVERSED));
     }
 
     /**
@@ -91,7 +112,9 @@ class ReportController extends Controller
      */
     public function salePointTickets(string $event, string $pdv)
     {
-        return $this->makeResource($this->service->salePointTickets($event, $pdv));
+        return $this->makeResource($this->service->salePointReports($event, $pdv, function ($order) {
+            return $order->tickets()->count();
+        }));
     }
 
     /**
@@ -102,7 +125,9 @@ class ReportController extends Controller
      */
     public function salePointValues(string $event, string $pdv)
     {
-        return $this->makeResource($this->service->salePointValues($event, $pdv));
+        return $this->makeResource($this->service->salePointReports($event, $pdv, function ($order) {
+            return $order->amount + $order->fee;
+        }));
     }
 
     /**
