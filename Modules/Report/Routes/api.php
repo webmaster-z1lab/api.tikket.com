@@ -24,6 +24,8 @@ Route::middleware('api.v:1,report')
 
             Route::get('participants', 'ParticipantController@get');
 
+            Route::get('summary', 'SummaryController@basic');
+
             Route::prefix('sale-points/{pdv}')
                 ->group(function () {
                     Route::get('tickets', 'ReportController@salePointTickets');
