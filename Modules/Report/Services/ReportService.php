@@ -61,9 +61,12 @@ class ReportService
         $report = new Report();
         $orders = Order::where('event_id', $event)
             ->where('status', Order::PAID)
+            ->where('channel', Order::ONLINE_CHANNEL)
             ->get();
 
-        $report->total = $orders->sum('amount');
+        $report->total = $orders->sum(function ($order) {
+            return $order->amount - ($order->discount ?? 0);
+        });
 
         $last_days = [];
         $today = today();
@@ -71,7 +74,9 @@ class ReportService
         do {
             $last_days[] = $orders->filter(function ($order) use ($date) {
                 return $order->created_at->isSameDay($date);
-            })->sum('amount');
+            })->sum(function ($order) {
+                return $order->amount - ($order->discount ?? 0);
+            });
             $date->addDay();
         } while ($date->lte($today));
 
