@@ -23,7 +23,7 @@ class OrderRepository
     /**
      * @param string $id
      *
-     * @return null|\Modules\Order\Models\Order
+     * @return \Modules\Order\Models\Order
      */
     public function find(string $id)
     {

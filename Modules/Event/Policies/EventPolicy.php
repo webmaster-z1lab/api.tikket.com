@@ -18,12 +18,7 @@ class EventPolicy
      */
     public function master(\Z1lab\OpenID\Models\User $user, $event)
     {
-        $event = $this->getEvent($event);
-
-        return $event->permissions()
-            ->where('email', $user->email)
-            ->where('type', Permission::MASTER)
-            ->exists();
+        return $this->checkType($user, $event, Permission::MASTER);
     }
 
     /**
@@ -34,12 +29,7 @@ class EventPolicy
      */
     public function organizer(\Z1lab\OpenID\Models\User $user, $event)
     {
-        $event = $this->getEvent($event);
-
-        return $event->permissions()
-            ->where('email', $user->email)
-            ->where('type', Permission::ORGANIZER)
-            ->exists();
+        return $this->checkType($user, $event, Permission::ORGANIZER);
     }
 
     /**
@@ -50,12 +40,7 @@ class EventPolicy
      */
     public function checkin(\Z1lab\OpenID\Models\User $user, $event)
     {
-        $event = $this->getEvent($event);
-
-        return $event->permissions()
-            ->where('email', $user->email)
-            ->where('type', Permission::CHECKIN)
-            ->exists();
+        return $this->checkType($user, $event, Permission::CHECKIN);
     }
 
     /**
@@ -66,23 +51,26 @@ class EventPolicy
      */
     public function pdv(\Z1lab\OpenID\Models\User $user, $event)
     {
-        $event = $this->getEvent($event);
-
-        return $event->permissions()
-            ->where('email', $user->email)
-            ->where('type', Permission::PDV)
-            ->exists();
+        return $this->checkType($user, $event, Permission::PDV);
     }
 
     /**
-     * @param $event
+     * @param \Z1lab\OpenID\Models\User          $user
+     * @param \Modules\Event\Models\Event|string $event
+     * @param string                             $type
      *
-     * @return \Modules\Event\Models\Event
+     * @return bool
      */
-    private function getEvent($event)
+    private function checkType(\Z1lab\OpenID\Models\User $user, $event, string $type)
     {
-        if ($event instanceof Event) return $event;
+        if ($event instanceof Event)
+            return $event->permissions()->where('email', $user->email)
+                ->where('type', $type)
+                ->exists();
 
-        return Event::find($event);
+        return Permission::where('event_id', $event)
+            ->where('email', $user->email)
+            ->where('type', $type)
+            ->exists();
     }
 }
