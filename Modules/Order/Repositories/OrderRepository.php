@@ -15,6 +15,7 @@ use Modules\Event\Models\Entrance;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 use Modules\Ticket\Jobs\CreateTickets;
+use Modules\Ticket\Jobs\DeleteTickets;
 
 class OrderRepository
 {
@@ -191,9 +192,14 @@ class OrderRepository
 
         $this->checkStatusForCoupons($order, $data['status']);
 
-        $order->update($data);
+        $changed = $order->update($data);
 
-        CreateTickets::dispatchNow($order);
+        if ($changed) {
+            if ($order->status === Order::PAID)
+                CreateTickets::dispatchNow($order);
+            elseif ($order->status === Order::REVERSED)
+                DeleteTickets::dispatchNow($order);
+        }
 
         return $order;
     }

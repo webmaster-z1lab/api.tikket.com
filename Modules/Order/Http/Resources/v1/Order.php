@@ -33,6 +33,7 @@ class Order extends Resource
                 'type'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->type),
                 'channel'        => $this->channel,
                 'transaction_id' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->transaction_id !== NULL, $this->transaction_id),
+                'created_at'     => $this->created_at->format('d/m/Y H:i'),
                 'costumer'       => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $order->resolve('Costumer')->make($this->costumer)),
                 'tickets'        => $order->resolve('Ticket')->collection($this->tickets),
                 'card'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL &&
