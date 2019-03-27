@@ -10,6 +10,7 @@ namespace Modules\Order\Services;
 
 
 use GuzzleHttp\Client;
+use Modules\Order\Models\Order;
 use Modules\Order\Repositories\OrderRepository;
 
 class OrderService
@@ -32,7 +33,7 @@ class OrderService
     /**
      * @param string $id
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return bool
      */
     public function cancel(string $id)
     {
@@ -42,17 +43,30 @@ class OrderService
             if (now()->diffInDays($order->created_at) > 7 || $order->event->starts_at->diffInDays($order->created_at) < 2)
                 abort(403, "You can't cancel this order.");
 
-        $client = new Client(['base_uri' => config('payment.server')]);
 
-        $credential = \OpenID::getClientToken();
+        if (!filled($order->transaction_id)) {
+            if ($order->channel === Order::ONLINE_CHANNEL)
+                abort(400, "This order doesn't have a transaction.");
 
-        if (!$credential)
-            abort(400,'Not possible to generate the client credential.');
+            if ($order->status === Order::PAID)
+                $this->repository->setStatus(['status' => Order::REVERSED], $id);
+            else
+                abort(400, 'The order status is incompatible.');
+        } else {
+            $client = new Client(['base_uri' => config('payment.server')]);
 
-        return $client->delete('api/v1/transactions/' . $order->transaction_id, [
-            'headers' => [
-                'Authorization' => "Bearer $credential",
-            ]
-        ]);
+            $credential = \OpenID::getClientToken();
+
+            if (!$credential)
+                abort(400, 'Not possible to generate the client credential.');
+
+            $client->delete('api/v1/transactions/' . $order->transaction_id, [
+                'headers' => [
+                    'Authorization' => "Bearer $credential",
+                ]
+            ]);
+        }
+
+        return TRUE;
     }
 }
