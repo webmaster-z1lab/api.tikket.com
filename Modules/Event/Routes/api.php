@@ -26,6 +26,8 @@ Route::middleware('api.v:1,event')
 
             Route::get('my-permissions', 'PermissionController@getLevels');
 
+            Route::get('my-permission', 'PermissionController@getByUserAndEvent');
+
             Route::apiResource('entrances', 'EntranceController');
 
             Route::apiResource('producers', 'ProducerController')->except(['index', 'update']);

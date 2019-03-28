@@ -64,6 +64,22 @@ class PermissionRepository extends ApiRepository
     }
 
     /**
+     * @param string $event_id
+     *
+     * @return \Modules\Event\Models\Permission
+     */
+    public function getByUserAndEvent(string $event_id)
+    {
+        $permission = $this->model->where('email', \Auth::user()->email)
+            ->where('event_id', $event_id)
+            ->first();
+
+        if ($permission === NULL) abort(404);
+
+        return $permission;
+    }
+
+    /**
      * @param string $event
      *
      * @return array

@@ -36,11 +36,13 @@ class PermissionController extends Controller
     }
 
     /**
+     * @param string $event
+     *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function index()
+    public function index(string $event)
     {
-        return $this->collectResource($this->repository->getByEvent(\Route::current()->parameter('event', '')));
+        return $this->collectResource($this->repository->getByEvent($event));
     }
 
     /**
@@ -76,6 +78,16 @@ class PermissionController extends Controller
     public function getByUser()
     {
         return $this->collectResource($this->repository->getByUser());
+    }
+
+    /**
+     * @param string $event
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function getByUserAndEvent(string $event)
+    {
+        return $this->makeResource($this->repository->getByUserAndEvent($event));
     }
 
     /**
