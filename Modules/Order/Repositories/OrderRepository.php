@@ -173,7 +173,7 @@ class OrderRepository
             'fee_is_hidden'  => $order->event->fee_is_hidden,
         ]);
 
-        CreateTickets::dispatchNow($order);
+        CreateTickets::dispatch($order);
 
         return $order;
     }
@@ -196,9 +196,9 @@ class OrderRepository
 
         if ($changed) {
             if ($order->status === Order::PAID)
-                CreateTickets::dispatchNow($order);
+                CreateTickets::dispatch($order);
             elseif ($order->status === Order::REVERSED)
-                DeleteTickets::dispatchNow($order);
+                DeleteTickets::dispatch($order);
         }
 
         return $order;
@@ -221,16 +221,16 @@ class OrderRepository
      */
     private function checkStatusForEntrances(Order $order, string $status)
     {
-        foreach ($order->bags as $bag) {
-            $entrance = Entrance::find($bag->entrance_id);
+        foreach ($order->tickets->groupBy('entrance_id') as $entrance_id => $tickets) {
+            $entrance = Entrance::find($entrance_id);
 
             switch ($status) {
                 case Order::PAID:
-                    $this->incrementSold($entrance, $bag->amount);
+                    $this->incrementSold($entrance, $tickets->count());
                     break;
                 case Order::CANCELED:
                 case Order::REVERSED:
-                    $this->incrementAvailable($entrance, Entrance::WAITING, $bag->amount);
+                    $this->incrementAvailable($entrance, Entrance::WAITING, $tickets->count());
                     break;
                 default:
             }
@@ -243,12 +243,14 @@ class OrderRepository
      */
     private function checkStatusForCoupons(Order $order, string $status)
     {
-        switch ($status) {
-            case Order::CANCELED:
-            case Order::REVERSED:
-                $this->decrementUsed($order->coupon);
-                break;
-            default:
+        if ($order->coupon()->exists()) {
+            switch ($status) {
+                case Order::CANCELED:
+                case Order::REVERSED:
+                    $this->decrementUsed($order->coupon);
+                    break;
+                default:
+            }
         }
     }
 }
