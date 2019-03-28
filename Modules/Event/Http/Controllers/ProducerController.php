@@ -21,6 +21,8 @@ class ProducerController extends Controller
     public function __construct(ProducerRepository $repository)
     {
         $this->repository = $repository;
+        $this->middleware('auth');
+        $this->middleware('can:master,event')->except(['getByUser']);
     }
 
     /**

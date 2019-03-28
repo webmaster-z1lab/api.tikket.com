@@ -33,6 +33,8 @@ class PermissionController extends Controller
     {
         $this->repository = $repository;
         $this->resource = 'Permission';
+        $this->middleware('auth');
+        $this->middleware('can:admin,event')->except(['getByUser', 'getByUserAndEvent']);
     }
 
     /**

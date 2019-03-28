@@ -21,15 +21,19 @@ class SaleController extends Controller
     public function __construct(OrderRepository $repository)
     {
         $this->repository = $repository;
+        $this->middleware('auth');
     }
 
     /**
      * @param \Modules\Order\Http\Requests\SaleRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\Resource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(SaleRequest $request)
     {
+        $this->authorize('sell', $request->get('event'));
+
         return api_resource('Order')->make($this->repository->createBySale($request->validated()));
     }
 }

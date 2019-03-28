@@ -20,6 +20,7 @@ class SummaryController extends Controller
     public function __construct(SummaryService $service)
     {
         $this->service = $service;
+        $this->middleware(['auth', 'can:admin,event']);
     }
 
     /**

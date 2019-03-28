@@ -31,5 +31,17 @@ class AuthServiceProvider extends ServiceProvider
         \Gate::define('checkin', 'Modules\Event\Policies\EventPolicy@checkin');
 
         \Gate::define('pdv', 'Modules\Event\Policies\EventPolicy@pdv');
+
+        \Gate::define('sell', 'Modules\Event\Policies\EventPolicy@sell');
+
+        \Gate::define('admin', 'Modules\Event\Policies\EventPolicy@admin');
+
+        \Gate::define('cart_owner', '\Modules\Cart\Policies\CartPolicy@owner');
+
+        \Gate::define('order_owner', 'Modules\Order\Policies\OrderPolicy@owner');
+
+        \Gate::define('ticket_owner', 'Modules\Ticket\Policies\TicketPolicy@owner');
+
+        \Gate::define('ticket_receiver', 'Modules\Ticket\Policies\TicketPolicy@receiver');
     }
 }

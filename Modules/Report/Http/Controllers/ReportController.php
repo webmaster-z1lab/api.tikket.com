@@ -21,6 +21,7 @@ class ReportController extends Controller
     public function __construct(ReportService $service)
     {
         $this->service = $service;
+        $this->middleware(['auth', 'can:admin,event']);
     }
 
     /**

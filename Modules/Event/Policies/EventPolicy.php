@@ -5,6 +5,7 @@ namespace Modules\Event\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Event\Models\Event;
 use Modules\Event\Models\Permission;
+use Z1lab\OpenID\Models\User;
 
 class EventPolicy
 {
@@ -16,7 +17,7 @@ class EventPolicy
      *
      * @return bool
      */
-    public function master(\Z1lab\OpenID\Models\User $user, $event)
+    public function master(User $user, $event)
     {
         return $this->checkType($user, $event, Permission::MASTER);
     }
@@ -27,7 +28,7 @@ class EventPolicy
      *
      * @return bool
      */
-    public function organizer(\Z1lab\OpenID\Models\User $user, $event)
+    public function organizer(User $user, $event)
     {
         return $this->checkType($user, $event, Permission::ORGANIZER);
     }
@@ -38,7 +39,7 @@ class EventPolicy
      *
      * @return bool
      */
-    public function checkin(\Z1lab\OpenID\Models\User $user, $event)
+    public function checkin(User $user, $event)
     {
         return $this->checkType($user, $event, Permission::CHECKIN);
     }
@@ -49,9 +50,47 @@ class EventPolicy
      *
      * @return bool
      */
-    public function pdv(\Z1lab\OpenID\Models\User $user, $event)
+    public function pdv(User $user, $event)
     {
         return $this->checkType($user, $event, Permission::PDV);
+    }
+
+    /**
+     * @param \Z1lab\OpenID\Models\User $user
+     * @param                           $event
+     *
+     * @return bool
+     */
+    public function sell(User $user, $event)
+    {
+        if ($event instanceof Event)
+            return $event->permissions()->where('email', $user->email)
+                ->whereIn('type', [Permission::MASTER, Permission::ORGANIZER, Permission::PDV])
+                ->exists();
+
+        return Permission::where('event_id', $event)
+            ->where('email', $user->email)
+            ->where('type', [Permission::MASTER, Permission::ORGANIZER, Permission::PDV])
+            ->exists();
+    }
+
+    /**
+     * @param \Z1lab\OpenID\Models\User $user
+     * @param                           $event
+     *
+     * @return bool
+     */
+    public function admin(User $user, $event)
+    {
+        if ($event instanceof Event)
+            return $event->permissions()->where('email', $user->email)
+                ->whereIn('type', [Permission::MASTER, Permission::ORGANIZER])
+                ->exists();
+
+        return Permission::where('event_id', $event)
+            ->where('email', $user->email)
+            ->where('type', [Permission::MASTER, Permission::ORGANIZER])
+            ->exists();
     }
 
     /**

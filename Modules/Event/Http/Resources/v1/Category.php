@@ -17,7 +17,7 @@ class Category extends Resource
         return [
             'type' => 'categories',
             'attributes' => [
-                'name' => $this['name']
+                'name' => $this->resource['name']
             ]
         ];
     }

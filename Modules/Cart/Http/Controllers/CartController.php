@@ -24,6 +24,8 @@ class CartController extends Controller
     public function __construct(CartRepository $repository)
     {
         $this->repository = $repository;
+        $this->middleware('auth')->except(['store']);
+        $this->middleware('can:cart_owner,cart')->except(['store']);
     }
 
     /**
@@ -42,16 +44,6 @@ class CartController extends Controller
     public function store(CartRequest $request)
     {
         return api_resource('Cart')->make($this->repository->create($request->all()));
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return \Illuminate\Http\Resources\Json\Resource
-     */
-    public function user(string $id)
-    {
-        return api_resource('Cart')->make($this->repository->setUser($id));
     }
 
     /**

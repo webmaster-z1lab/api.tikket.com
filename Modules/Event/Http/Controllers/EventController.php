@@ -18,6 +18,8 @@ class EventController extends ApiController
     public function __construct(EventRepository $repository)
     {
         parent::__construct($repository, 'Event');
+        $this->middleware('auth')->except('findByUrl');
+        $this->middleware('can:master,event')->except(['findByUrl', 'store']);
     }
 
     /**
@@ -97,13 +99,5 @@ class EventController extends ApiController
     public function publish(string $id)
     {
         return $this->makeResource($this->repository->publish($id));
-    }
-
-    /**
-     * @return \Illuminate\Http\Resources\Json\Resource
-     */
-    public function getByUser()
-    {
-        return $this->collectResource($this->repository->getByUser());
     }
 }

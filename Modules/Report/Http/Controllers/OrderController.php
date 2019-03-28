@@ -21,6 +21,7 @@ class OrderController extends Controller
     public function __construct(OrderService $service)
     {
         $this->service = $service;
+        $this->middleware(['auth', 'can:admin,event']);
     }
 
     /**

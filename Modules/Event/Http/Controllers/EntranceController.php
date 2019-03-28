@@ -3,7 +3,6 @@
 namespace Modules\Event\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Modules\Event\Http\Requests\EntrancesRequest;
 use Modules\Event\Repositories\EntranceRepository;
 
@@ -22,6 +21,7 @@ class EntranceController extends Controller
     public function __construct(EntranceRepository $repository)
     {
         $this->repository = $repository;
+        $this->middleware(['auth', 'can:admin,event']);
     }
 
     /**
@@ -59,6 +59,7 @@ class EntranceController extends Controller
 
     /**
      * @param string $event
+     * @param string $id
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      * @throws \Exception

@@ -3,12 +3,11 @@
 Route::middleware('api.v:1,event')
     ->prefix('v1')
     ->group(function () {
-        Route::apiResource('coupons', 'CouponController');
+        Route::apiResource('coupons', 'CouponController')->except(['index']);
 
         Route::apiResource('events', 'EventController')->except(['show']);
 
         Route::prefix('events')->as('events.')->group(function () {
-            Route::get('my_events', 'EventController@getByUser');
             Route::get('{event}', 'EventController@show')->name('show')->where('event', '\b[0-9a-fA-F]{24}\b');
             Route::get('{url}', 'EventController@findByUrl');
         });

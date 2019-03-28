@@ -33,6 +33,9 @@ class OrderController extends Controller
         $this->repository = $repository;
         $this->service = $service;
         $this->resource = 'Order';
+        $this->middleware('auth')->except('status');
+        $this->middleware('auth.m2m')->only('status');
+        $this->middleware('can:order_owner,order')->only(['show', 'destroy']);
     }
 
     /**
@@ -43,6 +46,8 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
+        $this->authorize('cart_owner', $request->get('cart'));
+
         return $this->makeResource($this->repository->createByCart($request->get('cart'), $request->ip()));
     }
 

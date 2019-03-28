@@ -21,6 +21,7 @@ class ParticipantController extends Controller
     public function __construct(ParticipantService $service)
     {
         $this->service = $service;
+        $this->middleware(['auth', 'can:admin,event']);
     }
 
     /**

@@ -105,21 +105,6 @@ class CartRepository
     }
 
     /**
-     * @param string $id
-     *
-     * @return \Modules\Cart\Models\Cart|null
-     */
-    public function setUser(string $id)
-    {
-        $cart = $this->find($id);
-
-        $cart->user_id = \Auth::id();
-        $cart->save();
-
-        return $cart->fresh();
-    }
-
-    /**
      * @param array  $data
      * @param string $id
      *
