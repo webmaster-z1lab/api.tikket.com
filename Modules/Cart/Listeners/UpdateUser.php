@@ -7,7 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Cart\Events\UserInformationReceived;
 
-class UpdateUser
+class UpdateUser implements ShouldQueue
 {
     /**
      * @var \GuzzleHttp\Client

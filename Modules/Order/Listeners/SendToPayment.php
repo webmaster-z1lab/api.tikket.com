@@ -10,7 +10,7 @@ use Modules\Event\Repositories\EntranceRepository;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Repositories\OrderRepository;
 
-class SendToPayment
+class SendToPayment implements ShouldQueue
 {
     /**
      * @var \Modules\Order\Repositories\OrderRepository

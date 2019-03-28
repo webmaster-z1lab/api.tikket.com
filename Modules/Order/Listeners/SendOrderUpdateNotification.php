@@ -5,7 +5,6 @@ namespace Modules\Order\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Order\Emails\OrderApproved;
 use Modules\Order\Emails\OrderFailed;;
-
 use Modules\Order\Emails\OrderReversed;
 use Modules\Order\Events\StatusChanged;
 
