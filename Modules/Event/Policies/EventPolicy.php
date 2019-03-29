@@ -70,7 +70,7 @@ class EventPolicy
 
         return Permission::where('event_id', $event)
             ->where('email', $user->email)
-            ->where('type', [Permission::MASTER, Permission::ORGANIZER, Permission::PDV])
+            ->whereIn('type', [Permission::MASTER, Permission::ORGANIZER, Permission::PDV])
             ->exists();
     }
 
@@ -89,7 +89,7 @@ class EventPolicy
 
         return Permission::where('event_id', $event)
             ->where('email', $user->email)
-            ->where('type', [Permission::MASTER, Permission::ORGANIZER])
+            ->whereIn('type', [Permission::MASTER, Permission::ORGANIZER])
             ->exists();
     }
 
