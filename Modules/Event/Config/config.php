@@ -26,8 +26,30 @@ $levels = [
 return [
     'name'        => 'Event',
     'categories'  => [
-        ['name' => 'show'],
-        ['name' => 'festa'],
+        [
+            'value' => 'congress',
+            'name'  => 'Congresso',
+        ],
+        [
+            'value' => 'class',
+            'name'  => 'Curso',
+        ],
+        [
+            'value' => 'party',
+            'name'  => 'Festa',
+        ],
+        [
+            'value' => 'networking',
+            'name'  => 'Networking',
+        ],
+        [
+            'value' => 'show',
+            'name'  => 'Show',
+        ],
+        [
+            'value' => 'workshop',
+            'name'  => 'Workshop',
+        ],
     ],
     'levels'      => $levels,
     'permissions' => [
