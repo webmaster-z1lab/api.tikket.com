@@ -10,15 +10,17 @@ class Category extends Resource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            'type' => 'categories',
+            'type'       => 'categories',
             'attributes' => [
-                'name' => $this->resource['name']
-            ]
+                'value' => $this->resource['value'],
+                'name'  => $this->resource['name'],
+            ],
         ];
     }
 }
