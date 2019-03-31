@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>CORE Api tikket.com | Um projeto Z1lab</title>
+    <title>CORE Api tikket.com.br | Um projeto Z1lab</title>
 
     <meta name="robots" content="no-index, no-follow">
     <meta name="author" content="z1lab.com.br">
@@ -24,10 +24,6 @@
     <div class="u-header__section">
         <div id="logoAndNav" class="container">
             <nav class="navbar navbar-expand u-header__navbar">
-                <a class="" href="/" aria-label="quantofica.com">
-                    <img src="https://cdn.z1lab.com.br/images/quantofica/logo.png" alt="Logo quantofica.com" width="200px">
-                </a>
-
                 <div class="ml-auto">
                     <a class="text-white" href="//z1lab.com.br" target="_blank">
                         Um projeto <img src="https://cdn.z1lab.com.br/images/z1lab/logo/logo_white.svg" alt="Logo Z1lab" width="75px">
@@ -44,13 +40,13 @@
         <div class="container d-lg-flex align-items-lg-center min-height-lg-100vh space-bottom-2 space-top-4 space-bottom-lg-3 space-lg-0">
             <div class="w-lg-80 w-xl-70 mt-lg-9">
                 <div class="mb-6">
-                    <h1 class="h2 text-white font-weight-normal">CORE Api tikket.com | Um projeto Z1lab</h1>
-                    <p class="text-white-70">Essa é uma extensão do site <a class="text-white font-weight-bold" href="//quantofica.com">tikket.com</a> que controla uma série de
+                    <h1 class="text-white font-weight-normal"><i class="fas fa-ticket-alt"></i> CORE Api tikket.com.br <br><small>Um projeto Z1lab</small></h1>
+                    <p class="text-white-70">Essa é uma extensão do site <a class="text-white font-weight-bold" href="//tikket.com.br">tikket.com.br</a> que controla uma série de
                         funções que garantem o funcionamento da ferramenta.</p>
                     <p class="text-white-70">Assim como todo o projeto essa é uma solução desenvolvida e matida pela <a class="text-white font-weight-bold" href="//z1lab.com.br">Z1lab</a>.
                     </p>
 
-                    <a class="btn btn-white btn-wide text-primary my-4 transition-3d-hover" href="//tikket.com"><i class="fas fa-globe-americas"></i> Ir para o Site</a>
+                    <a class="btn btn-white btn-wide text-primary my-4 transition-3d-hover" href="//tikket.com.br"><i class="fas fa-globe-americas"></i> Ir para o Site</a>
 
                     <div class="mb-6">
                         <h6 class="text-white">SERVICES STATUS <a href="#" onclick="checkAgain()"><i id="refresh" class="fas fa-sync-alt fa-spin"></i></a></h6>
@@ -61,7 +57,7 @@
                             <li class="list-inline-item" id="auth"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> AUTH</li>
                             <li class="list-inline-item" id="core"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> CORE</li>
                             <li class="list-inline-item" id="payment"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> PAYMENT</li>
-                            <li class="list-inline-item" id="message"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> MESSAGE</li>
+                            <li class="list-inline-item" id="admin"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> ADMIN</li>
                             <li class="list-inline-item" id="portal"><i class="fas fa-spinner fa-spin text-warning ml-1 status-check"></i> PORTAL</li>
                         </ul>
                     </div>
@@ -73,7 +69,7 @@
                         <li class="list-inline-item" title="Amazon Web Services"><i class="fab fa-2x fa-aws"></i></li>
                         <li class="list-inline-item" title="Openid"><i class="fab fa-2x fa-openid"></i></li>
                         <li class="list-inline-item" title="Discord"><i class="fab fa-2x fa-discord"></i></li>
-                        <li class="list-inline-item" title="BitBucket"><i class="fab fa-2x fa-bitbucket"></i></li>
+                        <li class="list-inline-item" title="Github"><i class="fab fa-2x fa-github"></i></li>
                         <li class="list-inline-item" title="The Force"><i class="fas fa-2x fa-jedi"></i></li>
                     </ul>
                 </div>
@@ -87,17 +83,17 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center space-1">
 
-            <p class="small text-white mb-0">&copy; tikket.com. Z1Lab 2018.</p>
+            <p class="small text-white mb-0">&copy; tikket.com.br | Z1Lab {{ date('Y') }}.</p>
 
             <ul class="list-inline mb-0 text-sm-right">
                 <li class="list-inline-item">
-                    <a class="btn btn-sm btn-icon btn-soft-light btn-bg-transparent" href="//facebook.com/quantofica">
+                    <a class="btn btn-sm btn-icon btn-soft-light btn-bg-transparent" href="//facebook.com/tikketeventos">
                         <span class="fab fa-facebook-f btn-icon__inner"></span>
                     </a>
                 </li>
 
                 <li class="list-inline-item">
-                    <a class="btn btn-sm btn-icon btn-soft-light btn-bg-transparent" href="//instagram.com/quantofica">
+                    <a class="btn btn-sm btn-icon btn-soft-light btn-bg-transparent" href="//instagram.com/tikketeventos">
                         <span class="fab fa-instagram btn-icon__inner"></span>
                     </a>
                 </li>
@@ -129,8 +125,8 @@
             "url": "https://tikket.com.br",
         },
         {
-            "id": "message",
-            "url": "https://message.tikket.com.br",
+            "id": "admin",
+            "url": "https://admin.tikket.com.br",
         },
         {
             "id": "core",
