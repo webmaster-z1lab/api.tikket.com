@@ -90,14 +90,14 @@ class EntranceRepository
         $event = $this->event($event);
 
         $data['starts_at'] = $previous = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
+
+        /** @var \Modules\Event\Models\Entrance $entrance */
         $entrance = $event->entrances()->find($id);
 
         if ($entrance->is_locked)
             $entrance->update(['description' => $data['description']]);
         else
             $entrance->update(array_except($data, ['lots']));
-
-        if ($entrance->lots()->exists()) $entrance->lots()->delete();
 
         for ($i = 0; $i < count($data['lots']); $i++) {
             $lot = $entrance->getLot($i + 1);
@@ -115,6 +115,8 @@ class EntranceRepository
                 $lot->update($data['lots'][$i]);
             }
         }
+
+        $entrance->lots()->where('number', '>', count($data['lots']))->delete();
 
         $entrance->save();
 
