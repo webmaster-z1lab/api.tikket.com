@@ -107,7 +107,7 @@ class EntrancesRequest extends ApiFormRequest
                         $validator->errors()->add('max_buy', "You can't update the entrance's maximum quantity.");
                     elseif ($this->starts_at !== $entrance->starts_at->format('Y-m-d'))
                         $validator->errors()->add('starts_at', "You can't update the entrance's start date.");
-                } elseif( today()->lte(Carbon::createFromFormat('Y-m-d',$this->starts_at)->endOfDay())) {
+                } elseif($entrance->starts_at->gt(Carbon::createFromFormat('Y-m-d', $this->starts_at)->endOfDay())) {
                     $validator->errors()->add('starts_at', "The start day can't be before today.");
                 }
 
