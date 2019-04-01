@@ -116,7 +116,10 @@ class EntranceRepository
             }
         }
 
-        $entrance->lots()->where('number', '>', count($data['lots']))->delete();
+        foreach ($entrance->lots as $lot) {
+            if ($lot->number <= count($data['lots'])) continue;
+            $lot->delete();
+        }
 
         $entrance->save();
 
