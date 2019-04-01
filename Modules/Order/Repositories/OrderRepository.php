@@ -11,7 +11,10 @@ namespace Modules\Order\Repositories;
 use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
+use Modules\Event\Jobs\LockEntrance;
+use Modules\Event\Jobs\LockEvent;
 use Modules\Event\Models\Entrance;
+use Modules\Event\Models\Event;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 use Modules\Ticket\Jobs\CreateTickets;
@@ -108,6 +111,10 @@ class OrderRepository
      */
     public function createBySale(array $data)
     {
+        $event = Event::find($data['event']);
+
+        LockEvent::dispatch($event);
+
         $tickets = [];
         $amount = 0;
         $fee = 0;
@@ -115,6 +122,8 @@ class OrderRepository
         $ticketsByEntrance = collect($data['tickets'])->groupBy('entrance');
         foreach ($ticketsByEntrance as $entrance_id => $items) {
             $entrance = Entrance::find($entrance_id);
+
+            LockEntrance::dispatch($entrance, $entrance->available->lot);
 
             if (!$entrance->is_free) {
                 $amount += ($entrance->available->value * $items->count());
