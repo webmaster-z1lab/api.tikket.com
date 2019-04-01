@@ -100,8 +100,8 @@ class EntranceRepository
         if ($entrance->lots()->exists()) $entrance->lots()->delete();
 
         for ($i = 0; $i < count($data['lots']); $i++) {
-            $lot = $entrance->lots()->where('number', $i)->first();
-            if ($i < $entrance->available->lot) {
+            $lot = $entrance->getLot($i + 1);
+            if (($i + 1) < $entrance->available->lot) {
                 $previous = $lot->finishes_at->addDay()->startOfDay();
                 continue;
             } else {

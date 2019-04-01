@@ -61,8 +61,9 @@ trait AvailableEntrances
     /**
      * @param \Modules\Event\Models\Entrance $entrance
      * @param int                            $value
+     * @param string|null                    $source
      */
-    public function incrementSold(Entrance $entrance, int $value = 1)
+    public function incrementSold(Entrance $entrance, int $value = 1, string $source = NULL)
     {
         if($entrance->available->sold === 0) {
             LockEntrance::dispatch($entrance);
@@ -70,7 +71,7 @@ trait AvailableEntrances
         }
 
         $entrance->available->increment(Entrance::SOLD, $value);
-        $entrance->available->decrement(Entrance::WAITING, $value);
+        $entrance->available->decrement($source ?? Entrance::WAITING, $value);
 
 
     }

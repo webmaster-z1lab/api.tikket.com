@@ -83,7 +83,7 @@ class TicketRepository extends ApiRepository
 
         $order->tickets->each(function ($ticket, $key) use ($event_data, $order_id) {
             $data = [
-                'entrance_id' => $ticket->entrance->id,
+                'entrance_id' => $ticket->entrance_id,
                 'order_id'    => $order_id,
                 'name'        => $ticket->entrance,
                 'lot'         => $ticket->lot,
