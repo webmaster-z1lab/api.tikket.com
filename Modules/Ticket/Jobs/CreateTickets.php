@@ -27,7 +27,7 @@ class CreateTickets implements ShouldQueue
      */
     public function __construct(Order $order)
     {
-        $this->order = $order;
+        $this->order = $order->fresh();
     }
 
     /**
