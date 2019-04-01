@@ -139,7 +139,7 @@ class EntrancesRequest extends ApiFormRequest
                                 $validator->errors()->add('lots.' . $key . '.finishes_at', "You can't update a past lot.");
                                 break;
                             }
-                            $prev = $aux->finshes_at;
+                            $prev = $aux->finishes_at;
                         } else {
                             $finish = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
                             if ($event->starts_at->lte($finish->startOfDay())) {

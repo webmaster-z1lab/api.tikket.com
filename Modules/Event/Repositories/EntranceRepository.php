@@ -105,11 +105,11 @@ class EntranceRepository
                 $previous = $lot->finishes_at->addDay()->startOfDay();
                 continue;
             } else {
-                $data['lots'][$i]['value'] = (int)($lot['value'] * 100);
-                $data['lots'][$i]['fee'] = max((int)($lot['value'] / 10), Lot::MIN_FEE);
-                $data['lots'][$i]['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
+                $data['lots'][$i]['value'] = (int)(floatval($data['lots'][$i]['value']) * 100);
+                $data['lots'][$i]['fee'] = max((int)($data['lots'][$i]['value'] / 10), Lot::MIN_FEE);
+                $data['lots'][$i]['finishes_at'] = Carbon::createFromFormat('Y-m-d', $data['lots'][$i]['finishes_at'])->endOfDay();
                 $data['lots'][$i]['starts_at'] = $previous;
-                if ($event->starts_at->isSameDay($lot['finishes_at'])) {
+                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at'])) {
                     $data['lots'][$i]['finishes_at'] = $event->starts_at->subHours(3);
                 }
                 $lot->update($data['lots'][$i]);
