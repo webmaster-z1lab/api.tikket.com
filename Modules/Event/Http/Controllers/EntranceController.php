@@ -21,7 +21,7 @@ class EntranceController extends Controller
     public function __construct(EntranceRepository $repository)
     {
         $this->repository = $repository;
-        $this->middleware(['auth', 'can:admin,event']);
+        $this->middleware(['auth', 'can:admin,event'])->except(['index']);
     }
 
     /**
