@@ -90,23 +90,38 @@ class EntranceRepository
         $event = $this->event($event);
 
         $data['starts_at'] = $previous = Carbon::createFromFormat('Y-m-d', $data['starts_at'])->startOfDay();
+
+        /** @var \Modules\Event\Models\Entrance $entrance */
         $entrance = $event->entrances()->find($id);
-        $entrance->update(array_except($data, ['lots']));
 
-        if ($entrance->lots()->exists()) $entrance->lots()->delete();
+        if ($entrance->is_locked)
+            $entrance->update(['description' => $data['description']]);
+        else
+            $entrance->update(array_except($data, ['lots']));
 
-        foreach ($data['lots'] as $key => $lot) {
-            $lot['number'] = $key + 1;
-            $lot['value'] = (int)($lot['value'] * 100);
-            $lot['fee'] = max((int)($lot['value'] / 10), Lot::MIN_FEE);
-            $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
-            $lot['starts_at'] = $previous;
-            if ($event->starts_at->isSameDay($lot['finishes_at'])) {
-                $lot['finishes_at'] = $event->starts_at->subHours(3);
+        for ($i = 0; $i < count($data['lots']); $i++) {
+            $lot = $entrance->getLot($i + 1);
+            if (($i + 1) < $entrance->available->lot) {
+                $previous = $lot->finishes_at->addDay()->startOfDay();
+                continue;
+            } else {
+                $data['lots'][$i]['value'] = (int)(floatval($data['lots'][$i]['value']) * 100);
+                $data['lots'][$i]['fee'] = max((int)($data['lots'][$i]['value'] / 10), Lot::MIN_FEE);
+                $data['lots'][$i]['finishes_at'] = Carbon::createFromFormat('Y-m-d', $data['lots'][$i]['finishes_at'])->endOfDay();
+                $data['lots'][$i]['starts_at'] = $previous;
+                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at'])) {
+                    $data['lots'][$i]['finishes_at'] = $event->starts_at->subHours(3);
+                }
+                $lot->update($data['lots'][$i]);
             }
-            $entrance->lots()->create($lot);
-            $previous = $lot['finishes_at']->addDay()->startOfDay();
         }
+
+        foreach ($entrance->lots as $lot) {
+            if ($lot->number <= count($data['lots'])) continue;
+            $lot->delete();
+        }
+
+        $entrance->save();
 
         return $event->fresh();
     }

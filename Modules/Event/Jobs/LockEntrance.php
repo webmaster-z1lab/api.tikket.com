@@ -30,7 +30,7 @@ class LockEntrance implements ShouldQueue
     public function __construct(Entrance $entrance, int $lot)
     {
         $this->entrance = $entrance->fresh();
-        $this->lot = $this->entrance->getLot($lot);
+        $this->lot = $lot;
     }
 
     /**
@@ -40,22 +40,11 @@ class LockEntrance implements ShouldQueue
      */
     public function handle()
     {
-        $this->lot->status = $this->lot::CLOSED;
+        $lot = $this->entrance->getLot($this->lot);
+        $lot->status = $lot::CLOSED;
         $this->entrance->is_locked = TRUE;
 
-        $this->lot->save();
+        $lot->save();
         $this->entrance->save();
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param  \Exception $e
-     *
-     * @return void
-     */
-    public function failed(\Exception $e)
-    {
-        \Log::error($e->getMessage());
     }
 }

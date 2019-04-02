@@ -116,6 +116,8 @@ class OrderRepository
         foreach ($ticketsByEntrance as $entrance_id => $items) {
             $entrance = Entrance::find($entrance_id);
 
+            $this->incrementSold($entrance, $items->count(), Entrance::AVAILABLE);
+
             if (!$entrance->is_free) {
                 $amount += ($entrance->available->value * $items->count());
                 $fee += ($entrance->available->fee * $items->count());
