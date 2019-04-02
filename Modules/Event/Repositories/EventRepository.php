@@ -10,6 +10,7 @@ namespace Modules\Event\Repositories;
 
 use App\Traits\EventValidator;
 use Carbon\Carbon;
+use Modules\Event\Jobs\DeletePermissions;
 use Modules\Event\Models\Event;
 use Modules\Event\Models\Permission;
 use Modules\Ticket\Jobs\UpdateTickets;
@@ -108,23 +109,17 @@ class EventRepository extends ApiRepository
     {
         $event = $this->find($id);
 
-        switch ($event->status) {
-            case Event::DRAFT:
-            case Event::COMPLETED:
-                $this->flush();
+        if (in_array($event->status, [Event::DRAFT, Event::COMPLETED])) {
+            $this->flush();
 
-                return $event->delete();
-            case Event::PUBLISHED:
-                $result = $event->update(['status' => $event->is_locked ? Event::CANCELED : Event::COMPLETED]);
-                $this->setCacheKey($id);
-                $this->flush()->remember($event);
+            DeletePermissions::dispatch($event->id);
 
-                return $result;
-            default:
-                abort(400, "This event can't be canceled or unpublished.");
+            return $event->delete();
         }
 
-        return TRUE;
+        abort(400, "This event can't be canceled or unpublished.");
+
+        return FALSE;
     }
 
     /**
@@ -212,5 +207,49 @@ class EventRepository extends ApiRepository
         }
 
         return $event->fresh();
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event|null
+     */
+    public function unpublish(string $id)
+    {
+        $event = $this->find($id);
+
+        if ($event->status === Event::PUBLISHED && !$event->is_locked) {
+            $event->update(['status' => Event::COMPLETED]);
+            $this->setCacheKey($id);
+            $this->flush()->remember($event);
+
+            return $event;
+        }
+
+        abort(400, "This event can't be canceled or unpublished.");
+
+        return NULL;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Modules\Event\Models\Event|null
+     */
+    public function cancel(string $id)
+    {
+        $event = $this->find($id);
+
+        if ($event->status === Event::PUBLISHED && $event->is_locked) {
+            $event->update(['status' => Event::CANCELED]);
+            $this->setCacheKey($id);
+            $this->flush()->remember($event);
+
+            return $event;
+        }
+
+        abort(400, "This event can't be canceled or unpublished.");
+
+        return NULL;
     }
 }
