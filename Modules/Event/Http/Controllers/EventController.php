@@ -101,4 +101,24 @@ class EventController extends ApiController
     {
         return $this->makeResource($this->repository->publish($id));
     }
+
+    /**
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function unpublish(string $id)
+    {
+        return $this->makeResource($this->repository->unpublish($id));
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function cancel(string $id)
+    {
+        return $this->makeResource($this->repository->cancel($id));
+    }
 }

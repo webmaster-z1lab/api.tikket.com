@@ -9,6 +9,7 @@
 namespace Modules\Event\Repositories;
 
 use Carbon\Carbon;
+use Modules\Event\Jobs\UpdateAvailableLot;
 use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
 use Modules\Event\Models\Lot;
@@ -99,9 +100,11 @@ class EntranceRepository
         else
             $entrance->update(array_except($data, ['lots']));
 
+        $current_lot = $entrance->available->lot;
+
         for ($i = 0; $i < count($data['lots']); $i++) {
             $lot = $entrance->getLot($i + 1);
-            if (($i + 1) < $entrance->available->lot) {
+            if (($i + 1) < $current_lot) {
                 $previous = $lot->finishes_at->addDay()->startOfDay();
                 continue;
             } else {
@@ -112,7 +115,9 @@ class EntranceRepository
                 if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at'])) {
                     $data['lots'][$i]['finishes_at'] = $event->starts_at->subHours(3);
                 }
-                $lot->update($data['lots'][$i]);
+
+                if ($lot->update($data['lots'][$i]) && ($i + 1) === $current_lot)
+                    UpdateAvailableLot::dispatch($entrance);
             }
         }
 
@@ -128,6 +133,8 @@ class EntranceRepository
 
     /**
      * @param string $event
+     *
+     * @param string $id
      *
      * @return \Modules\Event\Models\Event
      * @throws \Exception

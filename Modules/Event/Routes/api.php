@@ -19,6 +19,10 @@ Route::middleware('api.v:1,event')
 
             Route::patch('publish', 'EventController@publish');
 
+            Route::patch('unpublish', 'EventController@unpublish');
+
+            Route::patch('cancel', 'EventController@cancel');
+
             //Route::patch('fee', 'EventController@fee');
 
             Route::get('sale-points', 'PermissionController@salePoints');
