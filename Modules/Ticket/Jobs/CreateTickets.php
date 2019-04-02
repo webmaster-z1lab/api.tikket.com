@@ -51,8 +51,8 @@ class CreateTickets implements ShouldQueue
         $this->order->tickets->each(function ($participant, $key) use ($event_data, $order_id) {
             $ticket = Ticket::create([
                 'name' => $participant->entrance,
-                'lot' => $participant->lot,
-                'code' => strtoupper(Str::random(Ticket::CODE_LENGTH)),
+                'lot'  => $participant->lot,
+                'code' => $participant->code === NULL ? strtoupper(Str::random(Ticket::CODE_LENGTH)) : $participant->code,
             ]);
 
             $ticket->order()->associate($order_id);
