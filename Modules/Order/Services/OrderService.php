@@ -40,7 +40,7 @@ class OrderService
         $order = $this->repository->find($id);
 
         if (!\Gate::allows('master', $order->event) && !\Gate::allows('organizer', $order->event))
-            if (now()->diffInDays($order->created_at) > 7 || $order->event->starts_at->diffInDays($order->created_at) < 2)
+            if (now()->diffInDays($order->created_at) > 7 || now()->diffInDays($order->event->starts_at) < 2)
                 abort(403, "You can't cancel this order.");
 
 

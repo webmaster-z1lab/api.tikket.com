@@ -12,6 +12,6 @@ class OrderObserver
      */
     public function saving(Order $order)
     {
-        if ($order->isDirty('status')) event(new StatusChanged($order, $order->getOriginal('status'), $order->status));
+        if ($order->isDirty('status') && $order->channel === Order::ONLINE_CHANNEL) event(new StatusChanged($order, $order->getOriginal('status'), $order->status));
     }
 }

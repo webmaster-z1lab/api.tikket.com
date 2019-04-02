@@ -231,8 +231,10 @@ class OrderRepository
                     $this->incrementSold($entrance, $tickets->count());
                     break;
                 case Order::CANCELED:
-                case Order::REVERSED:
                     $this->incrementAvailable($entrance, Entrance::WAITING, $tickets->count());
+                    break;
+                case Order::REVERSED:
+                    $this->incrementAvailable($entrance, Entrance::SOLD, $tickets->count());
                     break;
                 default:
             }
