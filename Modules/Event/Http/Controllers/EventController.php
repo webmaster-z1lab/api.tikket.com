@@ -19,7 +19,7 @@ class EventController extends ApiController
     {
         parent::__construct($repository, 'Event');
         $this->middleware('auth')->except('findByUrl');
-        $this->middleware('can:admin,event')->except(['destroy', 'findByUrl', 'store']);
+        $this->middleware('can:admin,event')->except(['show', 'destroy', 'findByUrl', 'store']);
         $this->middleware('can:master,event')->only('destroy');
     }
 
