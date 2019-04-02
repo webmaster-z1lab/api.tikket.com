@@ -112,7 +112,7 @@ class EventRepository extends ApiRepository
         if (in_array($event->status, [Event::DRAFT, Event::COMPLETED])) {
             $this->flush();
 
-            DeletePermissions::dispatch($event->id);
+            DeletePermissions::dispatch($id);
 
             return $event->delete();
         }
@@ -157,6 +157,9 @@ class EventRepository extends ApiRepository
 
         if ($event->is_locked) UpdateTickets::dispatch($event);
 
+        $this->setCacheKey($id);
+        $this->flush()->remember($event);
+
         return $event->fresh();
     }
 
@@ -171,6 +174,9 @@ class EventRepository extends ApiRepository
         $event = $this->find($id);
 
         $event->update($data);
+
+        $this->setCacheKey($id);
+        $this->flush()->remember($event);
 
         return $event->fresh();
     }
@@ -187,6 +193,8 @@ class EventRepository extends ApiRepository
         if ($event->status !== Event::DRAFT) abort(400, 'This event is not a draft.');
 
         $event->update(['status' => Event::COMPLETED]);
+        $this->setCacheKey($id);
+        $this->flush()->remember($event);
 
         return $event->fresh();
     }
@@ -204,6 +212,8 @@ class EventRepository extends ApiRepository
 
         if ($this->is_valid($event)) {
             $event->update(['status' => Event::PUBLISHED]);
+            $this->setCacheKey($id);
+            $this->flush()->remember($event);
         }
 
         return $event->fresh();
