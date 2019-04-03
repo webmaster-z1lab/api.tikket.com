@@ -68,8 +68,6 @@ class CartRequest extends ApiFormRequest
 
                     $user = \Auth::user()->name;
 
-                    \Log::info("$user already buy $bagBuy tickets.");
-
                     if ($bagBuy + $ticket['quantity'] > $entrance->max_buy) {
                         $validator->errors()->add('tickets', "Entry '$entrance->name' only allows $entrance->max_buy tickets per person.");
                     }
