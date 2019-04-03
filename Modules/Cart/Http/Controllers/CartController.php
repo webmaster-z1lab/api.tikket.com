@@ -25,7 +25,7 @@ class CartController extends Controller
     {
         $this->repository = $repository;
         $this->middleware('auth')->except(['store']);
-        $this->middleware('can:cart_owner,cart')->except(['store']);
+        $this->middleware('can:cart_owner,cart')->except(['find', 'store']);
     }
 
     /**

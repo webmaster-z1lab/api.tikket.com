@@ -40,7 +40,7 @@ class CardRequest extends ApiFormRequest
             'card.parcel'       => 'bail|required|numeric|min:1',
 
             'card.holder'            => 'bail|required|array',
-            'card.holder.name'       => 'bail|required|string',
+            'card.holder.name'       => 'bail|required|string|full_name',
             'card.holder.document'   => 'bail|required|cpf',
             'card.holder.birth_date' => 'bail|required|date_format:Y-m-d|before_or_equal:today -18 years',
             'card.holder.phone'      => 'bail|required|cell_phone',
