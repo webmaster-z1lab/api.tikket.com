@@ -56,14 +56,14 @@ class OrderRequest extends ApiFormRequest
                 if ($sold + $bag->amount > $entrance->available->amount) {
                     $validator->errors()->add('tickets', "There are no tickets for entrance '$entrance->name' at the moment.");
                 } else {
-                    $buyed = Order::paid()->byPerson($cart->costumer->document)->get();
+                    $buyed = Order::processed()->byPerson($cart->costumer->document)->get();
 
                     if (NULL !== $buyed && !$buyed->isEmpty()) {
                         $bagBuy = $buyed->sum(function ($order) use ($bag) {
                             return $order->bags()->where('entrance_id', $bag->entrance_id)->sum('amount');
                         });
 
-                        if ($bagBuy + $cart->bag->amount > $entrance->max_buy) {
+                        if ($bagBuy + $bag->amount > $entrance->max_buy) {
                             $validator->errors()->add('tickets', "Entry '$entrance->name' only allows $entrance->max_buy tickets per person.");
                         }
                     }

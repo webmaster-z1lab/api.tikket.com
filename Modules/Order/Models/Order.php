@@ -30,6 +30,7 @@ use Modules\Event\Models\Event;
  * @property-read \Carbon\Carbon                      updated_at
  *
  * @method $this paid()
+ * @method $this processed()
  * @method $this byPerson(string $document)
  */
 class Order extends Model
@@ -90,6 +91,16 @@ class Order extends Model
     public function scopePaid($query)
     {
         return $query->where('status', self::PAID);
+    }
+
+    /**
+     * @param $query
+     *
+     * @return $this
+     */
+    public function scopeProcessed($query)
+    {
+        return $query->where('status', self::PAID)->orWhere('status', self::WAITING);
     }
 
     /**

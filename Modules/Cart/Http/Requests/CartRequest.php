@@ -3,6 +3,7 @@
 namespace Modules\Cart\Http\Requests;
 
 use Modules\Event\Models\Entrance;
+use Modules\Order\Models\Order;
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
 
 class CartRequest extends ApiFormRequest
@@ -56,6 +57,22 @@ class CartRequest extends ApiFormRequest
                     $validator->errors()->add('tickets', "The max tickets for entrance '$entrance->name' is $entrance->max_buy.");
                 } elseif ($ticket['quantity'] < $entrance->min_buy) {
                     $validator->errors()->add('tickets', "The minimum tickets for entrance '$entrance->name' is $entrance->min_buy.");
+                }
+
+                $buyed = Order::processed()->byPerson(\Auth::user()->document)->get();
+
+                if (NULL !== $buyed && !$buyed->isEmpty()) {
+                    $bagBuy = $buyed->sum(function ($order) use ($entrance) {
+                        return $order->bags()->where('entrance_id', $entrance->id)->sum('amount');
+                    });
+
+                    $user = \Auth::user()->name;
+
+                    \Log::info("$user already buy $bagBuy tickets.");
+
+                    if ($bagBuy + $ticket['quantity'] > $entrance->max_buy) {
+                        $validator->errors()->add('tickets', "Entry '$entrance->name' only allows $entrance->max_buy tickets per person.");
+                    }
                 }
 
                 if (!now()->between($entrance->available->starts_at, $entrance->available->finishes_at)) {

@@ -67,6 +67,7 @@ class OrderRepository
 
         $order->event()->associate($data['event_id']);
         $order->tickets()->createMany($data['tickets']);
+        $order->bags()->createMany($data['bags']);
 
         $order->coupon()->associate($cart->coupon);
 
