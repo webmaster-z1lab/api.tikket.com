@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
                 'cnpj'        => 'O campo :attribute não é um CNPJ válido',
                 'cpf'         => 'O campo :attribute não é um CPF válido',
                 'bool_custom' => 'O campo :attribute deve ser verdadeiro ou falso',
+                'full_name'   => 'O campo :attribute deve ser um nome completo.',
             ];
 
             return new Validator($translator, $data, $rules, $messages, $customAttributes);

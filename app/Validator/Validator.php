@@ -8,6 +8,7 @@
 
 namespace App\Validator;
 
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Validator as BaseValidator;
 use Respect\Validation\Validator as Respect;
 
@@ -81,5 +82,20 @@ class Validator extends BaseValidator
         if ($doc === 14) return Respect::cnpj()->validate($value);
 
         return FALSE;
+    }
+
+    /**
+     * @param $atrribute
+     * @param $value
+     *
+     * @return bool
+     */
+    protected function validateFullName($atrribute, $value)
+    {
+        $names = Arr::where(explode(' ', $value), function ($value, $key) {
+            return filled($value);
+        });
+
+        return count($names) > 1;
     }
 }
