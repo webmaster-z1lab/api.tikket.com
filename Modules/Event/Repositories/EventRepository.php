@@ -255,6 +255,8 @@ class EventRepository extends ApiRepository
             $this->setCacheKey($id);
             $this->flush()->remember($event);
 
+            UpdateTickets::dispatch($event);
+
             return $event;
         }
 

@@ -12,6 +12,7 @@ use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
+use Modules\Event\Models\Event;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 use Modules\Ticket\Jobs\CreateTickets;
@@ -40,7 +41,20 @@ class OrderRepository
      */
     public function getByUser()
     {
-        return Order::where('costumer.user_id', '79583c6c-f96c-4fc5-95b2-b81839435b89')->latest()->get();
+        $past = \Request::query('past', FALSE);
+
+        $past = $past === 'false' ? FALSE : boolval($past);
+
+        if ($past)
+            return Order::where('costumer.user_id', \Auth::id())
+                ->whereHas('event', function ($query) {
+                    $query->whereIn('status', [Event::CANCELED, Event::FINALIZED]);
+                })->latest()->get();
+
+        return Order::where('costumer.user_id', \Auth::id())
+            ->whereHas('event', function ($query) {
+                $query->whereNotIn('status', [Event::CANCELED, Event::FINALIZED]);
+            })->latest()->get();
     }
 
     /**

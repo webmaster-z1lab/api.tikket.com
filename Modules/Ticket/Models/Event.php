@@ -24,9 +24,11 @@ class Event extends Model
         'url',
         'address',
         'starts_at',
+        'finishes_at',
+        'status'
     ];
 
-    protected $dates = ['starts_at'];
+    protected $dates = ['starts_at', 'finishes_at'];
 
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne

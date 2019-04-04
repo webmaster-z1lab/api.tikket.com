@@ -22,7 +22,7 @@ class UpdateTickets implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param \Modules\Event\Models\Event $event
+     * @param  \Modules\Event\Models\Event  $event
      */
     public function __construct(Event $event)
     {
@@ -39,11 +39,13 @@ class UpdateTickets implements ShouldQueue
         $tickets = Ticket::where('event.event_id', $this->event->id)->get();
 
         $data = [
-            'name' => $this->event->name,
-            'url' => $this->event->url,
-            'address' => $this->event->address->formatted,
-            'starts_at' => $this->event->starts_at,
-            'image' => $this->event->image->toArray()
+            'name'        => $this->event->name,
+            'status'      => $this->event->status,
+            'url'         => $this->event->url,
+            'address'     => $this->event->address->formatted,
+            'starts_at'   => $this->event->starts_at,
+            'finishes_at' => $this->event->finishes_at,
+            'image'       => $this->event->image->toArray(),
         ];
 
         $tickets->each(function ($ticket) use ($data) {

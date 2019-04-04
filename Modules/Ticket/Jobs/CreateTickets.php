@@ -23,7 +23,7 @@ class CreateTickets implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param \Modules\Order\Models\Order $order
+     * @param  \Modules\Order\Models\Order  $order
      */
     public function __construct(Order $order)
     {
@@ -38,12 +38,14 @@ class CreateTickets implements ShouldQueue
     public function handle()
     {
         $event_data = [
-            'event_id'  => $this->order->event->id,
-            'name'      => $this->order->event->name,
-            'url'       => $this->order->event->url,
-            'address'   => $this->order->event->address->formatted,
-            'starts_at' => $this->order->event->starts_at,
-            'image'     => $this->order->event->image->toArray(),
+            'event_id'    => $this->order->event->id,
+            'name'        => $this->order->event->name,
+            'status'      => $this->order->event->status,
+            'url'         => $this->order->event->url,
+            'address'     => $this->order->event->address->formatted,
+            'starts_at'   => $this->order->event->starts_at,
+            'finishes_at' => $this->order->event->finishes_at,
+            'image'       => $this->order->event->image->toArray(),
         ];
 
         $order_id = $this->order->id;

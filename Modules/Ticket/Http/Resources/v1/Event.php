@@ -20,13 +20,15 @@ class Event extends Resource
         $ticket = (new APIResourceManager())->setVersion(1, 'ticket');
 
         return [
-            'id'        => $this->id,
-            'event_id'  => $this->event_id,
-            'name'      => $this->name,
-            'url'       => $this->url,
-            'address'   => $this->address,
-            'starts_at' => $this->starts_at->format('d/m/Y H:i'),
-            'image'     => $ticket->resolve('Image')->make($this->image),
+            'id'          => $this->id,
+            'event_id'    => $this->event_id,
+            'name'        => $this->name,
+            'status'      => $this->status,
+            'url'         => $this->url,
+            'address'     => $this->address,
+            'starts_at'   => $this->starts_at->format('d/m/Y H:i'),
+            'finishes_at' => $this->finishes_at->format('d/m/Y H:i'),
+            'image'       => $ticket->resolve('Image')->make($this->image),
         ];
     }
 }
