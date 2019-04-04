@@ -103,8 +103,12 @@ class OrderRepository
         if (!$data['is_free']) {
             event(new OrderCreated($order->id));
         } else {
+            foreach ($order->bags as $bag) {
+                $this->incrementSold(Entrance::find($bag->entrance_id), $bag->amount);
+            }
             $order->status = Order::PAID;
             $order->save();
+            CreateTickets::dispatch($order);
         }
 
         return $order;
