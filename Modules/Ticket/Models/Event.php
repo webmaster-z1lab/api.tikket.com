@@ -26,6 +26,8 @@ class Event extends Model
         'starts_at',
     ];
 
+    protected $dates = ['starts_at'];
+
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */

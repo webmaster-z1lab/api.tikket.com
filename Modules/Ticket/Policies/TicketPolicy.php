@@ -22,9 +22,7 @@ class TicketPolicy
         }
 
         return Ticket::whereKey($ticket)->whereHas('order', function ($query) use ($user) {
-            $query->where('costumer.user_id', $user->id)
-                ->orWhere('sale_point.user_id', $user->id)
-                ->orWhere('administrator.user_id', $user->id);
+            $query->where('costumer.user_id', $user->id);
         })->exists();
     }
 
