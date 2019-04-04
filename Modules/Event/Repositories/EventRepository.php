@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Modules\Event\Jobs\DeletePermissions;
 use Modules\Event\Models\Event;
 use Modules\Event\Models\Permission;
-use Modules\Ticket\Jobs\UpdateTickets;
+use Modules\Ticket\Jobs\UpdateEventInfo;
 use Z1lab\JsonApi\Repositories\ApiRepository;
 
 class EventRepository extends ApiRepository
@@ -95,7 +95,7 @@ class EventRepository extends ApiRepository
         $this->setCacheKey($id);
         $this->flush()->remember($event);
 
-        if ($event->is_locked) UpdateTickets::dispatch($event);
+        if ($event->is_locked) UpdateEventInfo::dispatch($event);
 
         return $event;
     }
@@ -155,7 +155,7 @@ class EventRepository extends ApiRepository
 
         $address->coordinate()->create(['location' => $data['coordinate']]);
 
-        if ($event->is_locked) UpdateTickets::dispatch($event);
+        if ($event->is_locked) UpdateEventInfo::dispatch($event);
 
         $this->setCacheKey($id);
         $this->flush()->remember($event);
@@ -255,7 +255,7 @@ class EventRepository extends ApiRepository
             $this->setCacheKey($id);
             $this->flush()->remember($event);
 
-            UpdateTickets::dispatch($event);
+            UpdateEventInfo::dispatch($event);
 
             return $event;
         }

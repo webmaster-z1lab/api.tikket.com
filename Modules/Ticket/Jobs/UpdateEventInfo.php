@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Event\Models\Event;
 use Modules\Ticket\Models\Ticket;
 
-class UpdateTickets implements ShouldQueue
+class UpdateEventInfo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

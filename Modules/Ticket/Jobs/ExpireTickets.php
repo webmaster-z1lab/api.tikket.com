@@ -3,40 +3,39 @@
 namespace Modules\Ticket\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Modules\Order\Models\Order;
 use Modules\Ticket\Models\Ticket;
 
-class DeleteTickets implements ShouldQueue
+class ExpireTickets implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     /**
-     * @var \Modules\Order\Models\Order
+     * @var string
      */
-    private $order;
+    private $event_id;
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param  string  $event_id
      */
-    public function __construct(Order $order)
+    public function __construct(string $event_id)
     {
-        $this->order = $order;
+        $this->event_id = $event_id;
     }
 
     /**
      * Execute the job.
      *
      * @return void
-     * @throws \Exception
      */
     public function handle()
     {
-        Ticket::where('order_id', $this->order->id)->delete();
+        Ticket::where('status', Ticket::VALID)
+            ->where('event.event_id', $this->event_id)
+            ->update(['status' => Ticket::EXPIRED]);
     }
 }
