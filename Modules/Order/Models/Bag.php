@@ -2,7 +2,7 @@
 
 namespace Modules\Order\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 /**
  * Class Bag
