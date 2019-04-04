@@ -12,24 +12,30 @@ use Modules\Order\Models\Order;
  *
  * @package Modules\Ticket\Models
  *
- * @property string                             order_id
- * @property string                             entrance_id
- * @property string                             name
- * @property string                             lot
- * @property string                             code
- * @property string                             status
+ * @property string order_id
+ * @property string entrance_id
+ * @property string name
+ * @property string lot
+ * @property string code
+ * @property string status
  * @property \Modules\Ticket\Models\Participant participant
- * @property \Modules\Ticket\Models\Event       event
- * @property \Modules\Order\Models\Order        order
- * @property \Modules\Event\Models\Entrance     entrance
- * @property-read \Carbon\Carbon                created_at
- * @property-read \Carbon\Carbon                updated_at
+ * @property \Modules\Ticket\Models\Event event
+ * @property \Modules\Order\Models\Order order
+ * @property \Modules\Event\Models\Entrance entrance
+ * @property-read \Carbon\Carbon created_at
+ * @property-read \Carbon\Carbon updated_at
  */
 class Ticket extends Model
 {
     use SoftDeletes;
 
-    const CODE_LENGTH = 10;
+    public const CODE_LENGTH = 10;
+
+    public const VALID = 'valid';
+    public const CANCELLED = 'cancelled';
+    public const CHECKED_IN = 'checked in';
+    public const EXPIRED = 'expired';
+
 
     protected $fillable = [
         'name',
@@ -44,7 +50,8 @@ class Ticket extends Model
     ];
 
     protected $attributes = [
-        'first_owner' => TRUE
+        'first_owner' => TRUE,
+        'status'      => self::VALID,
     ];
 
     /**

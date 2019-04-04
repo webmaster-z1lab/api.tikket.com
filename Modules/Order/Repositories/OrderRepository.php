@@ -16,7 +16,7 @@ use Modules\Event\Models\Event;
 use Modules\Order\Events\OrderCreated;
 use Modules\Order\Models\Order;
 use Modules\Ticket\Jobs\CreateTickets;
-use Modules\Ticket\Jobs\DeleteTickets;
+use Modules\Ticket\Jobs\CancelTickets;
 
 class OrderRepository
 {
@@ -227,7 +227,7 @@ class OrderRepository
             if ($order->status === Order::PAID)
                 CreateTickets::dispatch($order);
             elseif ($order->status === Order::REVERSED)
-                DeleteTickets::dispatch($order);
+                CancelTickets::dispatch($order);
         }
 
         return $order;

@@ -15,7 +15,8 @@ class TicketController extends ApiController
     public function __construct(TicketRepository $repository)
     {
         parent::__construct($repository, 'Ticket');
-        $this->middleware(['auth', 'can:ticket_receiver,ticket']);
+        $this->middleware('auth');
+        $this->middleware('can:ticket_receiver,ticket')->except('index');
     }
 
     /**
