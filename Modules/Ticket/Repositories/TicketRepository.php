@@ -34,25 +34,21 @@ class TicketRepository extends ApiRepository
         $past = $past === 'false' ? FALSE : boolval($past);
 
         if ($past) {
-            return $this->model->where(function ($query) {
-                $query->where('event.status', Event::CANCELED)
-                    ->orWhere('event.status', Event::FINALIZED);
-            })->where(function ($query) {
-                $query->where('participant.email', \Auth::user()->email)
-                    ->orWhereHas('order', function ($query) {
-                        $query->where('costumer.user_id', Auth::id());
-                    });
-            })->latest()->get();
+            return $this->model->whereIn('event.status', [[Event::CANCELED, Event::FINALIZED]])
+                ->where(function ($query) {
+                    $query->where('participant.email', \Auth::user()->email)
+                        ->orWhereHas('order', function ($query) {
+                            $query->where('costumer.user_id', Auth::id());
+                        });
+                })->latest()->get();
         }
 
-        return $this->model->where(function ($query) {
-            $query->where('event.status', '<>', Event::CANCELED)
-                ->where('event.status', '<>', Event::FINALIZED);
-        })->where(function ($query) {
-            $query->where('participant.email', \Auth::user()->email)
-                ->orWhereHas('order', function ($query) {
-                    $query->where('costumer.user_id', \Auth::id());
-                });
-        })->latest()->get();
+        return $this->model->whereNotIn('event.status', [[Event::CANCELED, Event::FINALIZED]])
+            ->where(function ($query) {
+                $query->where('participant.email', \Auth::user()->email)
+                    ->orWhereHas('order', function ($query) {
+                        $query->where('costumer.user_id', \Auth::id());
+                    });
+            })->latest()->get();
     }
 }
