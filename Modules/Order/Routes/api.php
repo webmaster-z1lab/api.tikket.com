@@ -3,7 +3,7 @@
 Route::middleware('api.v:1,order')
     ->prefix('v1')
     ->group(function () {
-        Route::apiResource('orders', 'OrderController')->only(['store', 'show', 'destroy']);
+        Route::apiResource('orders', 'OrderController')->except(['update']);
 
         Route::patch('orders/{order}/status', 'OrderController@status')->name('orders.status');
 

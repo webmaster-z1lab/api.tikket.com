@@ -17,6 +17,7 @@ return [
         'cart'   => '1',
         'order'  => '1',
         'report' => '1',
+        'ticket' => '1',
     ],
 
     /*
@@ -35,6 +36,7 @@ return [
         'cart'   => 'Modules\Cart\Http\Resources',
         'order'  => 'Modules\Order\Http\Resources',
         'report' => 'Modules\Report\Http\Resources',
+        'ticket' => 'Modules\Ticket\Http\Resources',
     ],
 
     /*
@@ -52,6 +54,7 @@ return [
         'cart'   => '',
         'order'  => '',
         'report' => '',
+        'ticket' => '',
     ],
 
 ];

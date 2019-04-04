@@ -177,4 +177,12 @@ class Order extends Model
     {
         return $this->embedsOne(SalePoint::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actual_tickets()
+    {
+        return $this->hasMany(\Modules\Ticket\Models\Ticket::class);
+    }
 }

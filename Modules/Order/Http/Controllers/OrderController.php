@@ -39,6 +39,14 @@ class OrderController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function index()
+    {
+        return $this->collectResource($this->repository->getByUser());
+    }
+
+    /**
      * @param \Modules\Order\Http\Requests\OrderRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\Resource
@@ -58,7 +66,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        return $this->makeResource($this->repository->find($id));
+        return api_resource('DetailedOrder')->make($this->repository->find($id));
     }
 
     /**
@@ -92,5 +100,15 @@ class OrderController extends Controller
     private function makeResource($obj)
     {
         return api_resource($this->resource)->make($obj);
+    }
+
+    /**
+     * @param $obj
+     *
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    private function collectResource($obj)
+    {
+        return api_resource($this->resource)->collection($obj);
     }
 }

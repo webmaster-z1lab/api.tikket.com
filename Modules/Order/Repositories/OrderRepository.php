@@ -36,6 +36,14 @@ class OrderRepository
     }
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getByUser()
+    {
+        return Order::where('costumer.user_id', '79583c6c-f96c-4fc5-95b2-b81839435b89')->latest()->get();
+    }
+
+    /**
      * @param string $cart_id
      * @param string $ip
      *
