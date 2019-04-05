@@ -35,6 +35,8 @@ class OrderService
                         ->orWhere('costumer.email', 'LIKE', "%$search%");
                 })
                 ->latest()
+                ->skip(($page - 1) * self::PER_PAGE)
+                ->take(self::PER_PAGE)
                 ->get();
 
             $total = Order::where('event_id', $event_id)
@@ -49,6 +51,8 @@ class OrderService
             $results = Order::where('event_id', $event_id)
                 ->where('status', '<>', Order::CANCELED)
                 ->latest()
+                ->skip(($page - 1) * self::PER_PAGE)
+                ->take(self::PER_PAGE)
                 ->get();
 
             $total = Order::where('event_id', $event_id)
