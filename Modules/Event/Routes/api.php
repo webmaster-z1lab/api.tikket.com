@@ -38,6 +38,8 @@ Route::middleware('api.v:1,event')
             Route::apiResource('permissions', 'PermissionController')->except(['update']);
 
             Route::get('coupons', 'CouponController@getByEvent');
+
+            Route::get('search', 'SearchController@index');
         });
 
         Route::get('categories', 'CategoryController@index');

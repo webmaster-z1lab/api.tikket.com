@@ -58,7 +58,7 @@ class DetailedOrder extends Resource
                 'coupon'  => $this->when($this->resource->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL,
                     $event->resolve('Coupon')->make($this->resource->coupon)),
                 'tickets' => $this->when(in_array($this->resource->status, [\Modules\Order\Models\Order::PAID, \Modules\Order\Models\Order::REVERSED]),
-                    $ticket->resolve('Ticket')->collection($this->resource->actual_tickets()->withTrashed()->get())),
+                    $ticket->resolve('Ticket')->collection($this->resource->actual_tickets)),
             ],
         ];
     }

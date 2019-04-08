@@ -2,6 +2,8 @@
 
 namespace Modules\Event\Models;
 
+use Carbon\Carbon;
+use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
@@ -10,26 +12,26 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @package Modules\Event\Models
  *
- * @property string                                   name
- * @property string                                   url
- * @property string                                   description
- * @property string                                   body
- * @property string                                   category
- * @property string                                   types
- * @property string                                   referer
- * @property \Carbon\Carbon                           starts_at
- * @property \Carbon\Carbon                           finishes_at
- * @property integer                                  fee_percentage
- * @property bool                                     fee_is_hidden
- * @property bool                                     is_active
- * @property bool                                     is_public
- * @property bool                                     is_locked
+ * @property string name
+ * @property string url
+ * @property string description
+ * @property string body
+ * @property string category
+ * @property string types
+ * @property string referer
+ * @property \Carbon\Carbon starts_at
+ * @property \Carbon\Carbon finishes_at
+ * @property integer fee_percentage
+ * @property bool fee_is_hidden
+ * @property bool is_active
+ * @property bool is_public
+ * @property bool is_locked
  * @property \Illuminate\Database\Eloquent\Collection entrances
- * @property \Modules\Event\Models\Address            address
- * @property \Modules\Event\Models\Producer           producer
- * @property \Modules\Event\Models\Image              image
- * @property-read \Carbon\Carbon                      created_at
- * @property-read \Carbon\Carbon                      updated_at
+ * @property \Modules\Event\Models\Address address
+ * @property \Modules\Event\Models\Producer producer
+ * @property \Modules\Event\Models\Image image
+ * @property-read \Carbon\Carbon created_at
+ * @property-read \Carbon\Carbon updated_at
  */
 class Event extends Model
 {
@@ -126,5 +128,86 @@ class Event extends Model
     public function permissions()
     {
         return $this->hasMany(Permission::class);
+    }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     * @param  string|NULL  $value
+     *
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopeCity(Builder $query, string $value = NULL)
+    {
+        if (filled($value)) {
+            $data = explode('-', $value);
+
+            return $query->where('address.city', trim($data[0]))->where('address.state', trim($data[1]));
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     * @param  string|NULL  $period
+     *
+     * @return \Illuminate\Database\Query\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopePeriod(Builder $query, string $period = NULL)
+    {
+        $start = today()->startOfDay();
+        $end = today()->endOfDay();
+        switch ($period) {
+            case 'today':
+                break;
+            case 'tomorrow':
+                $start->addDay();
+                $end->addDay();
+                break;
+            case 'this_week':
+                $start->startOfWeek();
+                $end->endOfWeek();
+                break;
+            case 'this_weekend':
+                if ($start->isSunday())
+                    break;
+                elseif ($start->isFriday() || $start->isSaturday())
+                    $end->endOfWeek();
+                else {
+                    $start->next(Carbon::FRIDAY);
+                    $end->endOfWeek();
+                }
+                break;
+            case 'next_week':
+                $start->startOfWeek()->next();
+                $end->endOfWeek()->next();
+                break;
+            case 'this_month':
+                $start->startOfMonth();
+                $end->endOfMonth();
+                break;
+            case 'next_month':
+                $start->addMonth()->startOfMonth();
+                $end->addMonth()->endOfMonth();
+                break;
+            default:
+                return $query;
+        }
+
+        return $query->whereBetween('starts_at', [$start, $end]);
+    }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     * @param  string|NULL  $keywords
+     *
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $keywords = NULL)
+    {
+        if (filled($keywords))
+            return $query->whereRaw(['$text' => ['$search' => $keywords]]);
+
+        return $query;
     }
 }
