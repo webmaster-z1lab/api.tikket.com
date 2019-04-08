@@ -2,10 +2,13 @@
 
 namespace Modules\Ticket\Http\Resources\v1;
 
+use App\Traits\MaskTrait;
 use Illuminate\Http\Resources\Json\Resource;
 
 class Participant extends Resource
 {
+    use MaskTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -18,7 +21,7 @@ class Participant extends Resource
         return [
             'id'       => $this->id,
             'name'     => $this->name,
-            'document' => $this->document,
+            'document' => $this->mask($this->document, '###.###.###-##'),
             'email'    => $this->email,
         ];
     }
