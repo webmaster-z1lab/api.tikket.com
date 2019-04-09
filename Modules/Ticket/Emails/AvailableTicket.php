@@ -1,28 +1,28 @@
 <?php
 
-namespace Modules\Order\Emails;
+namespace Modules\Ticket\Emails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Modules\Order\Models\Order;
+use Modules\Ticket\Models\Ticket;
 
-class OrderReversed extends Mailable
+class AvailableTicket extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var \Modules\Order\Models\Order
+     * @var \Modules\Ticket\Models\Ticket
      */
-    public $order;
+    public $ticket;
 
     /**
      * @var array
      */
     public $url = [
         'link' => 'https://tikket.com.br',
-        'text' => 'Refazer compra',
+        'text' => 'Ir para o ingresso',
     ];
 
     /**
@@ -30,24 +30,24 @@ class OrderReversed extends Mailable
      */
     public $image = [
         'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_alert.png',
-        'text'   => 'Estorno realizado com sucesso',
+        'text'   => 'Ingresso disponível no site',
     ];
 
     /**
      * @var string
      */
-    public $subject = 'Estorno do pedido';
+    public $subject = 'Ingresso disponível no site';
 
-    public $description = 'O estorno do seu pedido foi realizado com sucesso';
+    public $description = 'O seu ingresso já está disponível no site.';
 
     /**
-     * NeedsUpdatePayment constructor.
+     * Create a new message instance.
      *
-     * @param $order
+     * @return void
      */
-    public function __construct($order)
+    public function __construct(Ticket $ticket)
     {
-        $this->order = $order;
+        $this->ticket = $ticket;
     }
 
     /**
@@ -57,6 +57,6 @@ class OrderReversed extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order.order-reversed');
+        return $this->view('view.name');
     }
 }

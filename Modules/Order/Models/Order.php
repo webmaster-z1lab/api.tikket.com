@@ -12,22 +12,23 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Order\Models
  *
- * @property string                                   status
- * @property string                                   amount
- * @property string                                   fee
- * @property string                                   hash
- * @property string                                   ip
- * @property string                                   type
- * @property string                                   channel
- * @property integer                                  fee_percentage
- * @property boolean                                  fee_is_hidden
- * @property \Modules\Order\Models\Costumer           costumer
- * @property \Modules\Order\Models\Card               card
+ * @property string status
+ * @property integer amount
+ * @property integer fee
+ * @property integer discount
+ * @property string hash
+ * @property string ip
+ * @property string type
+ * @property string channel
+ * @property integer fee_percentage
+ * @property boolean fee_is_hidden
+ * @property \Modules\Order\Models\Costumer costumer
+ * @property \Modules\Order\Models\Card card
  * @property \Illuminate\Database\Eloquent\Collection bags
  * @property \Illuminate\Database\Eloquent\Collection tickets
- * @property \Modules\Event\Models\Event              event
- * @property-read \Carbon\Carbon                      created_at
- * @property-read \Carbon\Carbon                      updated_at
+ * @property \Modules\Event\Models\Event event
+ * @property-read \Carbon\Carbon created_at
+ * @property-read \Carbon\Carbon updated_at
  *
  * @method $this paid()
  * @method $this processed()
@@ -55,8 +56,8 @@ class Order extends Model
     public const REVERSED = 'reversed';
 
     public const ONLINE_CHANNEL = 'online';
-    public const PDV_CHANNEL = 'pdv';
-    public const ADMIN_CHANNEL = 'admin';
+    public const PDV_CHANNEL    = 'pdv';
+    public const ADMIN_CHANNEL  = 'admin';
 
     protected $fillable = [
         'status',
@@ -80,7 +81,8 @@ class Order extends Model
     ];
 
     protected $attributes = [
-        'status' => 'waiting',
+        'status'   => 'waiting',
+        'discount' => 0,
     ];
 
     /**
@@ -105,7 +107,7 @@ class Order extends Model
 
     /**
      * @param        $query
-     * @param string $document
+     * @param  string  $document
      *
      * @return $this
      */

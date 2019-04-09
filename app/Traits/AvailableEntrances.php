@@ -11,6 +11,7 @@ namespace App\Traits;
 
 use Modules\Event\Jobs\LockEntrance;
 use Modules\Event\Jobs\LockEvent;
+use Modules\Event\Jobs\RunningOutLot;
 use Modules\Event\Models\Entrance;
 
 trait AvailableEntrances
@@ -72,6 +73,9 @@ trait AvailableEntrances
 
         $entrance->available->increment(Entrance::SOLD, $value);
         $entrance->available->decrement($source, $value);
+
+        if ((($entrance->available->available * 10) <= $entrance->available->amount) && !$entrance->available->was_advised)
+            RunningOutLot::dispatch($entrance);
     }
 
     /**

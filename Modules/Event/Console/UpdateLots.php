@@ -3,8 +3,10 @@
 namespace Modules\Event\Console;
 
 use Illuminate\Console\Command;
+use Modules\Event\Emails\LotChanged;
 use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Lot;
+use Modules\Event\Models\Permission;
 
 class UpdateLots extends Command
 {
@@ -75,6 +77,12 @@ class UpdateLots extends Command
                         'starts_at'   => $current->finishes_at->addSecond(),
                         'finishes_at' => $next->finishes_at,
                     ]);
+
+                    $admins = $entrance->event->permissions()->whereIn('type', [Permission::ORGANIZER, Permission::MASTER])->get();
+                    /** @var \Modules\Event\Models\Permission $admin */
+                    foreach ($admins as $admin) {
+                        \Mail::to($admin->email)->send(new LotChanged($entrance));
+                    }
                 }
             }
         }

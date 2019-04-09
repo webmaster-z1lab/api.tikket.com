@@ -1,15 +1,14 @@
 <?php
 
-namespace Modules\Event\Emails;
+namespace Modules\Report\Emails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Event\Models\Event;
-use Modules\Ticket\Models\Ticket;
 
-class EventSoon extends Mailable
+class DiaryReport extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,34 +18,40 @@ class EventSoon extends Mailable
     public $event;
 
     /**
-     * @var \Modules\Ticket\Models\Ticket
+     * @var array
      */
-    private $ticket;
-
     public $url = [
         'link' => 'https://tikket.com.br',
-        'text' => 'Evento ocorrerá em breve',
+        'text' => 'Relatório diário',
     ];
 
+    /**
+     * @var array
+     */
     public $image = [
-        'source' => '',
-        'text'   => 'Ir para o evento',
+        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_super_thank_you.png',
+        'text'   => 'Relatório diário',
     ];
 
-    public $subject = 'Lembrete de evento';
+    /**
+     * @var string
+     */
+    public $subject = 'Relatório diário';
 
-    public $description = 'O evento irá acontecer em breve, não esqueça.';
+    /**
+     * @var string
+     */
+    public $description = 'Relatório diário.';
+
 
     /**
      * Create a new message instance.
      *
      * @param  \Modules\Event\Models\Event  $event
-     * @param  \Modules\Ticket\Models\Ticket  $ticket
      */
-    public function __construct(Event $event, Ticket $ticket)
+    public function __construct(Event $event)
     {
         $this->event = $event;
-        $this->ticket = $ticket;
     }
 
     /**
@@ -56,6 +61,6 @@ class EventSoon extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.event.reminder');
+        return $this->view('emails.report.diary-report');
     }
 }

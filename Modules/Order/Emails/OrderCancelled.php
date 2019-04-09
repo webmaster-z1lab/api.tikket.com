@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Modules\Order\Models\Order;
 
-class OrderReversed extends Mailable
+class OrderCancelled extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,15 +29,15 @@ class OrderReversed extends Mailable
      */
     public $image = [
         'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_alert.png',
-        'text'   => 'Estorno realizado com sucesso',
+        'text'   => 'Pedido cancelado',
     ];
 
     /**
      * @var string
      */
-    public $subject = 'Estorno do pedido';
+    public $subject = 'Pedido cancelado';
 
-    public $description = 'O estorno do seu pedido foi realizado com sucesso';
+    public $description = 'Seu pedido foi cancelado.';
 
     /**
      * NeedsUpdatePayment constructor.
@@ -57,6 +56,6 @@ class OrderReversed extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.order.order-reversed');
+        return $this->view('emails.order.order-canceled');
     }
 }
