@@ -66,7 +66,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        return api_resource('DetailedOrder')->make($this->repository->find($id));
+        return api_resource('Order')->make($this->repository->find($id));
     }
 
     /**

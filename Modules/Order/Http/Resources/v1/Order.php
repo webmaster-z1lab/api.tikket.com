@@ -4,7 +4,15 @@ namespace Modules\Order\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\Resource;
 use Juampi92\APIResources\APIResourceManager;
+use Modules\Order\Models\Order as Model;
 
+/**
+ * Class DetailedOrder
+ *
+ * @package Modules\Order\Http\Resources\v1
+ *
+ * @property \Modules\Order\Models\Order $resource
+ */
 class Order extends Resource
 {
     /**
@@ -13,40 +21,51 @@ class Order extends Resource
      * @param  \Illuminate\Http\Request
      *
      * @return array
-     * @throws \Exception
+     * @throws \Juampi92\APIResources\Exceptions\ResourceNotFoundException
      */
     public function toArray($request)
     {
         $order = (new APIResourceManager())->setVersion(1, 'order');
         $event = (new APIResourceManager())->setVersion(1, 'event');
+        $ticket = (new APIResourceManager())->setVersion(1, 'ticket');
 
         return [
-            'id'            => $this->id,
+            'id'            => $this->resource->id,
             'types'         => 'orders',
             'attributes'    => [
-                'status'         => $this->status,
-                'amount'         => $this->amount,
-                'discount'       => $this->discount,
-                'fee'            => $this->fee,
-                'channel'        => $this->channel,
-                'created_at'     => $this->created_at->format('d/m/Y H:i'),
-                'updated_at'     => $this->updated_at->toW3cString(),
-                'hash'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->hash),
-                'ip'             => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->ip),
-                'type'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $this->type),
-                'transaction_id' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->transaction_id !== NULL, $this->transaction_id),
-                'costumer'       => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL, $order->resolve('Costumer')->make($this->costumer)),
-                'card'           => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL &&
-                    ends_with($this->type, 'card'), $order->resolve('Card')->make($this->card)),
-                'sale_point'     => $this->when($this->channel === \Modules\Order\Models\Order::PDV_CHANNEL, $order->resolve('SalePoint')->make($this->sale_point)),
-                'administrator'  => $this->when($this->channel === \Modules\Order\Models\Order::ADMIN_CHANNEL,
-                    $order->resolve('SalePoint')->make($this->administrator)),
-                'tickets'        => $order->resolve('Ticket')->collection($this->tickets),
-                'event'        => $order->resolve('Event')->make($this->event),
+                'code'     => $this->resource->code,
+                'status'     => $this->resource->status,
+                'amount'     => $this->resource->amount,
+                'discount'   => $this->resource->discount,
+                'fee'        => $this->resource->fee,
+                'channel'    => $this->resource->channel,
+                'created_at' => $this->resource->created_at->format('d/m/Y H:i'),
+                'updated_at' => $this->resource->updated_at->toW3cString(),
+                'tickets'    => $order->resolve('Ticket')->collection($this->resource->tickets),
+                'event'      => $order->resolve('Event')->make($this->resource->event),
+
+                $this->mergeWhen($this->resource->channel === Model::ONLINE_CHANNEL, [
+                    'hash'           => $this->resource->hash,
+                    'ip'             => $this->resource->ip,
+                    'type'           => $this->resource->type,
+                    'costumer'       => $order->resolve('Costumer')->make($this->resource->costumer),
+                    'transaction_id' => $this->when($this->resource->transaction_id !== NULL, $this->resource->transaction_id),
+                    'card'           => $this->when(ends_with($this->resource->type, 'card'),
+                        $order->resolve('Card')->make($this->resource->card)),
+                ]),
+
+                'sale_point' => $this->when($this->resource->channel === Model::PDV_CHANNEL,
+                    $order->resolve('SalePoint')->make($this->resource->sale_point)),
+
+                'administrator' => $this->when($this->resource->channel === Model::ADMIN_CHANNEL,
+                    $order->resolve('SalePoint')->make($this->resource->administrator)),
             ],
             'relationships' => [
-                'coupon' => $this->when($this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL && $this->coupon !== NULL,
-                    $event->resolve('Coupon')->make($this->coupon)),
+                'coupon' => $this->when($this->resource->channel === Model::ONLINE_CHANNEL && $this->resource->coupon !== NULL,
+                    $event->resolve('Coupon')->make($this->resource->coupon)),
+
+                'actual_tickets' => $this->when(in_array($this->resource->status, [Model::PAID, Model::REVERSED]),
+                    $ticket->resolve('Ticket')->collection($this->resource->actual_tickets)),
             ],
         ];
     }

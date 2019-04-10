@@ -12,22 +12,30 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Order\Models
  *
- * @property string                                   status
- * @property string                                   amount
- * @property string                                   fee
- * @property string                                   hash
- * @property string                                   ip
- * @property string                                   type
- * @property string                                   channel
- * @property integer                                  fee_percentage
- * @property boolean                                  fee_is_hidden
- * @property \Modules\Order\Models\Costumer           costumer
- * @property \Modules\Order\Models\Card               card
+ * @property string id
+ * @property string transaction_id
+ * @property string status
+ * @property string amount
+ * @property string fee
+ * @property string hash
+ * @property string ip
+ * @property string type
+ * @property string channel
+ * @property string code
+ * @property integer discount
+ * @property integer fee_percentage
+ * @property boolean fee_is_hidden
+ * @property \Modules\Order\Models\Costumer costumer
+ * @property \Modules\Order\Models\Card card
+ * @property \Modules\Event\Models\Coupon coupon
+ * @property \Modules\Order\Models\SalePoint sale_point
+ * @property \Modules\Order\Models\SalePoint administrator
  * @property \Illuminate\Database\Eloquent\Collection bags
  * @property \Illuminate\Database\Eloquent\Collection tickets
- * @property \Modules\Event\Models\Event              event
- * @property-read \Carbon\Carbon                      created_at
- * @property-read \Carbon\Carbon                      updated_at
+ * @property \Modules\Ticket\Models\Ticket actual_tickets
+ * @property \Modules\Event\Models\Event event
+ * @property-read \Carbon\Carbon created_at
+ * @property-read \Carbon\Carbon updated_at
  *
  * @method $this paid()
  * @method $this processed()
@@ -55,10 +63,13 @@ class Order extends Model
     public const REVERSED = 'reversed';
 
     public const ONLINE_CHANNEL = 'online';
-    public const PDV_CHANNEL = 'pdv';
-    public const ADMIN_CHANNEL = 'admin';
+    public const PDV_CHANNEL    = 'pdv';
+    public const ADMIN_CHANNEL  = 'admin';
+
+    public const CODE_LENGTH = 8;
 
     protected $fillable = [
+        'code',
         'status',
         'amount',
         'discount',
@@ -105,7 +116,7 @@ class Order extends Model
 
     /**
      * @param        $query
-     * @param string $document
+     * @param  string  $document
      *
      * @return $this
      */
