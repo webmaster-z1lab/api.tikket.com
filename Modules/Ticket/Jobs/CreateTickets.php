@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Str;
 use Modules\Order\Models\Order;
+use Modules\Ticket\Emails\AvailableTicket;
 use Modules\Ticket\Models\Ticket;
 
 class CreateTickets implements ShouldQueue
@@ -64,15 +65,18 @@ class CreateTickets implements ShouldQueue
             $ticket->save();
 
             $ticket->participant()->create([
-                'name'     => $participant->name,
-                'document' => $participant->document,
-                'email'    => $participant->email,
+                'name'     => filled($participant->name) ? $participant->name : NULL,
+                'document' => filled($participant->document) ? $participant->document : NULL,
+                'email'    => filled($participant->email) ? $participant->email : NULL,
             ]);
 
             /** @var \Modules\Ticket\Models\Event $event */
             $event = $ticket->event()->create(array_except($event_data, ['image']));
 
             $event->image()->create($event_data['image']);
+
+            if ($ticket->participant->email !== NULL)
+                \Mail::to($ticket->participant->email)->send(new AvailableTicket($ticket));
         });
     }
 }

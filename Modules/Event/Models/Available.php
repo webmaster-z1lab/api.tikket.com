@@ -9,33 +9,35 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Event\Models
  *
- * @property integer             lot
- * @property string              lot_id
- * @property integer             available
- * @property integer             reserved
- * @property integer             waiting
- * @property integer             sold
- * @property integer             amount
- * @property integer             remainder
- * @property integer             value
- * @property integer             fee
- * @property integer             price
- * @property boolean             is_sold_out
- * @property boolean             is_active
- * @property \Carbon\Carbon      starts_at
- * @property \Carbon\Carbon      finishes_at
+ * @property integer lot
+ * @property string lot_id
+ * @property integer available
+ * @property integer reserved
+ * @property integer waiting
+ * @property integer sold
+ * @property integer amount
+ * @property integer remainder
+ * @property integer value
+ * @property integer fee
+ * @property integer price
+ * @property boolean is_sold_out
+ * @property boolean is_active
+ * @property boolean was_advised
+ * @property \Carbon\Carbon starts_at
+ * @property \Carbon\Carbon finishes_at
  * @property-read \Carbon\Carbon created_at
  * @property-read \Carbon\Carbon updated_at
  */
 class Available extends Model
 {
-    const STATUS_ACTIVE = TRUE;
+    const STATUS_ACTIVE   = TRUE;
     const STATUS_SOLD_OUT = FALSE;
-    const QNT_RESERVED = 0;
-    const QNT_WAITING = 0;
-    const QNT_SOLD = 0;
-    const QNT_AMOUNT = 0;
-    const QNT_REMAINDER = 0;
+    const QNT_RESERVED    = 0;
+    const QNT_WAITING     = 0;
+    const QNT_SOLD        = 0;
+    const QNT_AMOUNT      = 0;
+    const QNT_REMAINDER   = 0;
+    const WAS_ADVISED         = FALSE;
 
     protected $fillable = [
         'lot_id',
@@ -63,6 +65,7 @@ class Available extends Model
         'remainder'   => self::QNT_REMAINDER,
         'is_active'   => self::STATUS_ACTIVE,
         'is_sold_out' => self::STATUS_SOLD_OUT,
+        'was_advised'     => self::WAS_ADVISED,
     ];
 
     protected $casts = [
@@ -77,6 +80,7 @@ class Available extends Model
         'price'     => 'integer',
         'is_active' => 'boolean',
         'lot'       => 'integer',
+        'advised'   => 'boolean',
     ];
 
     protected $dates = [

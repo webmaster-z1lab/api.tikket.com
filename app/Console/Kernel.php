@@ -27,6 +27,15 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('entrance:update-lots')
                   ->dailyAt('00:00');
+
+        $schedule->command('event:upcoming')
+            ->dailyAt('08:00');
+
+        $schedule->command('event:diary-report')
+            ->dailyAt('08:00');
+
+        $schedule->command('entrance:running-out-lot')
+            ->dailyAt('08:00');
     }
 
     /**

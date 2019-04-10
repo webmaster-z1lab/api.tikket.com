@@ -91,7 +91,8 @@ class Order extends Model
     ];
 
     protected $attributes = [
-        'status' => 'waiting',
+        'status'   => 'waiting',
+        'discount' => 0,
     ];
 
     /**

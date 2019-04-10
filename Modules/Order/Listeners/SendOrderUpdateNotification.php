@@ -4,9 +4,14 @@ namespace Modules\Order\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Modules\Order\Emails\OrderApproved;
-use Modules\Order\Emails\OrderFailed;;
+use Modules\Order\Emails\OrderCancelled;
+use Modules\Order\Emails\OrderFailed;
+
+;
+
 use Modules\Order\Emails\OrderReversed;
 use Modules\Order\Events\StatusChanged;
+use Modules\Order\Models\Order;
 
 class SendOrderUpdateNotification implements ShouldQueue
 {
@@ -18,43 +23,40 @@ class SendOrderUpdateNotification implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  StatusChanged $event
+     * @param  StatusChanged  $event
      *
      * @return void
      */
     public function handle(StatusChanged $event)
     {
-        if (NULL !== $event->getOldStatus()) {
-            $this->order = $event->getOrder();
+        $order = $event->getOrder();
 
+        if (filled(optional($order->costumer)->email)) {
             $method = camel_case($event->getStatus());
 
-            if (method_exists($this, $method)) $this->$method($event->getOldStatus());
+            if (method_exists($this, $method)) {
+                $this->$method($event->getOrder());
+            }
         }
     }
 
-    /**
-     * @param string $oldStatus
-     */
-    protected function active(string $oldStatus)
+    protected function paid(Order $order)
     {
-        \Mail::to($this->order->costumer->email)->send(new OrderApproved($this->order));
+        \Mail::to($order->costumer->email)->send(new OrderApproved($this->order));
     }
 
-    /**
-     * @param string $oldStatus
-     */
-    protected function canceled(string $oldStatus)
+    protected function canceled(Order $order)
     {
-        \Mail::to($this->order->costumer->email)->send(new OrderFailed($this->order));
+        \Mail::to($order->costumer->email)->send(new OrderFailed($this->order));
 
     }
 
-    /**
-     * @param string $oldStatus
-     */
-    protected function reversed(string $oldStatus)
+    protected function reversed(Order $order)
     {
-        \Mail::to($this->order->costumer->email)->send(new OrderReversed($this->order));
+        if (($order->amount + $order->fee - ($order->discount ?? 0)) > 0) {
+            \Mail::to($order->costumer->email)->send(new OrderReversed($this->order));
+        } else {
+            \Mail::to($order->costumer->email)->send(new OrderCancelled($this->order));
+        }
     }
 }

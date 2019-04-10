@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Modules\Order\Models\Order;
+use Modules\Ticket\Emails\CancelledTicket;
 use Modules\Ticket\Models\Ticket;
 
 class CancelTickets implements ShouldQueue
@@ -38,5 +39,13 @@ class CancelTickets implements ShouldQueue
     public function handle()
     {
         Ticket::where('order_id', $this->order->id)->update(['status' => Ticket::CANCELLED]);
+
+        $tickets = Ticket::where('order_id', $this->order->id)->get();
+
+        /** @var \Modules\Ticket\Models\Ticket $ticket */
+        foreach ($tickets as $ticket) {
+            if (filled(optional($ticket->participant)->email) && $ticket->participant->email !== optional($ticket->order->costumer)->email)
+                \Mail::to($ticket->participant->email)->send(new CancelledTicket($ticket));
+        }
     }
 }
