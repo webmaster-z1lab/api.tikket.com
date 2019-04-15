@@ -210,4 +210,18 @@ class Event extends Model
 
         return $query;
     }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     * @param  string|NULL  $category
+     *
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopeCategory(Builder $query, string $category = NULL)
+    {
+        if (filled($category))
+            return $query->where('category', $category);
+
+        return $query;
+    }
 }
