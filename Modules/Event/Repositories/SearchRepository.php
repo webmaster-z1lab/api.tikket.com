@@ -35,4 +35,16 @@ class SearchRepository
 
         return $this->paginate($results, $total, self::PER_PAGE, $page);
     }
+
+    /**
+     * @return array
+     */
+    public function user_ip()
+    {
+        $user_ip = getenv('REMOTE_ADDR');
+
+        return \Cache::rememberForever($user_ip, function () use ($user_ip) {
+            return json_decode(file_get_contents("https://extreme-ip-lookup.com/json/$user_ip"));
+        });
+    }
 }

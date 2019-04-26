@@ -3,6 +3,8 @@
 Route::middleware('api.v:1,event')
     ->prefix('v1')
     ->group(function () {
+        Route::get('actions/user_ip', 'SearchController@getGeoIp');
+
         Route::apiResource('coupons', 'CouponController')->except(['index']);
 
         Route::apiResource('events', 'EventController')->except(['show']);

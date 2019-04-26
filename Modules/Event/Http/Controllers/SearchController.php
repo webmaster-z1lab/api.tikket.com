@@ -33,6 +33,14 @@ class SearchController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getGeoIp()
+    {
+        return response()->json($this->repository->user_ip(), 200);
+    }
+
+    /**
      * @param $obj
      *
      * @return \Illuminate\Http\Resources\Json\Resource
