@@ -38,7 +38,7 @@ class EntrancesRequest extends ApiFormRequest
                 'lots' => 'bail|required|array|min:1',
 
                 'lots.*.amount'      => 'bail|required|integer|min:1',
-                'lots.*.value'       => 'bail|required_if:is_free,false|numeric|min:1',
+                'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:1',
                 'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after_or_equal:starts_at',
             ];
 
@@ -53,7 +53,7 @@ class EntrancesRequest extends ApiFormRequest
             'lots' => 'bail|required|array|min:1',
 
             'lots.*.amount'      => 'bail|required|integer|min:1',
-            'lots.*.value'       => 'bail|required_if:is_free,false|numeric|min:1',
+            'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:1',
             'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after_or_equal:starts_at',
         ];
     }
