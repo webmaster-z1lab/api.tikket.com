@@ -23,6 +23,7 @@ class SearchRepository
             ->search(\Request::query('keywords'))
             ->city(\Request::query('city'))
             ->period(\Request::query('period'))
+            ->category(\Request::query('category'))
             ->skip(($page - 1) * self::PER_PAGE)
             ->take(self::PER_PAGE)
             ->get();
@@ -31,6 +32,7 @@ class SearchRepository
             ->search(\Request::query('keywords'))
             ->city(\Request::query('city'))
             ->period(\Request::query('period'))
+            ->category(\Request::query('category'))
             ->count();
 
         return $this->paginate($results, $total, self::PER_PAGE, $page);
