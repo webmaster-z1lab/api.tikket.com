@@ -74,6 +74,7 @@ class EntrancesRequest extends ApiFormRequest
 
             if (\Request::isMethod('POST') || in_array($event->status, [Event::DRAFT, Event::COMPLETED])) {
                 $start = Carbon::createFromFormat('Y-m-d', $this->starts_at)->startOfDay();
+
                 if (!$event->starts_at->gte($start))
                     $validator->errors()->add('starts_at', 'The start must be before event start');
                 else {

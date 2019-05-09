@@ -66,7 +66,7 @@ class EntranceRepository
         foreach ($data['lots'] as $key => $lot) {
             $lot['number'] = $key + 1;
             $lot['value'] = (int)($lot['value'] * 100);
-            $lot['fee'] = max((int)($lot['value'] / 10), Lot::MIN_FEE);
+            $lot['fee'] = $this->calcFee($entrance, $lot['value']);
             $lot['starts_at'] = $previous;
             $lot['finishes_at'] = Carbon::createFromFormat('Y-m-d', $lot['finishes_at'])->endOfDay();
             if ($event->starts_at->isSameDay($lot['finishes_at'])) {
@@ -80,11 +80,12 @@ class EntranceRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $event
-     * @param string $id
+     * @param  array  $data
+     * @param  string  $event
+     * @param  string  $id
      *
-     * @return \Modules\Event\Models\Event
+     * @return \Modules\Event\Models\Event|null
+     * @throws \Exception
      */
     public function update(array $data, string $event, string $id)
     {
@@ -95,10 +96,9 @@ class EntranceRepository
         /** @var \Modules\Event\Models\Entrance $entrance */
         $entrance = $event->entrances()->find($id);
 
-        if ($entrance->is_locked)
-            $entrance->update(['description' => $data['description']]);
-        else
-            $entrance->update(array_except($data, ['lots']));
+        $entrance->is_locked
+            ? $entrance->update(['description' => $data['description']])
+            : $entrance->update(array_except($data, ['lots']));
 
         $current_lot = $entrance->available->lot;
 
@@ -109,12 +109,12 @@ class EntranceRepository
                 continue;
             } else {
                 $data['lots'][$i]['value'] = (int)(floatval($data['lots'][$i]['value']) * 100);
-                $data['lots'][$i]['fee'] = max((int)($data['lots'][$i]['value'] / 10), Lot::MIN_FEE);
+                $data['lots'][$i]['fee'] = $this->calcFee($entrance, $data['lots'][$i]['value']);
                 $data['lots'][$i]['finishes_at'] = Carbon::createFromFormat('Y-m-d', $data['lots'][$i]['finishes_at'])->endOfDay();
                 $data['lots'][$i]['starts_at'] = $previous;
-                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at'])) {
+
+                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at']))
                     $data['lots'][$i]['finishes_at'] = $event->starts_at->subHours(3);
-                }
 
                 if ($lot->update($data['lots'][$i]) && ($i + 1) === $current_lot)
                     UpdateAvailableLot::dispatch($entrance);
@@ -204,5 +204,18 @@ class EntranceRepository
         if (NULL === $entrance) abort(404);
 
         return $entrance;
+    }
+
+    /**
+     * @param  \Modules\Event\Models\Entrance  $entrance
+     * @param  int  $value
+     *
+     * @return int|void
+     */
+    private function calcFee($entrance, int $value)
+    {
+        if(!$entrance->is_free) return max((int)($value / 10), Lot::MIN_FEE);
+
+        return 0;
     }
 }

@@ -29,10 +29,11 @@ trait PaginateTrait
         $options['path'] = \Request::url();
 
         $query = \Request::query();
+
         if (NULL !== $query) {
             $query = Arr::except($query, 'page');
-            if (filled($query))
-                $options['query'] = $query;
+
+            if (filled($query)) $options['query'] = $query;
         }
 
         return new LengthAwarePaginator($items, $total, $perPage, $page, $options);
