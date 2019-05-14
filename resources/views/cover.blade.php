@@ -12,11 +12,11 @@
     <meta name="site_name" content="tikket.com">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="https://cdn.z1lab.com.br/images/quantofica/favicon.png">
+    <link rel="shortcut icon" href="https://d35c048n9fix3e.cloudfront.net/images/quantofica/favicon.png">
     <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.z1lab.com.br/template/front/2.0.1/css/theme.min.css">
+    <link rel="stylesheet" href="https://d35c048n9fix3e.cloudfront.net/template/front/2.0.1/css/theme.min.css">
 </head>
 <body class="gradient-half-primary-body-v1 mb-lg-0">
 
@@ -26,7 +26,7 @@
             <nav class="navbar navbar-expand u-header__navbar">
                 <div class="ml-auto">
                     <a class="text-white" href="//z1lab.com.br" target="_blank">
-                        Um projeto <img src="https://cdn.z1lab.com.br/images/z1lab/logo/logo_white.svg" alt="Logo Z1lab" width="75px">
+                        Um projeto <img src="https://d35c048n9fix3e.cloudfront.net/images/z1lab/logo/logo_white.svg" alt="Logo Z1lab" width="75px">
                     </a>
                 </div>
             </nav>
@@ -36,7 +36,7 @@
 
 <main id="content" role="main">
     <!-- Hero Section -->
-    <div class="d-lg-flex" style="background: url(https://cdn.z1lab.com.br/template/front/2.0.1/img/bg-shapes/bg4.png) no-repeat right;">
+    <div class="d-lg-flex" style="background: url(https://d35c048n9fix3e.cloudfront.net/template/front/2.0.1/img/bg-shapes/bg4.png) no-repeat right;">
         <div class="container d-lg-flex align-items-lg-center min-height-lg-100vh space-bottom-2 space-top-4 space-bottom-lg-3 space-lg-0">
             <div class="w-lg-80 w-xl-70 mt-lg-9">
                 <div class="mb-6">
