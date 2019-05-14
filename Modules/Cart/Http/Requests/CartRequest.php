@@ -2,6 +2,7 @@
 
 namespace Modules\Cart\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Modules\Event\Models\Entrance;
 use Modules\Order\Models\Order;
 use Z1lab\JsonApi\Http\Requests\ApiFormRequest;
@@ -49,14 +50,14 @@ class CartRequest extends ApiFormRequest
 
                 if ($entrance->available->available < $ticket['quantity']) {
                     if ($entrance->available->available === 0) {
-                        $validator->errors()->add('tickets', "There are no tickets for entrance '$entrance->name' at the moment.");
+                        $validator->errors()->add('tickets', "Não existem ingressos disponíveis para a entrada '$entrance->name' no momento.");
                     } else {
-                        $validator->errors()->add('tickets', "We have only {$entrance->available->available} tickets remaining for the entrance '$entrance->name'");
+                        $validator->errors()->add('tickets', "Nós temos somente {$entrance->available->available} ingresso(s) restante(s) para a entrada '$entrance->name'");
                     }
                 } elseif ($ticket['quantity'] > $entrance->max_buy) {
-                    $validator->errors()->add('tickets', "The max tickets for entrance '$entrance->name' is $entrance->max_buy.");
+                    $validator->errors()->add('tickets', "Você não pode mais comprar ingressos para a entrada '$entrance->name'. O limite permitido pela organização do evento é de $entrance->max_buy ingresso(s).");
                 } elseif ($ticket['quantity'] < $entrance->min_buy) {
-                    $validator->errors()->add('tickets', "The minimum tickets for entrance '$entrance->name' is $entrance->min_buy.");
+                    $validator->errors()->add('tickets', "O mínimo de ingressos para a entrada '$entrance->name' é de $entrance->min_buy.");
                 }
 
                 $buyed = Order::processed()->byPerson(\Auth::user()->document)->get();
@@ -67,12 +68,12 @@ class CartRequest extends ApiFormRequest
                     });
 
                     if ($bagBuy + $ticket['quantity'] > $entrance->max_buy) {
-                        $validator->errors()->add('tickets', "Entry '$entrance->name' only allows $entrance->max_buy tickets per person.");
+                        $validator->errors()->add('tickets', "A entrada '$entrance->name' permite somente $entrance->max_buy ingresso(s) por pessoa.");
                     }
                 }
 
                 if (!now()->between($entrance->available->starts_at, $entrance->available->finishes_at)) {
-                    $validator->errors()->add('tickets', "Sales for lot {$entrance->available->lot} are not available.");
+                    $validator->errors()->add('tickets', "As vendas do Lote {$entrance->available->lot} não estão disponíveis.");
                 }
             }
         });

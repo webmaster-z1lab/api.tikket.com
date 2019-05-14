@@ -93,7 +93,7 @@ class EventRepository extends ApiRepository
         $image->save();
 
         $this->setCacheKey($id);
-        $this->flush()->remember($event);
+        $this->flush()->remember($event->fresh());
 
         if ($event->is_locked) UpdateEventInfo::dispatch($event);
 
@@ -158,9 +158,9 @@ class EventRepository extends ApiRepository
         if ($event->is_locked) UpdateEventInfo::dispatch($event);
 
         $this->setCacheKey($id);
-        $this->flush()->remember($event);
+        $this->flush()->remember($event->fresh());
 
-        return $event->fresh();
+        return $event;
     }
 
     /**
@@ -176,7 +176,7 @@ class EventRepository extends ApiRepository
         $event->update($data);
 
         $this->setCacheKey($id);
-        $this->flush()->remember($event);
+        $this->flush()->remember($event->fresh());
 
         return $event->fresh();
     }
@@ -194,7 +194,7 @@ class EventRepository extends ApiRepository
 
         $event->update(['status' => Event::COMPLETED]);
         $this->setCacheKey($id);
-        $this->flush()->remember($event);
+        $this->flush()->remember($event->fresh());
 
         return $event->fresh();
     }
@@ -213,7 +213,7 @@ class EventRepository extends ApiRepository
         if ($this->is_valid($event)) {
             $event->update(['status' => Event::PUBLISHED]);
             $this->setCacheKey($id);
-            $this->flush()->remember($event);
+            $this->flush()->remember($event->fresh());
         }
 
         return $event->fresh();
@@ -231,7 +231,7 @@ class EventRepository extends ApiRepository
         if ($event->status === Event::PUBLISHED && !$event->is_locked) {
             $event->update(['status' => Event::COMPLETED]);
             $this->setCacheKey($id);
-            $this->flush()->remember($event);
+            $this->flush()->remember($event->fresh());
 
             return $event;
         }
@@ -253,7 +253,7 @@ class EventRepository extends ApiRepository
         if ($event->status === Event::PUBLISHED && $event->is_locked) {
             $event->update(['status' => Event::CANCELED]);
             $this->setCacheKey($id);
-            $this->flush()->remember($event);
+            $this->flush()->remember($event->fresh());
 
             UpdateEventInfo::dispatch($event);
 
