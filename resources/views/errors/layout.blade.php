@@ -12,11 +12,11 @@
     <meta name="site_name" content="{{ config('app.name') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="https://cdn.z1lab.com.br/images/quantofica/favicon.png">
+    <link rel="shortcut icon" href="https://d35c048n9fix3e.cloudfront.net/images/quantofica/favicon.png">
     <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.z1lab.com.br/template/front/2.0.1/css/theme.min.css">
+    <link rel="stylesheet" href="https://d35c048n9fix3e.cloudfront.net/template/front/2.0.1/css/theme.min.css">
 </head>
 
 <body class="@yield('body-class')" style="@yield('body-style')">
@@ -26,12 +26,12 @@
         <div id="logoAndNav" class="container">
             <nav class="navbar navbar-expand u-header__navbar">
                 <a class="" href="/" aria-label="tikket.com">
-                    <img src="https://cdn.z1lab.com.br/images/quantofica/logo_full.png" alt="quantofica.com" width="200px">
+                    <img src="https://d35c048n9fix3e.cloudfront.net/images/quantofica/logo_full.png" alt="quantofica.com" width="200px">
                 </a>
 
                 <div class="ml-auto">
                     <a class="text-dark" href="//z1lab.com.br" target="_blank">
-                        Um projeto <img src="https://cdn.z1lab.com.br/images/z1lab/logo/logo_full.svg" alt="quantofica.com" width="75px">
+                        Um projeto <img src="https://d35c048n9fix3e.cloudfront.net/images/z1lab/logo/logo_full.svg" alt="quantofica.com" width="75px">
                     </a>
                 </div>
             </nav>

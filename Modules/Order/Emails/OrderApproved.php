@@ -29,7 +29,7 @@ class OrderApproved extends Mailable
      * @var array
      */
     public $image = [
-        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_super_thank_you.png',
+        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_super_thank_you.png',
         'text'   => 'Compra confirmada',
     ];
 

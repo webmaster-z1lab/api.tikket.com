@@ -28,7 +28,7 @@ class OrderCancelled extends Mailable
      * @var array
      */
     public $image = [
-        'source' => 'https://cdn.z1lab.com.br/images/undraw/png/undraw_alert.png',
+        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_alert.png',
         'text'   => 'Pedido cancelado',
     ];
 

@@ -6,7 +6,7 @@
                     <tr>
                         <td style="padding: 20px; font-family: sans-serif; font-size: 14px; text-align: center; color: #FFFFFF;">
                             <a href="https://quantofica.com" target="_blank" style="color: #FFFFFF !important;" title="quantofica.com">
-                                <img src="https://cdn.z1lab.com.br/images/quantofica/favicon.png" width="60px" alt="quantofica.com">
+                                <img src="https://d35c048n9fix3e.cloudfront.net/images/quantofica/favicon.png" width="60px" alt="quantofica.com">
                             </a>
                             <span class="unstyle-auto-detected-links">
                                 <br>Viçosa, Minas Gerais, Brasil
@@ -28,12 +28,12 @@
                     <tr align="center">
                         <td style="padding-right: 5px">
                             <a href="https://facebook.com/quantofica" target="_blank" title="Facebook do quantofica.com">
-                                <img src="https://cdn.z1lab.com.br/images/social/facebook_white.png" alt="@quantofica" width="25px">
+                                <img src="https://d35c048n9fix3e.cloudfront.net/images/social/facebook_white.png" alt="@quantofica" width="25px">
                             </a>
                         </td>
                         <td>
                             <a href="https://instagram.com/quantofica" target="_blank" title="Instagram do quantofica.com">
-                                <img src="https://cdn.z1lab.com.br/images/social/instagram_white.png" alt="@quantofica" width="25px">
+                                <img src="https://d35c048n9fix3e.cloudfront.net/images/social/instagram_white.png" alt="@quantofica" width="25px">
                             </a>
                         </td>
                     </tr>

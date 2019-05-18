@@ -2,7 +2,7 @@
 
 @section('title', '405 - Método não permitido')
 @section('body-class', 'bg-img-hero-fixed')
-@section('body-style', 'background-image: url(https://cdn.z1lab.com.br/images/undraw/undraw_be_the_hero_ssr2.svg);')
+@section('body-style', 'background-image: url(https://d35c048n9fix3e.cloudfront.net/images/undraw/undraw_be_the_hero_ssr2.svg);')
 
 @section('content')
     <div class="d-lg-flex">

@@ -9,7 +9,7 @@
         <div class="container d-lg-flex align-items-lg-center min-height-lg-100vh space-top-4 space-bottom-2 space-lg-0">
             <div class="w-100 mx-auto">
                 <figure class="mb-5 ie-maintenance-mode">
-                    <img src="https://cdn.z1lab.com.br/template/front/2.0.1/svg/illustrations/maintenance-mode.svg" alt="Image Description">
+                    <img src="https://d35c048n9fix3e.cloudfront.net/template/front/2.0.1/svg/illustrations/maintenance-mode.svg" alt="Image Description">
                 </figure>
 
                 <div class="w-md-80 w-lg-50 text-center mx-md-auto">

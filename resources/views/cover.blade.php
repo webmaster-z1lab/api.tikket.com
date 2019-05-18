@@ -12,10 +12,9 @@
     <meta name="site_name" content="tikket.com">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="https://d35c048n9fix3e.cloudfront.net/images/quantofica/favicon.png">
+    <link rel="shortcut icon" href="https://d35c048n9fix3e.cloudfront.net/images/tikket/icon.png">
     <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://d35c048n9fix3e.cloudfront.net/template/front/2.0.1/css/theme.min.css">
 </head>
 <body class="gradient-half-primary-body-v1 mb-lg-0">
@@ -40,7 +39,8 @@
         <div class="container d-lg-flex align-items-lg-center min-height-lg-100vh space-bottom-2 space-top-4 space-bottom-lg-3 space-lg-0">
             <div class="w-lg-80 w-xl-70 mt-lg-9">
                 <div class="mb-6">
-                    <h1 class="text-white font-weight-normal"><i class="fas fa-ticket-alt"></i> CORE Api tikket.com.br <br><small>Um projeto Z1lab</small></h1>
+                    <img src="https://d35c048n9fix3e.cloudfront.net/images/tikket/logo-white.svg" alt="Logo Tikket" width="250px" class="mb-3">
+                    <h1 class="text-white font-weight-normal">CORE Api - <small>Um projeto Z1lab</small></h1>
                     <p class="text-white-70">Essa é uma extensão do site <a class="text-white font-weight-bold" href="//tikket.com.br">tikket.com.br</a> que controla uma série de
                         funções que garantem o funcionamento da ferramenta.</p>
                     <p class="text-white-70">Assim como todo o projeto essa é uma solução desenvolvida e matida pela <a class="text-white font-weight-bold" href="//z1lab.com.br">Z1lab</a>.
