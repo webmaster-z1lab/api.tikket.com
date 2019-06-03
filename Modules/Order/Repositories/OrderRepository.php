@@ -13,7 +13,7 @@ use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
-use Modules\Order\Events\OrderCreated;
+use Modules\Order\Jobs\SendToPayment;
 use Modules\Order\Models\Order;
 use Modules\Ticket\Jobs\CreateTickets;
 use Modules\Ticket\Jobs\CancelTickets;
@@ -46,12 +46,12 @@ class OrderRepository
         $past = $past === 'false' ? FALSE : boolval($past);
 
         if ($past)
-            return Order::where('costumer.user_id', \Auth::id())
+            return Order::where('customer.user_id', \Auth::id())
                 ->whereHas('event', function ($query) {
                     $query->whereIn('status', [Event::CANCELED, Event::FINALIZED]);
                 })->latest()->get();
 
-        return Order::where('costumer.user_id', \Auth::id())
+        return Order::where('customer.user_id', \Auth::id())
             ->whereHas('event', function ($query) {
                 $query->whereNotIn('status', [Event::CANCELED, Event::FINALIZED]);
             })->latest()->get();
@@ -95,27 +95,36 @@ class OrderRepository
 
         $user = \Auth::user();
 
-        $costumer = $order->costumer()->create([
+        $customer = $order->customer()->create([
             'user_id'  => $user->id,
             'name'     => $user->name,
             'email'    => $user->email,
-            'document' => $data['costumer']['document'],
+            'document' => $data['customer']['document'],
         ]);
 
-        $costumer->phone()->create($data['costumer']['phone']);
-        $costumer->save();
+        $customer->phone()->create($data['customer']['phone']);
+        $customer->save();
 
-        $card = $order->card()->create(array_except($data['card'], ['holder']));
-        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
-        $holder->phone()->create($data['card']['holder']['phone']);
-        $holder->address()->create($data['card']['holder']['address']);
+        switch ($data['type']) {
+            case 'credit_card':
+                $card = $order->card()->create(array_except($data['card'], ['holder']));
+                $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
+                $holder->phone()->create($data['card']['holder']['phone']);
+                $holder->address()->create($data['card']['holder']['address']);
 
-        $holder->save();
-        $card->save();
+                $holder->save();
+                $card->save();
+                break;
+            case 'boleto':
+                $customer->address()->create($data['customer']['address']);
+                $customer->save();
+                $order->boleto()->create();
+        }
+
         $order->save();
 
         if (!$data['is_free']) {
-            event(new OrderCreated($order->id));
+            SendToPayment::dispatch($order);
         } else {
             foreach ($order->bags as $bag) {
                 $this->incrementSold(Entrance::find($bag->entrance_id), $bag->amount);

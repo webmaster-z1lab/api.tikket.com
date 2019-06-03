@@ -5,7 +5,7 @@ namespace Modules\Order\Models;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 /**
- * Class Costumer
+ * Class Customer
  *
  * @package Modules\Order\Models
  *
@@ -15,7 +15,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property string document
  * @property \Modules\Order\Models\Phone phone
  */
-class Costumer extends Model
+class Customer extends Model
 {
     public $timestamps = FALSE;
 
@@ -32,5 +32,13 @@ class Costumer extends Model
     public function phone()
     {
         return $this->embedsOne(Phone::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function address()
+    {
+        return $this->embedsOne(Address::class);
     }
 }

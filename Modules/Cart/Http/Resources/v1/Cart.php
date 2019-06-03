@@ -37,7 +37,7 @@ class Cart extends Resource
                 'expires_at'     => $this->expires_at->toW3cString(),
                 'tickets'        => $cart->resolve('Ticket')->collection($this->tickets),
                 'card'           => $this->when(ends_with($this->type, 'card'), $cart->resolve('Card')->make($this->card)),
-                'costumer'       => $this->when($this->costumer !== NULL, $cart->resolve('Costumer')->make($this->costumer)),
+                'customer'       => $this->when($this->customer !== NULL, $cart->resolve('Customer')->make($this->customer)),
             ],
             'relationships' => [
                 'event' => $event->make($this->event),

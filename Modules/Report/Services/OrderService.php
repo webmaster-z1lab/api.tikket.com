@@ -31,8 +31,8 @@ class OrderService
                 ->where('status', '<>', Order::CANCELED)
                 ->where(function ($query) use ($search) {
                     $query->where('_id', 'LIKE', "%$search%")
-                        ->orWhere('costumer.name', 'LIKE', "%$search%")
-                        ->orWhere('costumer.email', 'LIKE', "%$search%");
+                        ->orWhere('customer.name', 'LIKE', "%$search%")
+                        ->orWhere('customer.email', 'LIKE', "%$search%");
                 })
                 ->latest()
                 ->skip(($page - 1) * self::PER_PAGE)
@@ -43,8 +43,8 @@ class OrderService
                 ->where('status', '<>', Order::CANCELED)
                 ->where(function ($query) use ($search) {
                     $query->where('_id', 'LIKE', "%$search%")
-                        ->orWhere('costumer.name', 'LIKE', "%$search%")
-                        ->orWhere('costumer.email', 'LIKE', "%$search%");
+                        ->orWhere('customer.name', 'LIKE', "%$search%")
+                        ->orWhere('customer.email', 'LIKE', "%$search%");
                 })
                 ->count();
         } else {

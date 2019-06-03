@@ -27,7 +27,7 @@ use Modules\Event\Models\Event;
  * @property \Illuminate\Database\Eloquent\Collection bags
  * @property \Illuminate\Database\Eloquent\Collection tickets
  * @property \Modules\Cart\Models\Card                card
- * @property \Modules\Cart\Models\Costumer            costumer
+ * @property \Modules\Cart\Models\Customer            customer
  * @property \Modules\Event\Models\Coupon             coupon
  * @property-read \Carbon\Carbon                      created_at
  * @property-read \Carbon\Carbon                      updated_at
@@ -40,8 +40,6 @@ class Cart extends Model
     public const OPENED = 'opened';
     public const FINISHED = 'finished';
     public const RECYCLED = 'recycled';
-
-    const CART_TYPE = 'credit_card';
 
     protected $fillable = [
         'user_id',
@@ -70,7 +68,6 @@ class Cart extends Model
     ];
 
     protected $attributes = [
-        'type'     => self::CART_TYPE,
         'status'   => self::OPENED,
         'amount'   => 0,
         'fee'      => 0,
@@ -118,9 +115,9 @@ class Cart extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function costumer()
+    public function customer()
     {
-        return $this->embedsOne(Costumer::class);
+        return $this->embedsOne(Customer::class);
     }
 
     /**

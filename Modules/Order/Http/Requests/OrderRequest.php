@@ -56,7 +56,7 @@ class OrderRequest extends ApiFormRequest
                 if ($sold + $bag->amount > $entrance->available->amount) {
                     $validator->errors()->add('tickets', "There are no tickets for entrance '$entrance->name' at the moment.");
                 } else {
-                    $buyed = Order::processed()->byPerson($cart->costumer->document)->get();
+                    $buyed = Order::processed()->byPerson($cart->customer->document)->get();
 
                     if (NULL !== $buyed && !$buyed->isEmpty()) {
                         $bagBuy = $buyed->sum(function ($order) use ($bag) {

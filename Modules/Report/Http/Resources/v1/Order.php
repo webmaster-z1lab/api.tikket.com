@@ -21,8 +21,8 @@ class Order extends Resource
             'channel'    => $this->channel,
             'price'      => $this->amount + $this->fee - ($this->discount ?? 0),
             'created_at' => $this->created_at->format('d/m/Y H:i'),
-            'name'       => $this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL ? $this->costumer->name : '',
-            'email'      => $this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL ? $this->costumer->email : '',
+            'name'       => $this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL ? $this->customer->name : '',
+            'email'      => $this->channel === \Modules\Order\Models\Order::ONLINE_CHANNEL ? $this->customer->email : '',
 
         ];
     }

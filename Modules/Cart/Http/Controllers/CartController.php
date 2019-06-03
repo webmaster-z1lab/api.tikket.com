@@ -3,7 +3,7 @@
 namespace Modules\Cart\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Cart\Http\Requests\CardRequest;
+use Modules\Cart\Http\Requests\PaymentRequest;
 use Modules\Cart\Http\Requests\CartRequest;
 use Modules\Cart\Http\Requests\CouponRequest;
 use Modules\Cart\Http\Requests\TicketRequest;
@@ -58,14 +58,14 @@ class CartController extends Controller
     }
 
     /**
-     * @param \Modules\Cart\Http\Requests\CardRequest $request
+     * @param \Modules\Cart\Http\Requests\PaymentRequest $request
      * @param string                                  $id
      *
      * @return \Illuminate\Http\Resources\Json\Resource
      */
-    public function card(CardRequest $request, string $id)
+    public function payment(PaymentRequest $request, string $id)
     {
-        return api_resource('Cart')->make($this->repository->setCard($request->validated(), $id));
+        return api_resource('Cart')->make($this->repository->setPayment($request->validated(), $id));
     }
 
     /**

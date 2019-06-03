@@ -12,6 +12,7 @@ use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Events\UserInformationReceived;
 use Modules\Cart\Jobs\RecycleCart;
+use Modules\Cart\Jobs\UpdateUserAddress;
 use Modules\Cart\Models\Cart;
 use Modules\Event\Models\Coupon;
 use Modules\Event\Models\Entrance;
@@ -133,56 +134,47 @@ class CartRepository
      *
      * @return \Modules\Cart\Models\Cart|null
      */
-    public function setCard(array $data, string $id)
+    public function setPayment(array $data, string $id)
     {
         $cart = $this->find($id);
 
         $cart->update([
             'hash'     => $data['hash'],
             'callback' => $data['callback'],
+            'type'     => $data['type'],
         ]);
 
-        $data['card']['parcel'] = (int)(floatval($data['card']['parcel']) * 100);
+        if (array_key_exists('customer', $data)) {
+            $customer = $cart->customer()->create(['document' => $data['customer']['document']]);
 
-        $card = $cart->card()->create(array_except($data['card'], ['holder']));
-
-        $holder = $card->holder()->create(array_except($data['card']['holder'], ['address', 'phone']));
-
-        $holder->address()->create($data['card']['holder']['address']);
-
-        $holder->phone()->create([
-            'area_code' => substr($data['card']['holder']['phone'], 0, 2),
-            'phone'     => substr($data['card']['holder']['phone'], 2),
-        ]);
-
-        $holder->save();
-
-        $card->save();
-
-        if (array_key_exists('costumer', $data)) {
-            $costumer = $cart->costumer()->create(['document' => $data['costumer']['document']]);
-
-            $costumer->phone()->create([
-                'area_code' => substr($data['costumer']['phone'], 0, 2),
-                'phone'     => substr($data['costumer']['phone'], 2),
+            $customer->phone()->create([
+                'area_code' => substr($data['customer']['phone'], 0, 2),
+                'phone'     => substr($data['customer']['phone'], 2),
             ]);
 
-            $costumer->save();
+            $customer->save();
 
-            event(new UserInformationReceived(\Request::bearerToken(), \Auth::id(), $data['costumer']['document'], $data['costumer']['phone']));
+            event(new UserInformationReceived(\Request::bearerToken(), \Auth::id(), $data['customer']['document'], $data['customer']['phone']));
         } else {
-            $costumer = $cart->costumer()->create(['document' => \Auth::user()->document]);
+            $customer = $cart->customer()->create(['document' => \Auth::user()->document]);
+
             $user = (new ApiService())->getUser(\Request::bearerToken())->data;
 
-            $costumer->phone()->create([
+            $customer->phone()->create([
                 'area_code' => $user->attributes->phone->area_code,
                 'phone'     => $user->attributes->phone->phone,
             ]);
-
-            $costumer->save();
         }
 
         $cart->save();
+
+        switch ($data['type']) {
+            case 'credit_card':
+                $this->setCardPayment($data, $cart);
+                break;
+            case 'boleto':
+                $this->setBoletoPayment($data, $cart);
+        }
 
         return $cart->fresh();
     }
@@ -217,5 +209,63 @@ class CartRepository
         $cart->save();
 
         return $cart->fresh();
+    }
+
+    /**
+     * @param  array  $data
+     * @param  \Modules\Cart\Models\Cart  $cart
+     */
+    private function setBoletoPayment(array $data, Cart &$cart)
+    {
+        $customer = $cart->customer;
+
+        if (array_key_exists('address', $data)) {
+            $customer->address()->create($data['address']);
+            $customer->save();
+
+            UpdateUserAddress::dispatch(\Request::bearerToken(), \Auth::id(), $data['address']);
+        } else {
+            $user = (new ApiService())->getUser(\Request::bearerToken())->data;
+
+            $customer->address()->create([
+                'street'      => $user->relationships->address->street,
+                'number'      => $user->relationships->address->number,
+                'complement'  => $user->relationships->address->complement,
+                'district'    => $user->relationships->address->district,
+                'postal_code' => $user->relationships->address->postal_code,
+                'city'        => $user->relationships->address->city,
+                'state'       => $user->relationships->address->state,
+            ]);
+
+            $customer->save();
+        }
+
+        $cart->save();
+    }
+
+    /**
+     * @param  array  $data
+     * @param  \Modules\Cart\Models\Cart  $cart
+     */
+    private function setCardPayment(array $data, Cart &$cart)
+    {
+        $data['card']['parcel'] = (int)(floatval($data['card']['parcel']) * 100);
+
+        $card = $cart->card()->create(array_except($data['card'], ['holder']));
+
+        $holder = $card->holder()->create(array_except($data['card']['holder'], ['phone']));
+
+        $holder->address()->create($data['address']);
+
+        $holder->phone()->create([
+            'area_code' => substr($data['card']['holder']['phone'], 0, 2),
+            'phone'     => substr($data['card']['holder']['phone'], 2),
+        ]);
+
+        $holder->save();
+
+        $card->save();
+
+        $cart->save();
     }
 }

@@ -18,7 +18,7 @@ class OrderPolicy
         if ($order instanceof Order) {
             if (\Gate::allows('admin', $order->event_id)) return TRUE;
 
-            return optional($order->costumer)->user_id === $user->id;
+            return optional($order->customer)->user_id === $user->id;
         }
 
         $order = Order::whereKey($order)->first();
@@ -27,6 +27,6 @@ class OrderPolicy
 
         if (\Gate::allows('admin', $order->event_id)) return TRUE;
 
-        return optional($order->costumer)->user_id === $user->id;
+        return optional($order->customer)->user_id === $user->id;
     }
 }

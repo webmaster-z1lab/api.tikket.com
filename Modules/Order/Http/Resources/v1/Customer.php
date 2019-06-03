@@ -5,7 +5,7 @@ namespace Modules\Order\Http\Resources\v1;
 use Illuminate\Http\Resources\Json\Resource;
 use Juampi92\APIResources\APIResourceManager;
 
-class Costumer extends Resource
+class Customer extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -24,8 +24,9 @@ class Costumer extends Resource
             'user_id'  => $this->user_id,
             'name'     => $this->name,
             'email'    => $this->email,
-            'document' => substr($this->document, 0, 3) . '.***.***-**',
+            'document' => substr($this->document, 0, 3).'.***.***-**',
             'phone'    => $order->resolve('Phone')->make($this->phone),
+            'address'  => $this->when(filled($this->address), $order->resolve('Address')->make($this->address)),
         ];
     }
 }

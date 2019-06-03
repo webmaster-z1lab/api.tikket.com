@@ -44,7 +44,7 @@ class CancelTickets implements ShouldQueue
 
         /** @var \Modules\Ticket\Models\Ticket $ticket */
         foreach ($tickets as $ticket) {
-            if (filled(optional($ticket->participant)->email) && $ticket->participant->email !== optional($ticket->order->costumer)->email)
+            if (filled(optional($ticket->participant)->email) && $ticket->participant->email !== optional($ticket->order->customer)->email)
                 \Mail::to($ticket->participant->email)->send(new CancelledTicket($ticket));
         }
     }

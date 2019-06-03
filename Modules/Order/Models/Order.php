@@ -25,8 +25,9 @@ use Modules\Event\Models\Event;
  * @property integer discount
  * @property integer fee_percentage
  * @property boolean fee_is_hidden
- * @property \Modules\Order\Models\Costumer costumer
+ * @property \Modules\Order\Models\Customer customer
  * @property \Modules\Order\Models\Card card
+ * @property \Modules\Order\Models\Boleto boleto
  * @property \Modules\Event\Models\Coupon coupon
  * @property \Modules\Order\Models\SalePoint sale_point
  * @property \Modules\Order\Models\SalePoint administrator
@@ -123,15 +124,15 @@ class Order extends Model
      */
     public function scopeByPerson($query, $document)
     {
-        return $query->where('costumer.document', $document);
+        return $query->where('customer.document', $document);
     }
 
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function costumer()
+    public function customer()
     {
-        return $this->embedsOne(Costumer::class);
+        return $this->embedsOne(Customer::class);
     }
 
     /**
@@ -140,6 +141,14 @@ class Order extends Model
     public function card()
     {
         return $this->embedsOne(Card::class);
+    }
+
+    /**
+     * @return \Jenssegers\Mongodb\Relations\EmbedsOne
+     */
+    public function boleto()
+    {
+        return $this->embedsOne(Boleto::class);
     }
 
     /**

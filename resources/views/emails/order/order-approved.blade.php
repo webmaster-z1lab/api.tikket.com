@@ -7,7 +7,7 @@
         'image' => $image,
         'button' => $url
     ])
-        <h2>Oi {{ explode(' ', $order->costumer->name)[0] }}!</h2>
+        <h2>Oi {{ explode(' ', $order->customer->name)[0] }}!</h2>
         <h2>Obrigado por assinar o quantofica.com</h2>
 
         <p>

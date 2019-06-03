@@ -31,7 +31,7 @@ class SendOrderUpdateNotification implements ShouldQueue
     {
         $order = $event->getOrder();
 
-        if (filled(optional($order->costumer)->email)) {
+        if (filled(optional($order->customer)->email)) {
             $method = camel_case($event->getStatus());
 
             if (method_exists($this, $method)) {
@@ -42,21 +42,21 @@ class SendOrderUpdateNotification implements ShouldQueue
 
     protected function paid(Order $order)
     {
-        \Mail::to($order->costumer->email)->send(new OrderApproved($this->order));
+        \Mail::to($order->customer->email)->send(new OrderApproved($this->order));
     }
 
     protected function canceled(Order $order)
     {
-        \Mail::to($order->costumer->email)->send(new OrderFailed($this->order));
+        \Mail::to($order->customer->email)->send(new OrderFailed($this->order));
 
     }
 
     protected function reversed(Order $order)
     {
         if (($order->amount + $order->fee - ($order->discount ?? 0)) > 0) {
-            \Mail::to($order->costumer->email)->send(new OrderReversed($this->order));
+            \Mail::to($order->customer->email)->send(new OrderReversed($this->order));
         } else {
-            \Mail::to($order->costumer->email)->send(new OrderCancelled($this->order));
+            \Mail::to($order->customer->email)->send(new OrderCancelled($this->order));
         }
     }
 }

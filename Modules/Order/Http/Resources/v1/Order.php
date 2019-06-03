@@ -33,7 +33,7 @@ class Order extends Resource
             'id'            => $this->resource->id,
             'types'         => 'orders',
             'attributes'    => [
-                'code'     => $this->resource->code,
+                'code'       => $this->resource->code,
                 'status'     => $this->resource->status,
                 'amount'     => $this->resource->amount,
                 'discount'   => $this->resource->discount,
@@ -48,10 +48,11 @@ class Order extends Resource
                     'hash'           => $this->resource->hash,
                     'ip'             => $this->resource->ip,
                     'type'           => $this->resource->type,
-                    'costumer'       => $order->resolve('Costumer')->make($this->resource->costumer),
+                    'customer'       => $order->resolve('Customer')->make($this->resource->customer),
                     'transaction_id' => $this->when($this->resource->transaction_id !== NULL, $this->resource->transaction_id),
                     'card'           => $this->when(ends_with($this->resource->type, 'card'),
                         $order->resolve('Card')->make($this->resource->card)),
+                    'boleto'         => $this->when($this->resource->type === 'boleto', $order->resolve('Boleto')->make($this->resource->boleto)),
                 ]),
 
                 'sale_point' => $this->when($this->resource->channel === Model::PDV_CHANNEL,

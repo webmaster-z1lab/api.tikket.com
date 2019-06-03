@@ -38,7 +38,7 @@ class TicketRepository extends ApiRepository
                 ->where(function ($query) {
                     $query->where('participant.email', \Auth::user()->email)
                         ->orWhereHas('order', function ($query) {
-                            $query->where('costumer.user_id', Auth::id());
+                            $query->where('customer.user_id', Auth::id());
                         });
                 })->latest()->get();
         }
@@ -47,7 +47,7 @@ class TicketRepository extends ApiRepository
             ->where(function ($query) {
                 $query->where('participant.email', \Auth::user()->email)
                     ->orWhereHas('order', function ($query) {
-                        $query->where('costumer.user_id', \Auth::id());
+                        $query->where('customer.user_id', \Auth::id());
                     });
             })->latest()->get();
     }
