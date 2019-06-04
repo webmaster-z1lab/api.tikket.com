@@ -144,7 +144,7 @@ class CartRepository
             'type'     => $data['type'],
         ]);
 
-        if (array_key_exists('customer', $data)) {
+        if (array_key_exists('customer', $data) && filled($data['customer']['document']) && filled($data['customer']['phone'])) {
             $customer = $cart->customer()->create(['document' => $data['customer']['document']]);
 
             $customer->phone()->create([

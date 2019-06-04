@@ -15,8 +15,8 @@ use Modules\Event\Models\Event;
  * @property string id
  * @property string transaction_id
  * @property string status
- * @property string amount
- * @property string fee
+ * @property integer amount
+ * @property integer fee
  * @property string hash
  * @property string ip
  * @property string type

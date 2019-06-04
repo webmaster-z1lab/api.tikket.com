@@ -38,10 +38,12 @@ class SendToPayment implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->order->toArray();
-        $data['amount'] += $data['fee'];
-        $data['amount'] -= $data['discount'];
-        unset($data['tickets'], $data['fee'], $data['discount']);
+        $data = [];
+        $data['amount'] = $this->order->amount + $this->order->fee - $this->order->discount;
+        $data['order_id'] = $this->order->id;
+        $data['hash'] = $this->order->hash;
+        $data['ip'] = $this->order->ip;
+        $data['type'] = $this->order->type;
         $data['items'] = [];
 
         $event = $this->order->event;
@@ -57,9 +59,54 @@ class SendToPayment implements ShouldQueue
             ];
         }
 
-        $data['order_id'] = $this->order->id;
+        $data['customer'] = [
+            'user_id'  => $this->order->customer->user_id,
+            'name'     => $this->order->customer->name,
+            'email'    => $this->order->customer->email,
+            'document' => $this->order->customer->document,
+            'phone'    => [
+                'area_code' => $this->order->customer->phone->area_code,
+                'phone'     => $this->order->customer->phone->phone,
+            ],
+        ];
 
-        $data['card']['holder']['birth_date'] = $data['card']['holder']['birth_date']->toDateTime()->format('Y-m-d');
+        if ($data['type'] === 'boleto') {
+            $data['customer']['address'] = [
+                'street'      => $this->order->customer->address->street,
+                'number'      => $this->order->customer->address->number,
+                'complement'  => $this->order->customer->address->complement,
+                'district'    => $this->order->customer->address->district,
+                'postal_code' => $this->order->customer->address->postal_code,
+                'city'        => $this->order->customer->address->city,
+                'state'       => $this->order->customer->address->state,
+            ];
+        } else {
+            $data['card'] = [
+                'brand'        => $this->order->card->brand,
+                'number'       => $this->order->card->number,
+                'token'        => $this->order->card->token,
+                'installments' => $this->order->card->installments,
+                'parcel'       => $this->order->card->parcel,
+                'holder'       => [
+                    'name'       => $this->order->card->holder->name,
+                    'document'   => $this->order->card->holder->document,
+                    'birth_date' => $this->order->card->holder->birth_date->format('Y-m-d'),
+                    'address'    => [
+                        'street'      => $this->order->card->holder->address->street,
+                        'number'      => $this->order->card->holder->address->number,
+                        'complement'  => $this->order->card->holder->address->complement,
+                        'district'    => $this->order->card->holder->address->district,
+                        'postal_code' => $this->order->card->holder->address->postal_code,
+                        'city'        => $this->order->card->holder->address->city,
+                        'state'       => $this->order->card->holder->address->state,
+                    ],
+                    'phone'      => [
+                        'area_code' => $this->order->card->holder->phone->area_code,
+                        'phone'     => $this->order->card->holder->phone->phone,
+                    ],
+                ],
+            ];
+        }
 
         $client = new Client(['base_uri' => config('payment.server')]);
 
@@ -80,9 +127,9 @@ class SendToPayment implements ShouldQueue
         $this->order->transaction_id = $transaction['id'];
         if ($data['type'] === 'boleto') {
             $this->order->boleto->update([
-                'url'      => $transaction['payment_method']['boleto']['url'],
-                'barcode'  => $transaction['payment_method']['boleto']['barcode'],
-                'due_date' => Carbon::createFromFormat(Carbon::W3C, $transaction['payment_method']['boleto']['due_date']),
+                'url'      => $transaction['attributes']['payment_method']['boleto']['url'],
+                'barcode'  => $transaction['attributes']['payment_method']['boleto']['barcode'],
+                'due_date' => Carbon::createFromFormat(Carbon::W3C, $transaction['attributes']['payment_method']['boleto']['due_date']),
             ]);
         }
         $this->order->save();

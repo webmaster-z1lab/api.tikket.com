@@ -14,6 +14,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property string email
  * @property string document
  * @property \Modules\Order\Models\Phone phone
+ * @property \Modules\Order\Models\Address address
  */
 class Customer extends Model
 {
