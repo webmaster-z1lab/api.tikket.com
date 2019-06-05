@@ -35,7 +35,7 @@ class ReadyBoleto implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('orders.' . $this->order->id);
+        return new PrivateChannel('orders.'.$this->order->id);
     }
 
     /**
@@ -45,6 +45,10 @@ class ReadyBoleto implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return \Modules\Order\Http\Resources\v1\Order::make($this->order);
+        return [
+            'url'      => $this->order->boleto->url,
+            'barcode'  => $this->order->boleto->barcode,
+            'due_date' => $this->order->boleto->due_date->format('d/m/Y'),
+        ];
     }
 }

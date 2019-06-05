@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Str;
 use Modules\Order\Events\ReadyBoleto;
 use Modules\Order\Models\Order;
 
@@ -46,6 +47,7 @@ class SendToPayment implements ShouldQueue
         $data['ip'] = $this->order->ip;
         $data['type'] = $this->order->type;
         $data['items'] = [];
+        $total = 0;
 
         $event = $this->order->event;
 
@@ -58,6 +60,8 @@ class SendToPayment implements ShouldQueue
                 'quantity'    => count($tickets),
                 'amount'      => $lot->price,
             ];
+
+            $total += count($tickets);
         }
 
         $data['customer'] = [
@@ -72,6 +76,8 @@ class SendToPayment implements ShouldQueue
         ];
 
         if ($data['type'] === 'boleto') {
+            $data['description'] = $total > 1 ? $total . ' entrada para ' : $total . ' entradas para ';
+            $data['description'] = Str::limit($data['description'] . $event->name, 100);
             $data['customer']['address'] = [
                 'street'      => $this->order->customer->address->street,
                 'number'      => $this->order->customer->address->number,
