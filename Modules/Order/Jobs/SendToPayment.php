@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Modules\Order\Events\ReadyBoleto;
 use Modules\Order\Models\Order;
 
 class SendToPayment implements ShouldQueue
@@ -131,7 +132,13 @@ class SendToPayment implements ShouldQueue
                 'barcode'  => $transaction['attributes']['payment_method']['boleto']['barcode'],
                 'due_date' => Carbon::createFromFormat(Carbon::W3C, $transaction['attributes']['payment_method']['boleto']['due_date']),
             ]);
+
+            $this->order->save();
+
+            broadcast(new ReadyBoleto($this->order));
+
+        } else {
+            $this->order->save();
         }
-        $this->order->save();
     }
 }

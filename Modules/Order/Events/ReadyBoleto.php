@@ -2,8 +2,8 @@
 
 namespace Modules\Order\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -20,10 +20,12 @@ class ReadyBoleto implements ShouldBroadcast
 
     /**
      * Create a new event instance.
+     *
+     * @param  \Modules\Order\Models\Order  $order
      */
-    public function __construct(/*Order $order*/)
+    public function __construct(Order $order)
     {
-//        $this->order = $order->fresh();
+        $this->order = $order->fresh();
     }
 
     /**
@@ -33,6 +35,16 @@ class ReadyBoleto implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('order');
+        return new PrivateChannel('orders.' . $this->order->id);
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return \Modules\Order\Http\Resources\v1\Order::make($this->order);
     }
 }
