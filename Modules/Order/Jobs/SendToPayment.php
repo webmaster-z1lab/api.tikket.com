@@ -76,7 +76,7 @@ class SendToPayment implements ShouldQueue
         ];
 
         if ($data['type'] === 'boleto') {
-            $data['description'] = $total > 1 ? $total . ' entrada para ' : $total . ' entradas para ';
+            $data['description'] = $total === 1 ? $total . ' entrada para ' : $total . ' entradas para ';
             $data['description'] = Str::limit($data['description'] . $event->name, 100);
             $data['customer']['address'] = [
                 'street'      => $this->order->customer->address->street,

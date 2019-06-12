@@ -32,7 +32,7 @@ class EntrancesRequest extends ApiFormRequest
                 'is_free'     => 'bail|required|boolean',
                 'min_buy'     => 'bail|nullable|integer|min:0|lte:max_buy',
                 'max_buy'     => 'bail|required|integer|gte:min_buy',
-                'starts_at'   => 'bail|required|date_format:Y-m-d|after:today',
+                'starts_at'   => 'bail|required|date_format:Y-m-d|after_or_equal:today',
                 'description' => 'bail|nullable|string',
 
                 'lots' => 'bail|required|array|min:1',
