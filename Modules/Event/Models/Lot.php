@@ -43,8 +43,6 @@ class Lot extends Model
      */
     public const LOCKED = 'locked';
 
-    public const MIN_FEE = 400;
-
     protected $fillable = [
         'number',
         'amount',
@@ -82,7 +80,7 @@ class Lot extends Model
      */
     public function getPriceAttribute()
     {
-        return (int)$this->attributes['value'] + (int)$this->attributes['fee'];
+        return (int)$this->attributes['value'];
     }
 
     /**

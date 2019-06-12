@@ -44,7 +44,7 @@ class MakeAvailableLot implements ShouldQueue
             'amount'      => $lot->amount,
             'value'       => $lot->value,
             'fee'         => $lot->fee,
-            'price'       => $lot->value + $lot->fee,
+            'price'       => $lot->value,
             'starts_at'   => $this->entrance->starts_at,
             'finishes_at' => $lot->finishes_at,
         ]);

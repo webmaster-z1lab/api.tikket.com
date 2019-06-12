@@ -26,6 +26,8 @@ class EntrancesRequest extends ApiFormRequest
      */
     public function rules()
     {
+        $min_value = (config('fee.min') + 100) / 100.0;
+
         if (\Request::isMethod('POST'))
             return [
                 'name'        => 'bail|required|string|between:3,25',
@@ -38,7 +40,7 @@ class EntrancesRequest extends ApiFormRequest
                 'lots' => 'bail|required|array|min:1',
 
                 'lots.*.amount'      => 'bail|required|integer|min:1',
-                'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:1',
+                'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:' . $min_value,
                 'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after_or_equal:starts_at',
             ];
 
@@ -53,7 +55,7 @@ class EntrancesRequest extends ApiFormRequest
             'lots' => 'bail|required|array|min:1',
 
             'lots.*.amount'      => 'bail|required|integer|min:1',
-            'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:1',
+            'lots.*.value'       => 'bail|nullable|required_if:is_free,false|numeric|min:' . $min_value,
             'lots.*.finishes_at' => 'bail|required|date_format:Y-m-d|after_or_equal:starts_at',
         ];
     }

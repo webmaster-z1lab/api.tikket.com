@@ -31,7 +31,7 @@ class ReportService
 
 
         $report->total = $orders->sum(function ($order) {
-            return $order->amount + $order->fee - ($order->discount ?? 0);
+            return $order->amount - ($order->discount ?? 0);
         });
 
         $last_days = [];
@@ -41,7 +41,7 @@ class ReportService
             $last_days[] = $orders->filter(function ($order) use ($date) {
                 return $order->created_at->isSameDay($date);
             })->sum(function ($order) {
-                return $order->amount + $order->fee - ($order->discount ?? 0);
+                return $order->amount - ($order->discount ?? 0);
             });
             $date->addDay();
         } while ($date->lte($today));
@@ -65,7 +65,7 @@ class ReportService
             ->get();
 
         $report->total = $orders->sum(function ($order) {
-            return $order->amount - ($order->discount ?? 0);
+            return $order->amount - ($order->discount ?? 0) - $order->fee;
         });
 
         $last_days = [];
@@ -75,7 +75,7 @@ class ReportService
             $last_days[] = $orders->filter(function ($order) use ($date) {
                 return $order->created_at->isSameDay($date);
             })->sum(function ($order) {
-                return $order->amount - ($order->discount ?? 0);
+                return $order->amount - ($order->discount ?? 0) - $order->fee;
             });
             $date->addDay();
         } while ($date->lte($today));

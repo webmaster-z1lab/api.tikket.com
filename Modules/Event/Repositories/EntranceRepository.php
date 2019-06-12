@@ -214,7 +214,7 @@ class EntranceRepository
      */
     private function calcFee($entrance, int $value)
     {
-        if(!$entrance->is_free) return max((int)($value / 10), Lot::MIN_FEE);
+        if(!$entrance->is_free) return max((int)($value / 10), config('fee.min'));
 
         return 0;
     }

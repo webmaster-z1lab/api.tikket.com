@@ -30,7 +30,7 @@ class SummaryService
         $online['sales'] = $sales->count();
 
         $net_value = $sales->sum(function ($order) {
-            return $order->amount - ($order->discount ?? 0);
+            return $order->amount - ($order->discount ?? 0) - $order->fee;
         });
 
         $online['value'] = $net_value + $sales->sum('fee');
@@ -45,7 +45,7 @@ class SummaryService
         $manual['sales'] = $sales->count();
 
         $manual['value'] = $sales->sum(function ($order) {
-            return $order->amount + $order->fee - ($order->discount ?? 0);
+            return $order->amount - ($order->discount ?? 0);
         });
 
         $total = [

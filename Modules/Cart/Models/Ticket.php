@@ -45,6 +45,6 @@ class Ticket extends Model
      */
     public function getPriceAttribute()
     {
-        return $this->attributes['value'] + $this->attributes['fee'];
+        return $this->attributes['value'];
     }
 }

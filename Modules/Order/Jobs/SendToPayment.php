@@ -41,7 +41,7 @@ class SendToPayment implements ShouldQueue
     public function handle()
     {
         $data = [];
-        $data['amount'] = $this->order->amount + $this->order->fee - $this->order->discount;
+        $data['amount'] = $this->order->amount - $this->order->discount;
         $data['order_id'] = $this->order->id;
         $data['hash'] = $this->order->hash;
         $data['ip'] = $this->order->ip;

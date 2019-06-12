@@ -73,7 +73,7 @@ class UpdateLots extends Command
                         'remainder'   => $current->available,
                         'value'       => $next->value,
                         'fee'         => $next->fee,
-                        'price'       => $next->value + $next->fee,
+                        'price'       => $next->value,
                         'starts_at'   => $current->finishes_at->addSecond(),
                         'finishes_at' => $next->finishes_at,
                     ]);
