@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'min' => intval(env('MIN_FEE', 500)),
+    'min' => (int)env('MIN_FEE', 500),
 
-    'percentage' => intval(env('FEE_PERCENTAGE', 10)),
+    'percentage' => (int)env('FEE_PERCENTAGE', 10),
 ];
