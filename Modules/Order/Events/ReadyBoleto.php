@@ -46,9 +46,9 @@ class ReadyBoleto implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'url'      => $this->order->boleto->url,
-            'barcode'  => $this->order->boleto->barcode,
-            'due_date' => $this->order->boleto->due_date->format('d/m/Y'),
+            'url'     => $this->order->boleto->url,
+            'barcode' => $this->order->boleto->barcode,
+            'due_at'  => $this->order->boleto->due_at->format('d/m/Y'),
         ];
     }
 }

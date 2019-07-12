@@ -5,11 +5,10 @@ namespace Modules\Order\Jobs;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Str;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Modules\Order\Events\ReadyBoleto;
 use Modules\Order\Models\Order;
 
@@ -76,8 +75,7 @@ class SendToPayment implements ShouldQueue
         ];
 
         if ($data['type'] === 'boleto') {
-            $data['description'] = $total === 1 ? $total . ' entrada para ' : $total . ' entradas para ';
-            $data['description'] = Str::limit($data['description'] . $event->name, 100);
+            $data['description'] = "Compra realizada no site tikket.com.br referente a $total entrada(s) para o evento {$event->name}.";
             $data['customer']['address'] = [
                 'street'      => $this->order->customer->address->street,
                 'number'      => $this->order->customer->address->number,

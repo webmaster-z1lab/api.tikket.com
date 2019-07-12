@@ -23,7 +23,7 @@ class CartRepository
     use AvailableEntrances, AvailableCoupons;
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return null|\Modules\Cart\Models\Cart
      */
@@ -49,7 +49,7 @@ class CartRepository
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      *
      * @return \Illuminate\Database\Eloquent\Model|\Modules\Cart\Models\Cart|null
      */
@@ -106,8 +106,8 @@ class CartRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Cart\Models\Cart|null
      */
@@ -129,8 +129,8 @@ class CartRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Cart\Models\Cart|null
      */
@@ -180,8 +180,8 @@ class CartRepository
     }
 
     /**
-     * @param string $coupon
-     * @param string $id
+     * @param  string  $coupon
+     * @param  string  $id
      *
      * @return \Modules\Cart\Models\Cart|null
      */
@@ -199,7 +199,7 @@ class CartRepository
 
         if ($coupon->is_percentage) {
             $ticketWillDiscount = $cart->tickets()->where('entrance_id', $coupon->entrance_id)->first();
-            $cart->discount = (int)($ticketWillDiscount->price * $coupon->discount / 100);
+            $cart->discount = (int) ($ticketWillDiscount->price * $coupon->discount / 100);
         } else {
             $cart->discount = $coupon->discount;
         }
@@ -212,7 +212,7 @@ class CartRepository
     }
 
     /**
-     * @param  array  $data
+     * @param  array                      $data
      * @param  \Modules\Cart\Models\Cart  $cart
      */
     private function setBoletoPayment(array $data, Cart &$cart)
@@ -244,12 +244,12 @@ class CartRepository
     }
 
     /**
-     * @param  array  $data
+     * @param  array                      $data
      * @param  \Modules\Cart\Models\Cart  $cart
      */
     private function setCardPayment(array $data, Cart &$cart)
     {
-        $data['card']['parcel'] = (int)(floatval($data['card']['parcel']) * 100);
+        $data['card']['parcel'] = (int) (floatval($data['card']['parcel']) * 100);
 
         $card = $cart->card()->create(array_except($data['card'], ['holder']));
 
