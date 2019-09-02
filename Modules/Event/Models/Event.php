@@ -33,6 +33,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @method \Modules\Event\Models\Event                city(string $value = NULL)
  * @method \Modules\Event\Models\Event                period(string $period = NULL)
  * @method \Modules\Event\Models\Event                search(string $keywords = NULL)
+ * @method \Modules\Event\Models\Event                published()
  * @property-read \Carbon\Carbon                      created_at
  * @property-read \Carbon\Carbon                      updated_at
  */
@@ -131,6 +132,16 @@ class Event extends Model
     public function permissions()
     {
         return $this->hasMany(Permission::class);
+    }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     *
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopePublished(Builder $query)
+    {
+        return $query->where('status', self::PUBLISHED);
     }
 
     /**
