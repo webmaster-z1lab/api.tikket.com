@@ -21,7 +21,6 @@ class SearchRepository
 
         $results = Event::whereIn('status', [Event::PUBLISHED, Event::CANCELED])
             ->search(\Request::query('keyword'))
-            ->city(\Request::query('city'))
             ->period(\Request::query('period'))
             ->published()
             ->skip(($page - 1) * self::PER_PAGE)
@@ -30,7 +29,6 @@ class SearchRepository
 
         $total = Event::whereIn('status', [Event::PUBLISHED, Event::CANCELED])
             ->search(\Request::query('keyword'))
-            ->city(\Request::query('city'))
             ->period(\Request::query('period'))
             ->published()
             ->count();

@@ -30,7 +30,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property \Modules\Event\Models\Address            address
  * @property \Modules\Event\Models\Producer           producer
  * @property \Modules\Event\Models\Image              image
- * @method \Modules\Event\Models\Event                city(string $value = NULL)
  * @method \Modules\Event\Models\Event                period(string $period = NULL)
  * @method \Modules\Event\Models\Event                search(string $keywords = NULL)
  * @method \Modules\Event\Models\Event                published()
@@ -142,23 +141,6 @@ class Event extends Model
     public function scopePublished(Builder $query)
     {
         return $query->where('status', self::PUBLISHED);
-    }
-
-    /**
-     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
-     * @param  string|NULL                           $value
-     *
-     * @return \Jenssegers\Mongodb\Eloquent\Builder
-     */
-    public function scopeCity(Builder $query, string $value = NULL)
-    {
-        if (NULL !== $value && $value !== '') {
-            $data = explode('-', $value);
-
-            return $query->where('address.city', trim($data[0]))->where('address.state', trim($data[1]));
-        }
-
-        return $query;
     }
 
     /**

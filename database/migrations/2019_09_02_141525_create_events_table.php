@@ -18,19 +18,25 @@ class CreateEventsTable extends Migration
         Schema::table('events', function (Blueprint $collection) {
             $collection->index(
                 [
-                    'name'        => 'text',
-                    'description' => 'text',
-                    'category'    => 'text',
+                    'name'                => 'text',
+                    'description'         => 'text',
+                    'category'            => 'text',
+                    'address.city'        => 'text',
+                    'address.state'       => 'text',
+                    'address.postal_code' => 'text',
                 ],
                 'full-text-events'
                 , NULL,
                 [
                     'weights' => [
-                        'name'        => 32,
-                        'description' => 8,
-                        'category'    => 4,
+                        'name'                => 32,
+                        'description'         => 8,
+                        'category'            => 4,
+                        'address.city'        => 4,
+                        'address.state'       => 4,
+                        'address.postal_code' => 4,
                     ],
-                    'name'    => 'full-text-users',
+                    'name'    => 'full-text-events',
                 ]
             );
         });
