@@ -1,228 +1,116 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="x-apple-disable-message-reformatting">
-    <title>@yield('title')</title>
 
-    <style>
-        html,
-        body {
-            margin  : 0 auto !important;
-            padding : 0 !important;
-            height  : 100% !important;
-            width   : 100% !important;
-        }
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+    <title>E-mail de notificação do Tikket.com.br | Eventos, inscrições e ingressos online</title>
 
-        * {
-            -ms-text-size-adjust     : 100%;
-            -webkit-text-size-adjust : 100%;
-        }
-
-        div[style*="margin: 16px 0"] {
-            margin : 0 !important;
-        }
-
-        table,
-        td {
-            mso-table-lspace : 0 !important;
-            mso-table-rspace : 0 !important;
-        }
-
-        table {
-            border-spacing  : 0 !important;
-            border-collapse : collapse !important;
-            table-layout    : fixed !important;
-            margin          : 0 auto !important;
-        }
-
-        table table table {
-            table-layout : auto;
-        }
-
-        img {
-            -ms-interpolation-mode : bicubic;
-        }
-
-        a {
-            text-decoration : none;
-        }
-
-        *[x-apple-data-detectors], /* iOS */
-        .unstyle-auto-detected-links *,
-        .aBn {
-            border-bottom   : 0 !important;
-            cursor          : default !important;
-            color           : inherit !important;
-            text-decoration : none !important;
-            font-size       : inherit !important;
-            font-family     : inherit !important;
-            font-weight     : inherit !important;
-            line-height     : inherit !important;
-        }
-
-        .a6S {
-            display : none !important;
-            opacity : 0.01 !important;
-        }
-
-        .im {
-            color : inherit !important;
-        }
-
-        img.g-img + div {
-            display : none !important;
-        }
-
-        @media only screen and (min-device-width : 320px) and (max-device-width : 374px) {
-            u ~ div .email-container {
-                min-width : 320px !important;
-            }
-        }
-
-        @media only screen and (min-device-width : 375px) and (max-device-width : 413px) {
-            u ~ div .email-container {
-                min-width : 375px !important;
-            }
-        }
-
-        @media only screen and (min-device-width : 414px) {
-            u ~ div .email-container {
-                min-width : 414px !important;
-            }
-        }
-    </style>
-
-    <!--[if mso]>
     <style type="text/css">
-        ul,
-        ol {
-            margin : 0 !important;
+
+        body {width : 100%; background-color : #0d0b0c; margin : 0; padding : 0; -webkit-font-smoothing : antialiased;mso-margin-top-alt : 0px; mso-margin-bottom-alt : 0px; mso-padding-alt : 0px 0px 0px 0px;}
+
+        p, h1, h2, h3, h4 {margin-top : 0;margin-bottom : 0;padding-top : 0;padding-bottom : 0;}
+
+        span.preheader {display : none; font-size : 1px;}
+
+        html {width : 100%;}
+
+        table {font-size : 12px;border : 0;}
+
+        .menu-space {padding-right : 25px;}
+
+        a, a:hover { text-decoration : none; color : #FFF;}
+
+
+        @media only screen and (max-width : 640px) {
+            body {width : auto !important;}
+
+            table [class=main] {width : 440px !important;}
+
+            table [class=two-left] {width : 420px !important; margin : 0px auto;}
+
+            table [class=full] {width : 100% !important; margin : 0px auto;}
+
+            table [class=two-left-inner] {width : 400px !important; margin : 0px auto;}
+
+            table [class=menu-icon] { display : none;}
+
         }
 
-        li {
-            margin-left : 30px !important;
+        @media only screen and (max-width : 479px) {
+            body {width : auto !important;}
+
+            table [class=main] {width : 310px !important;}
+
+            table [class=two-left] {width : 300px !important; margin : 0px auto;}
+
+            table [class=full] {width : 100% !important; margin : 0px auto;}
+
+            table [class=two-left-inner] {width : 280px !important; margin : 0px auto;}
+
+            table [class=menu-icon] { display : none;}
+
+
         }
 
-        li.list-item-first {
-            margin-top : 0 !important;
-        }
 
-        li.list-item-last {
-            margin-bottom : 10px !important;
-        }
     </style>
-    <![endif]-->
-
-    <!-- Progressive Enhancements : BEGIN -->
-    <style>
-        body {
-            font-family : "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-        }
-
-        a {
-            color : #377DFF;
-        }
-
-        h1 {
-            font-family : Verdana, sans-serif;
-            margin      : 0 0 10px 0;
-            font-size   : 18px;
-            color       : #333333;
-            font-weight : normal;
-        }
-
-        ul {
-            font-family     : Verdana, sans-serif;
-            padding         : 0;
-            margin          : 0 0 10px 0;
-            list-style-type : disc;
-        }
-
-        li {
-            font-family : Verdana, sans-serif;
-            margin      : 0 0 10px 30px;
-        }
-
-        h2 {
-            font-family : Verdana, sans-serif;
-            margin      : 0 0 10px 0;
-            font-size   : 18px;
-            color       : #333333;
-            font-weight : normal;
-        }
-
-        h3 {
-            font-family : Verdana, sans-serif;
-            margin      : 0 0 10px 0;
-            font-size   : 16px;
-            color       : #333333;
-            font-weight : normal;
-        }
-
-        .button-td, .button-a {
-            transition : all 100ms ease-in;
-        }
-
-        .button-td-primary:hover,
-        .button-a-primary:hover {
-            background   : #377DFF !important;
-            border-color : #377DFF !important;
-        }
-
-        @media screen and (max-width : 600px) {
-            .email-container p {
-                font-size : 17px !important;
-            }
-        }
-    </style>
-    <!--[if gte mso 9]>
-    <xml>
-        <o:OfficeDocumentSettings>
-            <o:AllowPNG/>
-            <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-    </xml>
-    <![endif]-->
 
 </head>
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #F8F9FA;">
-<center style="width: 100%; background-color: #F8F9FA;">
-    <!--[if mso | IE]>
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F8F9FA;">
-        <tr>
-            <td>
-    <![endif]-->
-    <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-        @yield('description', 'E-mail enviando pelo quantofica.com, o seu portal busca de negócios locais. Um projeto Z1lab.')
-    </div>
 
-    <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-        &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-    </div>
+<body yahoo="fix" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+<!--Main Table Start-->
 
-        @include('emails.components.header')
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#0d0b0c">
+    <tr>
+        <td align="center" valign="top">
+            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0" class="main">
+                <tr>
+                    <td height="100" align="center" valign="top" style="font-size:100px; line-height:100px;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td height="330" align="center" valign="top" style="background:#FFFFFF; -moz-border-radius: 4px 4px 0px 0px; border-radius: 4px 4px 0px 0px;">
+                        <table width="510" border="0" align="center" cellpadding="0" cellspacing="0" class="two-left">
+                            @include('emails.components.header')
 
-        @yield('content')
+                            <tr>
+                                <td align="left" valign="top">
+                                    <table width="80%" border="0" align="center" cellpadding="0" cellspacing="0" class="two-left">
 
-        @include('emails.components.divider')
+                                        <tr>
+                                            <td align="center" valign="top">
+                                                <table width="64" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <td align="center" valign="top">
+                                                            <img src="{{ $image['source'] }}" width="400px" alt="{{ $image['text'] }}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="center" valign="top">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
 
-        @include('emails.components.no-reply')
+                                        @yield('content')
 
-        @include('emails.components.divider')
-    </div>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-    @include('emails.components.footer')
+                @include('emails.components.address')
+                @include('emails.components.footer')
 
-    <!--[if mso | IE]>
-    </td>
+            </table>
+        </td>
     </tr>
-    </table>
-    <![endif]-->
-</center>
+</table>
+
+<!--Main Table End-->
+
 </body>
 </html>

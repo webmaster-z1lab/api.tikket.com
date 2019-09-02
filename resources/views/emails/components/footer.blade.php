@@ -1,44 +1,23 @@
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #24336B;">
-    <tr>
-        <td valign="top">
-            <div align="center" style="max-width: 600px; margin: auto;" class="email-container">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <tr>
-                        <td style="padding: 20px; font-family: sans-serif; font-size: 14px; text-align: center; color: #FFFFFF;">
-                            <a href="https://quantofica.com" target="_blank" style="color: #FFFFFF !important;" title="quantofica.com">
-                                <img src="https://d35c048n9fix3e.cloudfront.net/images/quantofica/favicon.png" width="60px" alt="quantofica.com">
-                            </a>
-                            <span class="unstyle-auto-detected-links">
-                                <br>Viçosa, Minas Gerais, Brasil
-                                <br>(31) 99715-0447
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-    </tr>
-</table>
+<tr>
+    <td height="30" align="center" valign="top" bgcolor="#6000A7" style="-moz-border-radius:0px 0px 4px 4px; border-radius:0px 0px 4px 4px">
+        <table width="490" border="0" cellspacing="0" cellpadding="0" class="two-left-inner">
+            <tr>
+                <td height="25" align="center" valign="middle" style="line-height:25px; font-size:25px;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle" style="font-family:'Open Sans', Verdana, Arial; font-size:13px; color:#ffffff; font-weight:normal; line-height:28px; text-transform:uppercase;">
+                    <a href="https://tikket.com.br" style="text-decoration:none; color:#FFFFFF;">Home</a> . &nbsp;
+                    <a href="https://facebook.com/tikketeventos" style="text-decoration:none; color:#FFFFFF;">Facebook</a> . &nbsp;
+                    <a href="https://instagram.com/tikketeventos" style="text-decoration:none; color:#FFFFFF;">Instagram</a>
+                </td>
+            </tr>
+            <tr>
+                <td height="25" align="center" valign="middle" style="line-height:25px; font-size:25px;">&nbsp;</td>
+            </tr>
 
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #24336B;" align="center">
-    <tr align="center">
-        <td valign="top">
-            <div align="center" style="max-width: 600px; margin: auto; padding: 0 0 20px" class="email-container">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                    <tr align="center">
-                        <td style="padding-right: 5px">
-                            <a href="https://facebook.com/quantofica" target="_blank" title="Facebook do quantofica.com">
-                                <img src="https://d35c048n9fix3e.cloudfront.net/images/social/facebook_white.png" alt="@quantofica" width="25px">
-                            </a>
-                        </td>
-                        <td>
-                            <a href="https://instagram.com/quantofica" target="_blank" title="Instagram do quantofica.com">
-                                <img src="https://d35c048n9fix3e.cloudfront.net/images/social/instagram_white.png" alt="@quantofica" width="25px">
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-    </tr>
-</table>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td height="100" align="center" valign="top" style="font-size:100px; line-height:100px;">&nbsp;</td>
+</tr>

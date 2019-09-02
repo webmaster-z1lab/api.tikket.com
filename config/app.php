@@ -56,6 +56,7 @@ return [
 
     'asset_url' => env('ASSET_URL', NULL),
 
+    'main_site_url' => env('MAIN_SITE_URL', 'http://127.0.0.1:8000'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -169,7 +170,6 @@ return [
         /*
          * Application Service Providers...
          */
-        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,

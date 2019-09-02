@@ -1,17 +1,17 @@
-<table align="center" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 auto; background-color: #FFFFFF">
-    <tr>
-        <td style="padding: 0 20px 20px;">
-            <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: auto;">
-                <tr>
-                    <td class="button-td button-td-primary" style="border-radius: 4px; background: #377DFF;">
-                        <a class="button-a button-a-primary" href="{{ $button['link'] }}"
-                           style="font-family : 'Poppins', Verdana, sans-serif; background : #377DFF; font-size : 16px; font-weight : bold; line-height : 15px; text-decoration : none; padding : 13px 17px; color : #ffffff; display : block; border-radius : 4px; width : 250px; text-align : center; text-transform : uppercase;">
-                            {{ __($button['text']) }}
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-
+<tr>
+    <td height="40" align="center" valign="top">&nbsp;</td>
+</tr>
+<tr>
+    <td align="center" valign="top">
+        <table width="220" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td height="50" align="center" valign="middle" bgcolor="#6000A7"
+                    style="font-family:Arial, Helvetica, sans-serif; font-size:16px; color:#6000A7; font-weight:bold; -moz-border-radius: 50px; border-radius: 50px;">
+                    <a href="{{ $button['link'] }}" style="text-decoration:none; color:#FFF; text-transform: uppercase;">{{ $button['text'] }}</a></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td height="80" align="center" valign="top">&nbsp;</td>
+</tr>

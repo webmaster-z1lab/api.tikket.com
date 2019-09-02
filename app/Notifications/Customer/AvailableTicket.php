@@ -2,10 +2,10 @@
 
 namespace App\Notifications\Customer;
 
+use App\Mail\Customer\AvailableTicketMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class AvailableTicket extends Notification implements ShouldQueue
 {
@@ -18,13 +18,13 @@ class AvailableTicket extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  \Modules\Order\Models\Customer  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -35,21 +35,19 @@ class AvailableTicket extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @param  \Modules\Order\Models\Customer  $notifiable
+     *
+     * @return \App\Mail\Customer\AvailableTicketMail
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new AvailableTicketMail())->to($notifiable->email);
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  \Modules\Order\Models\Customer  $notifiable
      * @return array
      */
     public function toArray($notifiable)

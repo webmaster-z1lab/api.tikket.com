@@ -1,15 +1,23 @@
-<table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 auto;background-color: #F8F9FA;">
-    <tr>
-        <td style="padding: 20px; text-align: left">
-            <a href="https://quantofica.com" target="_blank">
-                <img src="https://d35c048n9fix3e.cloudfront.net/images/quantofica/logo_full.png" width="220px" alt="alt_text" border="0" style="height: auto;">
-            </a>
-        </td>
+<tr>
+    <td height="40" align="left" valign="top" style="font-size:40px; line-height:40px;">&nbsp;</td>
+</tr>
+<tr>
+    <td align="left" valign="top">
 
-        <td style="padding: 20px; text-align: right">
-            <a href="https://z1lab.com.br" target="_blank">
-                <img src="https://d35c048n9fix3e.cloudfront.net/images/z1lab/logo/powered-by.png" width="150px" alt="alt_text" border="0" style="height: auto;">
-            </a>
-        </td>
-    </tr>
-</table>
+        <table width="105" border="0" align="left" cellpadding="0" cellspacing="0" class="full">
+            <tr>
+                <td align="center" valign="top"><a href="https://tikket.com.br"><img src="https://d35c048n9fix3e.cloudfront.net/images/tikket/logo-xs.png" height="40" alt=""/></a></td>
+            </tr>
+        </table>
+
+        <table border="0" align="right" cellpadding="0" cellspacing="0" class="full">
+            <tr>
+                <td height="8" align="center" valign="top" style="font-size:8px; line-height:8px;">&nbsp;</td>
+            </tr>
+        </table>
+
+    </td>
+</tr>
+<tr>
+    <td height="50" align="left" valign="top" style="font-size:50px; line-height:50px;">&nbsp;</td>
+</tr>
