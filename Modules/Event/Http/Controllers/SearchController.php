@@ -33,6 +33,14 @@ class SearchController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\Resources\Json\Resource
+     */
+    public function featured()
+    {
+        return api_resource('SimpleEvent')->collection($this->repository->featured());
+    }
+
+    /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function getGeoIp()

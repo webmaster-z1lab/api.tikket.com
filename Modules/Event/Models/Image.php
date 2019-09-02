@@ -13,9 +13,13 @@ use Jenssegers\Mongodb\Eloquent\Model;
  * @property string                      event_id
  * @property string                      original
  * @property string                      cover
+ * @property-read  string                cover_url
  * @property string                      thumbnail
+ * @property-read  string                thumbnail_url
  * @property string                      square
+ * @property-read  string                square_url
  * @property string                      facebook_cover
+ * @property-read string                 facebook_cover_url
  * @property \Modules\Event\Models\Event event
  */
 class Image extends Model
@@ -35,7 +39,7 @@ class Image extends Model
     {
         return (isset($this->attributes['cover']))
             ? \Storage::url($this->attributes['cover'])
-            : NULL;
+            : 'https://via.placeholder.com/1280x720';
     }
 
     /**
@@ -45,7 +49,7 @@ class Image extends Model
     {
         return (isset($this->attributes['thumbnail']))
             ? \Storage::url($this->attributes['thumbnail'])
-            : NULL;
+            : 'https://via.placeholder.com/250';
     }
 
     /**
@@ -55,14 +59,17 @@ class Image extends Model
     {
         return (isset($this->attributes['square']))
             ? \Storage::url($this->attributes['square'])
-            : NULL;
+            : 'https://via.placeholder.com/640';
     }
 
+    /**
+     * @return string
+     */
     public function getFacebookCoverUrlAttribute()
     {
         return (isset($this->attributes['facebook_cover']))
             ? \Storage::url($this->attributes['facebook_cover'])
-            : NULL;
+            : 'https://via.placeholder.com/1200x630';
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Validator\Validator;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        setLocale(LC_TIME, 'pt_BR');
+        Carbon::setLocale('pt_BR');
+
         $this->app['validator']->resolver(function ($translator, $data, $rules, $messages, $customAttributes) {
             $messages += [
                 'cell_phone'  => 'O campo :attribute não é um possui o formato válido de celular com DDD',

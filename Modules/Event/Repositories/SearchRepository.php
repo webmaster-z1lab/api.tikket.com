@@ -22,7 +22,6 @@ class SearchRepository
         $results = Event::whereIn('status', [Event::PUBLISHED, Event::CANCELED])
             ->search(\Request::query('keyword'))
             ->period(\Request::query('period'))
-            ->published()
             ->skip(($page - 1) * self::PER_PAGE)
             ->take(self::PER_PAGE)
             ->get();
@@ -30,10 +29,17 @@ class SearchRepository
         $total = Event::whereIn('status', [Event::PUBLISHED, Event::CANCELED])
             ->search(\Request::query('keyword'))
             ->period(\Request::query('period'))
-            ->published()
             ->count();
 
         return $this->paginate($results, $total, self::PER_PAGE, $page);
+    }
+
+    /**
+     * @return \Illuminate\Database\Query\Builder|\Modules\Event\Models\Event
+     */
+    public function featured()
+    {
+        return Event::featured()->get();
     }
 
     /**

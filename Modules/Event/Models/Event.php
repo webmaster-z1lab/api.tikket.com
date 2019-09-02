@@ -12,29 +12,32 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  *
  * @package Modules\Event\Models
  *
- * @property string                                   name
- * @property string                                   url
- * @property string                                   description
- * @property string                                   body
- * @property string                                   category
- * @property string                                   types
- * @property string                                   referer
- * @property \Carbon\Carbon                           starts_at
- * @property \Carbon\Carbon                           finishes_at
- * @property integer                                  fee_percentage
- * @property bool                                     fee_is_hidden
- * @property bool                                     is_active
- * @property bool                                     is_public
- * @property bool                                     is_locked
- * @property \Illuminate\Database\Eloquent\Collection entrances
- * @property \Modules\Event\Models\Address            address
- * @property \Modules\Event\Models\Producer           producer
- * @property \Modules\Event\Models\Image              image
+ * @property string                                   $id
+ * @property string                                   $name
+ * @property string                                   $url
+ * @property string                                   $description
+ * @property string                                   $body
+ * @property string                                   $category
+ * @property string                                   $types
+ * @property string                                   $referer
+ * @property \Carbon\Carbon                           $starts_at
+ * @property \Carbon\Carbon                           $finishes_at
+ * @property integer                                  $fee_percentage
+ * @property bool                                     $fee_is_hidden
+ * @property bool                                     $is_active
+ * @property bool                                     $is_public
+ * @property bool                                     $is_locked
+ * @property bool                                     $is_featured
+ * @property \Illuminate\Database\Eloquent\Collection $entrances
+ * @property \Modules\Event\Models\Address            $address
+ * @property \Modules\Event\Models\Producer           $producer
+ * @property \Modules\Event\Models\Image              $image
  * @method \Modules\Event\Models\Event                period(string $period = NULL)
  * @method \Modules\Event\Models\Event                search(string $keywords = NULL)
  * @method \Modules\Event\Models\Event                published()
- * @property-read \Carbon\Carbon                      created_at
- * @property-read \Carbon\Carbon                      updated_at
+ * @method \Modules\Event\Models\Event                featured()
+ * @property-read \Carbon\Carbon                      $created_at
+ * @property-read \Carbon\Carbon                      $updated_at
  */
 class Event extends Model
 {
@@ -46,11 +49,12 @@ class Event extends Model
     public const CANCELED  = 'canceled';
     public const PUBLISHED = 'published';
 
-    const STATUS_ACTIVE  = FALSE;
-    const STATUS_PUBLIC  = TRUE;
-    const STATUS_FEE     = TRUE;
-    const STATUS_LOCKED  = FALSE;
-    const FEE_PERCENTAGE = 10;
+    const STATUS_ACTIVE   = FALSE;
+    const STATUS_FEATURED = TRUE;
+    const STATUS_PUBLIC   = TRUE;
+    const STATUS_FEE      = TRUE;
+    const STATUS_LOCKED   = FALSE;
+    const FEE_PERCENTAGE  = 10;
 
     protected $attributes = [
         'is_active'      => self::STATUS_ACTIVE,
@@ -58,6 +62,7 @@ class Event extends Model
         'fee_is_hidden'  => self::STATUS_FEE,
         'fee_percentage' => self::FEE_PERCENTAGE,
         'is_locked'      => self::STATUS_LOCKED,
+        'is_featured'    => self::STATUS_FEATURED,
         'status'         => self::DRAFT,
     ];
 
@@ -77,6 +82,7 @@ class Event extends Model
         'is_public',
         'is_active',
         'is_locked',
+        'is_featured',
         'status',
     ];
 
@@ -91,6 +97,7 @@ class Event extends Model
         'is_public'      => 'boolean',
         'is_active'      => 'boolean',
         'is_locked'      => 'boolean',
+        'is_featured'    => 'boolean',
     ];
 
     /**
@@ -141,6 +148,16 @@ class Event extends Model
     public function scopePublished(Builder $query)
     {
         return $query->where('status', self::PUBLISHED);
+    }
+
+    /**
+     * @param  \Jenssegers\Mongodb\Eloquent\Builder  $query
+     *
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
+     */
+    public function scopeFeatured(Builder $query)
+    {
+        return $query->where('status', self::PUBLISHED)->where('is_featured', TRUE)->orderBy('starts_at');
     }
 
     /**
