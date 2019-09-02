@@ -54,7 +54,8 @@
             "Modules\\": "Modules/"
         },
         "classmap": [
-            "database/seeds"
+            "database/seeds",
+            "database/migrations"
         ]
     },
     "autoload-dev": {
