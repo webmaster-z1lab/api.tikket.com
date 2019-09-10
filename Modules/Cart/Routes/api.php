@@ -1,6 +1,6 @@
 <?php
 
-Route::middleware('api.v:1,cart')->prefix('v1')->group(function ()
+Route::middleware('api.v:1,cart')->prefix('v1')->group(static function ()
 {
     Route::get('carts', 'CartController@find')->name('carts.index');
 

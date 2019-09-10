@@ -2,8 +2,8 @@
 
 Route::middleware('api.v:1,report')
     ->prefix('v1')
-    ->group(function () {
-        Route::prefix('events/{event}/reports')->group(function () {
+    ->group(static function () {
+        Route::prefix('events/{event}/reports')->group(static function () {
             Route::get('sales', 'ReportController@valueSales');
 
             Route::get('canceled', 'ReportController@canceledSales');
@@ -27,7 +27,7 @@ Route::middleware('api.v:1,report')
             Route::get('summary', 'SummaryController@basic');
 
             Route::prefix('sale-points/{pdv}')
-                ->group(function () {
+                ->group(static function () {
                     Route::get('tickets', 'ReportController@salePointTickets');
 
                     Route::get('values', 'ReportController@salePointValues');

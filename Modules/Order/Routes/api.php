@@ -2,7 +2,7 @@
 
 Route::middleware('api.v:1,order')
     ->prefix('v1')
-    ->group(function () {
+    ->group(static function () {
         Route::apiResource('orders', 'OrderController')->except(['update']);
 
         Route::patch('orders/{order}/status', 'OrderController@status')->name('orders.status');

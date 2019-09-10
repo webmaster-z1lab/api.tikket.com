@@ -49,12 +49,12 @@ class Event extends Model
     public const CANCELED  = 'canceled';
     public const PUBLISHED = 'published';
 
-    const STATUS_ACTIVE   = FALSE;
-    const STATUS_FEATURED = TRUE;
-    const STATUS_PUBLIC   = TRUE;
-    const STATUS_FEE      = TRUE;
-    const STATUS_LOCKED   = FALSE;
-    const FEE_PERCENTAGE  = 10;
+    public const STATUS_ACTIVE   = FALSE;
+    public const STATUS_FEATURED = TRUE;
+    public const STATUS_PUBLIC   = TRUE;
+    public const STATUS_FEE      = TRUE;
+    public const STATUS_LOCKED   = FALSE;
+    public const FEE_PERCENTAGE  = 10;
 
     protected $attributes = [
         'is_active'      => self::STATUS_ACTIVE,

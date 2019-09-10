@@ -2,7 +2,7 @@
 
 Route::middleware('api.v:1,event')
     ->prefix('v1')
-    ->group(function () {
+    ->group(static function () {
         Route::get('actions/user_ip', 'SearchController@getGeoIp');
 
         Route::apiResource('coupons', 'CouponController')->except(['index']);
@@ -16,7 +16,7 @@ Route::middleware('api.v:1,event')
             Route::get('{url}', 'EventController@findByUrl');
         });
 
-        Route::prefix('events/{event}')->group(function () {
+        Route::prefix('events/{event}')->group(static function () {
             Route::patch('address', 'EventController@address');
 
             Route::patch('finalize', 'EventController@finilize');
