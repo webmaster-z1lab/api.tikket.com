@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 /**
@@ -9,15 +10,17 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Order\Models
  *
- * @property string user_id
- * @property string name
- * @property string email
- * @property string document
- * @property \Modules\Order\Models\Phone phone
+ * @property string                        user_id
+ * @property string                        name
+ * @property string                        email
+ * @property string                        document
+ * @property \Modules\Order\Models\Phone   phone
  * @property \Modules\Order\Models\Address address
  */
 class Customer extends Model
 {
+    use Notifiable;
+
     public $timestamps = FALSE;
 
     protected $fillable = [
@@ -30,7 +33,7 @@ class Customer extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function phone()
+    public function phone(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(Phone::class);
     }
@@ -38,7 +41,7 @@ class Customer extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function address()
+    public function address(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(Address::class);
     }

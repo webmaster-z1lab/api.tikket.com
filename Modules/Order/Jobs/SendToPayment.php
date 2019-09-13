@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Jobs;
 
+use App\Notifications\Customer\BoletoReceived;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -37,7 +38,7 @@ class SendToPayment implements ShouldQueue
      * @return void
      * @throws \Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $data = [];
         $data['amount'] = $this->order->amount - $this->order->discount;
@@ -132,15 +133,15 @@ class SendToPayment implements ShouldQueue
         $this->order->transaction_id = $transaction['id'];
         if ($data['type'] === 'boleto') {
             $this->order->boleto->update([
-                'url'      => $transaction['attributes']['payment_method']['boleto']['url'],
-                'barcode'  => $transaction['attributes']['payment_method']['boleto']['barcode'],
-                'due_date' => Carbon::createFromFormat(Carbon::W3C, $transaction['attributes']['payment_method']['boleto']['due_date']),
+                'url'     => $transaction['attributes']['payment_method']['boleto']['url'],
+                'barcode' => $transaction['attributes']['payment_method']['boleto']['barcode'],
+                'due_at'  => Carbon::createFromFormat(Carbon::W3C, $transaction['attributes']['payment_method']['boleto']['due_date']),
             ]);
 
             $this->order->save();
 
             broadcast(new ReadyBoleto($this->order));
-
+            $this->order->customer->notify(new BoletoReceived($this->order));
         } else {
             $this->order->save();
         }

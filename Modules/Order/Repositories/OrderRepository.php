@@ -15,19 +15,19 @@ use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
 use Modules\Order\Jobs\SendToPayment;
 use Modules\Order\Models\Order;
-use Modules\Ticket\Jobs\CreateTickets;
 use Modules\Ticket\Jobs\CancelTickets;
+use Modules\Ticket\Jobs\CreateTickets;
 
 class OrderRepository
 {
     use AvailableEntrances, AvailableCoupons;
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return \Modules\Order\Models\Order
      */
-    public function find(string $id)
+    public function find(string $id): Order
     {
         $order = Order::find($id);
 
@@ -39,32 +39,33 @@ class OrderRepository
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function getByUser()
+    public function getByUser(): \Illuminate\Support\Collection
     {
         $past = \Request::query('past', FALSE);
 
-        $past = $past === 'false' ? FALSE : boolval($past);
+        $past = $past === 'false' ? FALSE : (bool) $past;
 
-        if ($past)
+        if ($past) {
             return Order::where('customer.user_id', \Auth::id())
-                ->whereHas('event', function ($query) {
+                ->whereHas('event', static function ($query) {
                     $query->whereIn('status', [Event::CANCELED, Event::FINALIZED]);
                 })->latest()->get();
+        }
 
         return Order::where('customer.user_id', \Auth::id())
-            ->whereHas('event', function ($query) {
+            ->whereHas('event', static function ($query) {
                 $query->whereNotIn('status', [Event::CANCELED, Event::FINALIZED]);
             })->latest()->get();
     }
 
     /**
-     * @param string $cart_id
-     * @param string $ip
+     * @param  string  $cart_id
+     * @param  string  $ip
      *
      * @return \Modules\Order\Models\Order|null
      * @throws \Exception
      */
-    public function createByCart(string $cart_id, string $ip)
+    public function createByCart(string $cart_id, string $ip): ?Order
     {
         $cart = Cart::find($cart_id);
 
@@ -93,6 +94,7 @@ class OrderRepository
 
         $order->coupon()->associate($cart->coupon);
 
+        /** @var  \App\Models\User $user */
         $user = \Auth::user();
 
         $customer = $order->customer()->create([
@@ -138,11 +140,11 @@ class OrderRepository
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      *
      * @return \Modules\Order\Models\Order|null
      */
-    public function createBySale(array $data)
+    public function createBySale(array $data): ?Order
     {
         $tickets = [];
         $amount = 0;
@@ -159,7 +161,7 @@ class OrderRepository
                 $fee += ($entrance->available->fee * $items->count());
             }
 
-            foreach ($items as $ticket)
+            foreach ($items as $ticket) {
                 $tickets[] = [
                     'entrance_id' => $ticket['entrance'],
                     'entrance'    => $entrance->name,
@@ -171,6 +173,7 @@ class OrderRepository
                     'email'       => $ticket['email'],
                     'code'        => $ticket['code'],
                 ];
+            }
         }
 
         $admin = \Gate::allows('master', $data['event']) || \Gate::allows('organizer', $data['event']);
@@ -186,6 +189,7 @@ class OrderRepository
         $order->event()->associate($data['event']);
         $order->tickets()->createMany($tickets);
 
+        /** @var  \App\Models\User $user */
         $user = \Auth::user();
 
         if ($admin) {
@@ -217,12 +221,12 @@ class OrderRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Order\Models\Order|null
      */
-    public function setStatus(array $data, string $id)
+    public function setStatus(array $data, string $id): ?Order
     {
         $order = $this->find($id);
 
@@ -233,19 +237,20 @@ class OrderRepository
         $changed = $order->update($data);
 
         if ($changed) {
-            if ($order->status === Order::PAID)
+            if ($order->status === Order::PAID) {
                 CreateTickets::dispatch($order);
-            elseif ($order->status === Order::REVERSED)
+            } elseif ($order->status === Order::REVERSED) {
                 CancelTickets::dispatch($order);
+            }
         }
 
         return $order;
     }
 
     /**
-     * @param \Modules\Cart\Models\Cart $cart
+     * @param  \Modules\Cart\Models\Cart  $cart
      */
-    private function setWaitingEntrances(Cart $cart)
+    private function setWaitingEntrances(Cart $cart): void
     {
         foreach ($cart->bags as $bag) {
             $entrance = Entrance::find($bag->entrance_id);
@@ -254,10 +259,10 @@ class OrderRepository
     }
 
     /**
-     * @param \Modules\Order\Models\Order $order
-     * @param string                      $status
+     * @param  \Modules\Order\Models\Order  $order
+     * @param  string                       $status
      */
-    private function checkStatusForEntrances(Order $order, string $status)
+    private function checkStatusForEntrances(Order $order, string $status): void
     {
         foreach ($order->tickets->groupBy('entrance_id') as $entrance_id => $tickets) {
             $entrance = Entrance::find($entrance_id);
@@ -278,10 +283,10 @@ class OrderRepository
     }
 
     /**
-     * @param \Modules\Order\Models\Order $order
-     * @param string                      $status
+     * @param  \Modules\Order\Models\Order  $order
+     * @param  string                       $status
      */
-    private function checkStatusForCoupons(Order $order, string $status)
+    private function checkStatusForCoupons(Order $order, string $status): void
     {
         if ($order->coupon()->exists()) {
             switch ($status) {

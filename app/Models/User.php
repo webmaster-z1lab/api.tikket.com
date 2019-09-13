@@ -10,8 +10,10 @@ use Illuminate\Notifications\Notifiable;
  *
  * @package App\Models
  *
+ * @property string $id
  * @property string $email
- * @property string name
+ * @property string $name
+ * @property string $document
  */
 class User extends Authenticatable
 {

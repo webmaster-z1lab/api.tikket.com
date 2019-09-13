@@ -99,9 +99,9 @@ class Order extends Model
     /**
      * @param $query
      *
-     * @return $this
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
      */
-    public function scopePaid($query)
+    public function scopePaid($query): \Jenssegers\Mongodb\Eloquent\Builder
     {
         return $query->where('status', self::PAID);
     }
@@ -109,9 +109,9 @@ class Order extends Model
     /**
      * @param $query
      *
-     * @return $this
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
      */
-    public function scopeProcessed($query)
+    public function scopeProcessed($query): \Jenssegers\Mongodb\Eloquent\Builder
     {
         return $query->where('status', self::PAID)->orWhere('status', self::WAITING);
     }
@@ -120,9 +120,9 @@ class Order extends Model
      * @param        $query
      * @param  string  $document
      *
-     * @return $this
+     * @return \Jenssegers\Mongodb\Eloquent\Builder
      */
-    public function scopeByPerson($query, $document)
+    public function scopeByPerson($query, $document): \Jenssegers\Mongodb\Eloquent\Builder
     {
         return $query->where('customer.document', $document);
     }
@@ -130,7 +130,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function customer()
+    public function customer(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(Customer::class);
     }
@@ -138,7 +138,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function card()
+    public function card(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(Card::class);
     }
@@ -146,7 +146,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function boleto()
+    public function boleto(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(Boleto::class);
     }
@@ -154,7 +154,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsMany
      */
-    public function bags()
+    public function bags(): \Jenssegers\Mongodb\Relations\EmbedsMany
     {
         return $this->embedsMany(Bag::class);
     }
@@ -162,7 +162,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsMany
      */
-    public function tickets()
+    public function tickets(): \Jenssegers\Mongodb\Relations\EmbedsMany
     {
         return $this->embedsMany(Ticket::class);
     }
@@ -170,7 +170,7 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function event()
+    public function event(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
@@ -178,7 +178,7 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function coupon()
+    public function coupon(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Coupon::class);
     }
@@ -186,7 +186,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function sale_point()
+    public function sale_point(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(SalePoint::class);
     }
@@ -194,7 +194,7 @@ class Order extends Model
     /**
      * @return \Jenssegers\Mongodb\Relations\EmbedsOne
      */
-    public function administrator()
+    public function administrator(): \Jenssegers\Mongodb\Relations\EmbedsOne
     {
         return $this->embedsOne(SalePoint::class);
     }
@@ -202,7 +202,7 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function actual_tickets()
+    public function actual_tickets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\Modules\Ticket\Models\Ticket::class);
     }
