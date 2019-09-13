@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Modules\Order\Models\Order;
 
-class OrderReceivedMail extends Mailable
+class OrderApprovedMail extends Mailable
 {
     use Queueable, SerializesModels;
     /**
@@ -23,18 +23,22 @@ class OrderReceivedMail extends Mailable
      */
     public $button = [
         'link' => '',
-        'text' => 'Detalhes do Pedido',
+        'text' => 'imprimir ingressos',
     ];
     /**
      * @var array
      */
     public $image = [
-        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_super_thank_you.png',
-        'text'   => 'Pedido realizado',
+        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_confirmed.png',
+        'text'   => 'Pedido confirmado',
     ];
+    /**
+     * @var string
+     */
+    public $subject;
 
     /**
-     * OrderReceivedMail constructor.
+     * OrderApprovedMail constructor.
      *
      * @param  \Modules\Order\Models\Order  $order
      * @param  array                        $params
@@ -54,6 +58,6 @@ class OrderReceivedMail extends Mailable
      */
     public function build(): self
     {
-        return $this->view('emails.customer.order-received');
+        return $this->view('emails.customer.order-approved');
     }
 }

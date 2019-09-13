@@ -4,8 +4,8 @@ namespace App\Notifications\Customer;
 
 use App\Mail\Customer\AvailableTicketMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 
 class AvailableTicket extends Notification implements ShouldQueue
 {
@@ -18,7 +18,6 @@ class AvailableTicket extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-
     }
 
     /**
