@@ -29,6 +29,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
  * @property bool                                     $is_locked
  * @property bool                                     $is_featured
  * @property \Illuminate\Database\Eloquent\Collection $entrances
+ * @property \Illuminate\Database\Eloquent\Collection $permissions
  * @property \Modules\Event\Models\Address            $address
  * @property \Modules\Event\Models\Producer           $producer
  * @property \Modules\Event\Models\Image              $image

@@ -1,20 +1,20 @@
 <?php
 
-use Modules\Order\Models\Order;
+use App\Mail\Organizer\EventPublishedMail;
 
 Route::view('/', 'cover');
 
 Route::get('test', static function () {
-    $order = Order::find('5d77aa3f805c1e228c00093d');
+    $event = \Modules\Event\Models\Event::find('5d71128b805c1e08400026c2');
 
     $params = [
-        'action'  => config('app.main_site_url')."/order/{$order->id}",
-        'text'    => 'O pedido de extono do seu pedido foi realizado com sucesso.',
-        'title'   => 'Pedido extornado com sucesso',
-        'icon'    => 'fas fa-undo',
+        'action'  => config('app.main_site_url')."/evento/{$event->id}",
+        'text'    => "O seu evento {$event->name} acaba de ser publicado e está pronto para venda de ingressos.",
+        'title'   => 'Evento publicado com sucesso',
+        'icon'    => 'far fa-calendar-check',
         'color'   => 'info',
         'sent_at' => now(),
     ];
 
-    return new \App\Mail\Customer\OrderCancelledMail($order, $params);
+    return new EventPublishedMail($event, $params);
 });

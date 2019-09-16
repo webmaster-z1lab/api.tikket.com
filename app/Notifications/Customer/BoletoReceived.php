@@ -64,6 +64,6 @@ class BoletoReceived extends Notification implements ShouldQueue
             'icon'    => 'fas fa-shopping-cart',
             'color'   => 'info',
             'sent_at' => now(),
-        ];;
+        ];
     }
 }

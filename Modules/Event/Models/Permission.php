@@ -2,19 +2,24 @@
 
 namespace Modules\Event\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Permission extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Notifiable;
 
-    public const MASTER = 'master';
+    public const MASTER    = 'master';
     public const ORGANIZER = 'organizer';
-    public const CHECKIN = 'checkin';
-    public const PDV = 'pdv';
+    public const CHECKIN   = 'checkin';
+    public const PDV       = 'pdv';
 
-    protected $fillable = ['type', 'email', 'parent_id'];
+    protected $fillable = [
+        'type',
+        'email',
+        'parent_id',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -29,7 +34,7 @@ class Permission extends Model
      */
     public function getNameAttribute(): string
     {
-        return config('event.levels.' . $this->attributes['type'] . '.name');
+        return config('event.levels.'.$this->attributes['type'].'.name');
     }
 
     /**
@@ -37,6 +42,6 @@ class Permission extends Model
      */
     public function getDescriptionAttribute(): string
     {
-        return config('event.levels.' . $this->attributes['type'] . '.description');
+        return config('event.levels.'.$this->attributes['type'].'.description');
     }
 }

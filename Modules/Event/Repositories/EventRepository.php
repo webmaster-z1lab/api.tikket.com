@@ -8,6 +8,7 @@
 
 namespace Modules\Event\Repositories;
 
+use App\Notifications\Organizer\EventPublished;
 use App\Traits\EventValidator;
 use Carbon\Carbon;
 use Modules\Event\Jobs\DeletePermissions;
@@ -19,10 +20,11 @@ use Z1lab\JsonApi\Repositories\ApiRepository;
 class EventRepository extends ApiRepository
 {
     use EventValidator;
+
     /**
      * EventRepository constructor.
      *
-     * @param \Modules\Event\Models\Event $model
+     * @param  \Modules\Event\Models\Event  $model
      */
     public function __construct(Event $model)
     {
@@ -30,7 +32,7 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      *
      * @return \Modules\Event\Models\Event
      */
@@ -41,7 +43,7 @@ class EventRepository extends ApiRepository
         $data['url'] = str_slug($data['name']);
         $data['referer'] = \Request::url();
         $data['user_id'] = \Auth::id();
-        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
+        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool) $data['is_public'];
 
         /** @var \Modules\Event\Models\Event $event */
         $event = $this->model->create(array_except($data, ['cover']));
@@ -66,8 +68,8 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event
      */
@@ -79,7 +81,7 @@ class EventRepository extends ApiRepository
         $data['starts_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['starts_at']);
         $data['finishes_at'] = Carbon::createFromFormat('Y-m-d H:i', $data['finishes_at']);
         $data['referer'] = \Request::url();
-        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool)$data['is_public'];
+        $data['is_public'] = $data['is_public'] === 'false' ? FALSE : (bool) $data['is_public'];
 
         $event->update(array_except($data, ['cover']));
 
@@ -101,7 +103,7 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return bool
      */
@@ -123,7 +125,7 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param string $url
+     * @param  string  $url
      *
      * @return mixed
      */
@@ -137,8 +139,8 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event
      */
@@ -146,16 +148,21 @@ class EventRepository extends ApiRepository
     {
         $event = $this->find($id);
 
-        if ($event->address()->exists()) $event->address()->delete();
+        if ($event->address()->exists()) {
+            $event->address()->delete();
+        }
 
-        if (ends_with($data['formatted'], 'Brasil'))
+        if (ends_with($data['formatted'], 'Brasil')) {
             $data['formatted'] = str_replace_last(', Brasil', '', $data['formatted']);
+        }
 
         $address = $event->address()->create(array_except($data, ['coordinate']));
 
         $address->coordinate()->create(['location' => $data['coordinate']]);
 
-        if ($event->is_locked) UpdateEventInfo::dispatch($event);
+        if ($event->is_locked) {
+            UpdateEventInfo::dispatch($event);
+        }
 
         $this->setCacheKey($id);
         $this->flush()->remember($event->fresh());
@@ -164,8 +171,8 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param array  $data
-     * @param string $id
+     * @param  array   $data
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event|null
      */
@@ -182,7 +189,7 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event|null
      */
@@ -200,15 +207,18 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event
      */
     public function publish(string $id)
     {
+        /** @var Event $event */
         $event = $this->find($id);
 
-        if ($event->status !== Event::COMPLETED) abort(400, 'This event can not be published.');
+        if ($event->status !== Event::COMPLETED) {
+            abort(400, 'This event can not be published.');
+        }
 
         if ($this->is_valid($event)) {
             $event->update(['status' => Event::PUBLISHED]);
@@ -216,11 +226,17 @@ class EventRepository extends ApiRepository
             $this->flush()->remember($event->fresh());
         }
 
+        foreach ($event->permissions as $permission) {
+            if ($permission->type === Permission::MASTER || $permission->type === Permission::ORGANIZER) {
+                $permission->notify(new EventPublished($event));
+            }
+        }
+
         return $event->fresh();
     }
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event|null
      */
@@ -242,7 +258,7 @@ class EventRepository extends ApiRepository
     }
 
     /**
-     * @param string $id
+     * @param  string  $id
      *
      * @return \Modules\Event\Models\Event|null
      */
