@@ -2,7 +2,7 @@
 
 namespace App\Notifications\Customer;
 
-use App\Customer\Mail\OrderReceivedMail;
+use App\Mail\Customer\OrderReceivedMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -42,9 +42,9 @@ class OrderReceived extends Notification implements ShouldQueue
     }
 
     /**
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param $notifiable
      *
-     * @return \App\Customer\Mail\OrderReceivedMail
+     * @return \App\Mail\Customer\OrderReceivedMail
      */
     public function toMail($notifiable): OrderReceivedMail
     {

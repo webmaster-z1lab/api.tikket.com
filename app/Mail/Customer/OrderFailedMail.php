@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Modules\Order\Models\Order;
 
-class OrderApprovedMail extends Mailable
+class OrderFailedMail extends Mailable
 {
     use Queueable, SerializesModels;
     /**
@@ -23,18 +23,18 @@ class OrderApprovedMail extends Mailable
      */
     public $button = [
         'link' => '',
-        'text' => 'imprimir ingressos',
+        'text' => 'Comprar novamente',
     ];
     /**
      * @var array
      */
     public $image = [
-        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_confirmed.png',
-        'text'   => 'Pedido confirmado',
+        'source' => 'https://d35c048n9fix3e.cloudfront.net/images/undraw/png/undraw_cancel.png',
+        'text'   => 'Falha ao realizar pedido',
     ];
 
     /**
-     * OrderApprovedMail constructor.
+     * OrderFailedMail constructor.
      *
      * @param  \Modules\Order\Models\Order  $order
      * @param  array                        $params
@@ -54,6 +54,6 @@ class OrderApprovedMail extends Mailable
      */
     public function build(): self
     {
-        return $this->view('emails.customer.order-approved');
+        return $this->view('emails.customer.order-failed');
     }
 }

@@ -2,60 +2,69 @@
 
 namespace App\Notifications\Customer;
 
+use App\Mail\Customer\OrderFailedMail;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Modules\Order\Models\Order;
 
 class OrderFailed extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * @var \Modules\Order\Models\Order
      */
-    public function __construct()
+    public $order;
+
+    /**
+     * OrderFailed constructor.
+     *
+     * @param  \Modules\Order\Models\Order  $order
+     */
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  @param \Modules\Order\Models\Customer $notifiable
+     *
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
-     * Get the mail representation of the notification.
+     * @param  \Modules\Order\Models\Customer  $notifiable
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return \App\Mail\Customer\OrderFailedMail
      */
-    public function toMail($notifiable)
+    public function toMail($notifiable): OrderFailedMail
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new OrderFailedMail($this->order, $this->toArray($notifiable)))->to($notifiable->email);
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  \Modules\Order\Models\Customer  $notifiable
+     *
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         return [
-            //
+            'action'  => config('app.main_site_url')."/evento/{$this->order->event_id}",
+            'text'    => 'O pagamento do seu pedido foi negado pela operadora de cartão.',
+            'title'   => 'Falha no pagamento do seu pedido',
+            'icon'    => 'far fa-times-circle',
+            'color'   => 'danger',
+            'sent_at' => now(),
         ];
     }
 }

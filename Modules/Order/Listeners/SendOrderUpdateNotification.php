@@ -2,11 +2,11 @@
 
 namespace Modules\Order\Listeners;
 
+use App\Notifications\Customer\OrderApproved;
+use App\Notifications\Customer\OrderCancelled;
+use App\Notifications\Customer\OrderFailed;
+use App\Notifications\Customer\OrderReversed;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Modules\Order\Emails\OrderApproved;
-use Modules\Order\Emails\OrderCancelled;
-use Modules\Order\Emails\OrderFailed;
-use Modules\Order\Emails\OrderReversed;
 use Modules\Order\Events\StatusChanged;
 use Modules\Order\Models\Order;
 
@@ -42,7 +42,7 @@ class SendOrderUpdateNotification implements ShouldQueue
      */
     protected function paid(Order $order): void
     {
-        \Mail::to($order->customer->email)->send(new OrderApproved($this->order));
+        $order->customer->notify(new OrderApproved($order));
     }
 
     /**
@@ -50,7 +50,7 @@ class SendOrderUpdateNotification implements ShouldQueue
      */
     protected function canceled(Order $order): void
     {
-        \Mail::to($order->customer->email)->send(new OrderFailed($this->order));
+        $order->customer->notify(new OrderFailed($order));
     }
 
     /**
@@ -59,9 +59,9 @@ class SendOrderUpdateNotification implements ShouldQueue
     protected function reversed(Order $order): void
     {
         if (($order->amount + $order->fee - ($order->discount ?? 0)) > 0) {
-            \Mail::to($order->customer->email)->send(new OrderReversed($this->order));
+            $order->customer->notify(new OrderReversed($order));
         } else {
-            \Mail::to($order->customer->email)->send(new OrderCancelled($this->order));
+            $order->customer->notify(new OrderCancelled($order));
         }
     }
 }

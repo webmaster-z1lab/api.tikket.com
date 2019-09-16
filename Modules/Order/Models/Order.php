@@ -12,23 +12,24 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Order\Models
  *
- * @property string id
- * @property string transaction_id
- * @property string status
- * @property integer amount
- * @property integer fee
- * @property string hash
- * @property string ip
- * @property string type
- * @property string channel
- * @property string code
- * @property integer discount
- * @property integer fee_percentage
- * @property boolean fee_is_hidden
+ * @property string                         id
+ * @property string                         event_id
+ * @property string                         transaction_id
+ * @property string                         status
+ * @property integer                        amount
+ * @property integer                        fee
+ * @property string                         hash
+ * @property string                         ip
+ * @property string                         type
+ * @property string                         channel
+ * @property string                         code
+ * @property integer                        discount
+ * @property integer                        fee_percentage
+ * @property boolean                        fee_is_hidden
  * @property \Modules\Order\Models\Customer customer
- * @property \Modules\Order\Models\Card card
- * @property \Modules\Order\Models\Boleto boleto
- * @property \Modules\Event\Models\Coupon coupon
+ * @property \Modules\Order\Models\Card     card
+ * @property \Modules\Order\Models\Boleto   boleto
+ * @property \Modules\Event\Models\Coupon   coupon
  * @property \Modules\Order\Models\SalePoint sale_point
  * @property \Modules\Order\Models\SalePoint administrator
  * @property \Illuminate\Database\Eloquent\Collection bags
