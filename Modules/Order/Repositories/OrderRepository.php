@@ -8,6 +8,7 @@
 
 namespace Modules\Order\Repositories;
 
+use App\Notifications\Customer\OrderReceived;
 use App\Traits\AvailableCoupons;
 use App\Traits\AvailableEntrances;
 use Modules\Cart\Models\Cart;
@@ -126,11 +127,17 @@ class OrderRepository
         $order->save();
 
         if (!$data['is_free']) {
+            if ($data['type'] === 'credit_card') {
+                $order = $order->fresh();
+                $order->notify(new OrderReceived);
+            }
+
             SendToPayment::dispatch($order);
         } else {
             foreach ($order->bags as $bag) {
                 $this->incrementSold(Entrance::find($bag->entrance_id), $bag->amount);
             }
+
             $order->status = Order::PAID;
             $order->save();
             CreateTickets::dispatch($order);

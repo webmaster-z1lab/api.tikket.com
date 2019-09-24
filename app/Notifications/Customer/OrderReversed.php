@@ -6,30 +6,15 @@ use App\Mail\Customer\OrderReversedMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Modules\Order\Models\Order;
 
 class OrderReversed extends Notification implements ShouldQueue
 {
     use Queueable;
-    /**
-     * @var \Modules\Order\Models\Order
-     */
-    public $order;
-
-    /**
-     * OrderReversed constructor.
-     *
-     * @param  \Modules\Order\Models\Order  $order
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return array
      */
@@ -39,26 +24,26 @@ class OrderReversed extends Notification implements ShouldQueue
     }
 
     /**
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return \App\Mail\Customer\OrderReversedMail
      */
     public function toMail($notifiable): OrderReversedMail
     {
-        return (new OrderReversedMail($this->order, $this->toArray($notifiable)))->to($notifiable->email);
+        return (new OrderReversedMail($notifiable, $this->toArray($notifiable)))->to($notifiable->customer->email);
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return array
      */
     public function toArray($notifiable): array
     {
         return [
-            'action'  => config('app.main_site_url')."/order/{$this->order->id}",
+            'action'  => config('app.main_site_url')."/order/{$notifiable->id}",
             'text'    => 'O pedido de extono do seu pedido foi realizado com sucesso.',
             'title'   => 'Pedido extornado com sucesso',
             'icon'    => 'fas fa-undo',

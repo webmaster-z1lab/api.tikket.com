@@ -39,7 +39,7 @@ class EventPublished extends Notification implements ShouldQueue
     }
 
     /**
-     * @param $notifiable
+     * @param  \Modules\Event\Models\Permission  $notifiable
      *
      * @return \App\Mail\Organizer\EventPublishedMail
      */

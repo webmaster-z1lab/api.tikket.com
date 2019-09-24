@@ -42,7 +42,7 @@ class SendOrderUpdateNotification implements ShouldQueue
      */
     protected function paid(Order $order): void
     {
-        $order->customer->notify(new OrderApproved($order));
+        $order->notify(new OrderApproved);
     }
 
     /**
@@ -50,7 +50,7 @@ class SendOrderUpdateNotification implements ShouldQueue
      */
     protected function canceled(Order $order): void
     {
-        $order->customer->notify(new OrderFailed($order));
+        $order->notify(new OrderFailed);
     }
 
     /**
@@ -59,9 +59,9 @@ class SendOrderUpdateNotification implements ShouldQueue
     protected function reversed(Order $order): void
     {
         if (($order->amount + $order->fee - ($order->discount ?? 0)) > 0) {
-            $order->customer->notify(new OrderReversed($order));
+            $order->notify(new OrderReversed);
         } else {
-            $order->customer->notify(new OrderCancelled($order));
+            $order->notify(new OrderCancelled);
         }
     }
 }

@@ -6,30 +6,15 @@ use App\Mail\Customer\OrderApprovedMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use Modules\Order\Models\Order;
 
 class OrderApproved extends Notification implements ShouldQueue
 {
     use Queueable;
-    /**
-     * @var \Modules\Order\Models\Order
-     */
-    public $order;
-
-    /**
-     * Create a new notification instance.
-     *
-     * @param  \Modules\Order\Models\Order  $order
-     */
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return array
      */
@@ -39,25 +24,25 @@ class OrderApproved extends Notification implements ShouldQueue
     }
 
     /**
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return \App\Mail\Customer\OrderApprovedMail
      */
     public function toMail($notifiable): OrderApprovedMail
     {
-        return (new OrderApprovedMail($this->order, $this->toArray($notifiable)))->to($notifiable->email);
+        return (new OrderApprovedMail($notifiable, $this->toArray($notifiable)))->to($notifiable->customer->email);
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  \Modules\Order\Models\Customer  $notifiable
+     * @param  \Modules\Order\Models\Order  $notifiable
      *
      * @return array
      */
     public function toArray($notifiable): array
     {
-        $status = $this->order->type === 'credit_card' ? 'aprovado' : 'confirmado';
+        $status = $notifiable->type === 'credit_card' ? 'aprovado' : 'confirmado';
 
         return [
             'action'  => config('app.main_site_url').'/meus-ingressos',

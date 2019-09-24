@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Modules\Event\Jobs\UpdateAvailableLot;
 use Modules\Event\Models\Entrance;
 use Modules\Event\Models\Event;
-use Modules\Event\Models\Lot;
 use Z1lab\JsonApi\Traits\CacheTrait;
 
 class EntranceRepository
@@ -101,28 +100,34 @@ class EntranceRepository
             : $entrance->update(array_except($data, ['lots']));
 
         $current_lot = $entrance->available->lot;
+        $count_lots = count($data['lots']);
 
-        for ($i = 0; $i < count($data['lots']); $i++) {
+        for ($i = 0; $i < $count_lots; $i++) {
             $lot = $entrance->getLot($i + 1);
             if (($i + 1) < $current_lot) {
                 $previous = $lot->finishes_at->addDay()->startOfDay();
                 continue;
             } else {
-                $data['lots'][$i]['value'] = (int)(floatval($data['lots'][$i]['value']) * 100);
+                $data['lots'][$i]['value'] = (int) ((float) $data['lots'][$i]['value'] * 100);
                 $data['lots'][$i]['fee'] = $this->calcFee($entrance, $data['lots'][$i]['value']);
                 $data['lots'][$i]['finishes_at'] = Carbon::createFromFormat('Y-m-d', $data['lots'][$i]['finishes_at'])->endOfDay();
                 $data['lots'][$i]['starts_at'] = $previous;
 
-                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at']))
+                if ($event->starts_at->isSameDay($data['lots'][$i]['finishes_at'])) {
                     $data['lots'][$i]['finishes_at'] = $event->starts_at->subHours(3);
+                }
 
-                if ($lot->update($data['lots'][$i]) && ($i + 1) === $current_lot)
+                if ($lot->update($data['lots'][$i]) && ($i + 1) === $current_lot) {
                     UpdateAvailableLot::dispatch($entrance);
+                }
             }
         }
 
         foreach ($entrance->lots as $lot) {
-            if ($lot->number <= count($data['lots'])) continue;
+            if ($lot->number <= count($data['lots'])) {
+                continue;
+            }
+
             $lot->delete();
         }
 

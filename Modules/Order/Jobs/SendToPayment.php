@@ -141,7 +141,7 @@ class SendToPayment implements ShouldQueue
             $this->order->save();
 
             broadcast(new ReadyBoleto($this->order));
-            $this->order->customer->notify(new BoletoReceived($this->order));
+            $this->order->notify(new BoletoReceived);
         } else {
             $this->order->save();
         }

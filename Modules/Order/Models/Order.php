@@ -2,6 +2,8 @@
 
 namespace Modules\Order\Models;
 
+use App\Models\DatabaseNotification;
+use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Modules\Event\Models\Coupon;
@@ -12,32 +14,32 @@ use Modules\Event\Models\Event;
  *
  * @package Modules\Order\Models
  *
- * @property string                         id
- * @property string                         event_id
- * @property string                         transaction_id
- * @property string                         status
- * @property integer                        amount
- * @property integer                        fee
- * @property string                         hash
- * @property string                         ip
- * @property string                         type
- * @property string                         channel
- * @property string                         code
- * @property integer                        discount
- * @property integer                        fee_percentage
- * @property boolean                        fee_is_hidden
- * @property \Modules\Order\Models\Customer customer
- * @property \Modules\Order\Models\Card     card
- * @property \Modules\Order\Models\Boleto   boleto
- * @property \Modules\Event\Models\Coupon   coupon
- * @property \Modules\Order\Models\SalePoint sale_point
- * @property \Modules\Order\Models\SalePoint administrator
+ * @property string                                   id
+ * @property string                                   event_id
+ * @property string                                   transaction_id
+ * @property string                                   status
+ * @property integer                                  amount
+ * @property integer                                  fee
+ * @property string                                   hash
+ * @property string                                   ip
+ * @property string                                   type
+ * @property string                                   channel
+ * @property string                                   code
+ * @property integer                                  discount
+ * @property integer                                  fee_percentage
+ * @property boolean                                  fee_is_hidden
+ * @property \Modules\Order\Models\Customer           customer
+ * @property \Modules\Order\Models\Card               card
+ * @property \Modules\Order\Models\Boleto             boleto
+ * @property \Modules\Event\Models\Coupon             coupon
+ * @property \Modules\Order\Models\SalePoint          sale_point
+ * @property \Modules\Order\Models\SalePoint          administrator
  * @property \Illuminate\Database\Eloquent\Collection bags
  * @property \Illuminate\Database\Eloquent\Collection tickets
- * @property \Modules\Ticket\Models\Ticket actual_tickets
- * @property \Modules\Event\Models\Event event
- * @property-read \Carbon\Carbon created_at
- * @property-read \Carbon\Carbon updated_at
+ * @property \Modules\Ticket\Models\Ticket            actual_tickets
+ * @property \Modules\Event\Models\Event              event
+ * @property-read \Carbon\Carbon                      created_at
+ * @property-read \Carbon\Carbon                      updated_at
  *
  * @method $this paid()
  * @method $this processed()
@@ -45,7 +47,7 @@ use Modules\Event\Models\Event;
  */
 class Order extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Notifiable;
 
     /**
      * Order waiting for cardholder approval
@@ -118,7 +120,7 @@ class Order extends Model
     }
 
     /**
-     * @param        $query
+     * @param          $query
      * @param  string  $document
      *
      * @return \Jenssegers\Mongodb\Eloquent\Builder
@@ -206,5 +208,35 @@ class Order extends Model
     public function actual_tickets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\Modules\Ticket\Models\Ticket::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notifications(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')->orderBy('created_at', 'desc')->limit(100);
+    }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     *
+     * @return string
+     */
+    public function routeNotificationForMail($notification): string
+    {
+        return $this->customer->email;
+    }
+
+    /**
+     * The channels the user receives notification broadcasts on.
+     *
+     * @return string
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'customers.'.$this->customer->user_id;
     }
 }

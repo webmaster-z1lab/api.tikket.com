@@ -4,12 +4,11 @@ namespace App\Mail\Customer;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 use Modules\Order\Models\Order;
 
 class BoletoReceivedMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
     /**
      * @var \Modules\Order\Models\Order
      */

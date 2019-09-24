@@ -16,7 +16,6 @@ class RecycleCart implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, AvailableEntrances, AvailableCoupons;
 
-    public $deleteWhenMissingModels = TRUE;
     /**
      * @var \Modules\Cart\Models\Cart
      */
@@ -25,27 +24,31 @@ class RecycleCart implements ShouldQueue
     /**
      * RecycleTickets constructor.
      *
-     * @param \Modules\Cart\Models\Cart $cart
+     * @param  string  $cart
      */
-    public function __construct(Cart $cart)
+    public function __construct(string $cart)
     {
-        $this->cart = $cart->fresh();
+        $this->cart = Cart::find($cart);
     }
 
     /**
      * @throws \Exception
      */
-    public function handle()
+    public function handle(): void
     {
-        foreach ($this->cart->bags as $bag) {
-            $entrance = Entrance::find($bag->entrance_id);
-            $this->incrementAvailable($entrance, Entrance::RESERVED, $bag->amount);
+        if (NULL !== $this->cart) {
+            foreach ($this->cart->bags as $bag) {
+                $entrance = Entrance::find($bag->entrance_id);
+                $this->incrementAvailable($entrance, Entrance::RESERVED, $bag->amount);
+            }
+
+            if ($this->cart->coupon()->exists()) {
+                $this->decrementUsed($this->cart->coupon);
+            }
+
+            $this->cart->status = Cart::RECYCLED;
+            $this->cart->save();
+            $this->cart->delete();
         }
-
-        if ($this->cart->coupon()->exists()) $this->decrementUsed($this->cart->coupon);
-
-        $this->cart->status = Cart::RECYCLED;
-        $this->cart->save();
-        $this->cart->delete();
     }
 }

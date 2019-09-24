@@ -66,7 +66,7 @@ class CartRepository
         $fee = 0;
 
         foreach ($data['tickets'] as $ticket) {
-            $ticket['quantity'] = intval($ticket['quantity']);
+            $ticket['quantity'] = (int) $ticket['quantity'];
             $entrance = Entrance::find($ticket['entrance']);
             $lot = $entrance->lots()->where('number', $ticket['lot'])->first();
 
@@ -100,7 +100,7 @@ class CartRepository
         $cart->expires_at = now()->addMinutes(14)->addSeconds(2);
         $cart->save();
 
-        RecycleCart::dispatch($cart)->delay($cart->expires_at->addSeconds(58));
+        RecycleCart::dispatch($cart->id)->delay($cart->expires_at->addSeconds(58));
 
         return $cart->fresh();
     }

@@ -3,13 +3,12 @@
 namespace Modules\Ticket\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use Modules\Order\Models\Order;
-use Modules\Ticket\Emails\AvailableTicket;
 use Modules\Ticket\Models\Ticket;
 
 class CreateTickets implements ShouldQueue
@@ -75,8 +74,9 @@ class CreateTickets implements ShouldQueue
 
             $event->image()->create($event_data['image']);
 
-            if ($ticket->participant->email !== NULL)
+            /*if ($ticket->participant->email !== NULL) {
                 \Mail::to($ticket->participant->email)->send(new AvailableTicket($ticket));
+            }*/
         });
     }
 }

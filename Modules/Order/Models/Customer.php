@@ -2,7 +2,6 @@
 
 namespace Modules\Order\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 /**
@@ -10,6 +9,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
  *
  * @package Modules\Order\Models
  *
+ * @property string                        id
  * @property string                        user_id
  * @property string                        name
  * @property string                        email
@@ -19,8 +19,6 @@ use Jenssegers\Mongodb\Eloquent\Model;
  */
 class Customer extends Model
 {
-    use Notifiable;
-
     public $timestamps = FALSE;
 
     protected $fillable = [
